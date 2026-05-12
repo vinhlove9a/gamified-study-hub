@@ -8,14 +8,17 @@ The long-term platform direction includes workspace-based learning management, d
 ## Current Status
 **Base project foundation**
 
-This repository currently provides the monorepo structure, backend/frontend base setup, infrastructure configuration, and development conventions only.
+This repository currently provides the monorepo structure, backend/frontend base setup, infrastructure configuration, backend foundation conventions, and MVP database foundation schema.
 
 Not implemented yet:
 - Authentication and authorization
 - Business/domain modules
-- Database schema and business migrations
 - Document/coin/mission/gamification logic
 - Multi-tenant domain behavior
+
+Architecture docs:
+- `docs/architecture/backend-foundation.md`
+- `docs/architecture/database-foundation.md`
 
 ## Tech Stack
 - Backend: Java 21, Spring Boot 3.x, Maven, PostgreSQL, Flyway
