@@ -1,0 +1,109 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gsh-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-gamified_study_hub}
+      POSTGRES_USER: ${POSTGRES_USER:-gsh_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gsh_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gsh_user} -d ${POSTGRES_DB:-gamified_study_hub}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - gsh-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: gsh-redis
+    command: >
+      sh -c "if [ -n \"$${REDIS_PASSWORD}\" ];
+      then redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\";
+      else redis-server --appendonly yes;
+      fi"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "if [ -n \"$${REDIS_PASSWORD}\" ]; then redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep PONG; else redis-cli ping | grep PONG; fi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - gsh-network
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: gsh-backend
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_NAME: "${APP_NAME:-Gamified Study Hub}"
+      BACKEND_PORT: ${BACKEND_PORT:-8080}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DB: ${POSTGRES_DB:-gamified_study_hub}
+      POSTGRES_USER: ${POSTGRES_USER:-gsh_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gsh_password}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - gsh-network
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080/api}
+    container_name: gsh-frontend
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_NAME: "${APP_NAME:-Gamified Study Hub}"
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      - backend
+    networks:
+      - gsh-network
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: gsh-nginx
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - gsh-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  gsh-network:
+    driver: bridge

@@ -1,0 +1,64 @@
+# --- Java / Maven ---
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# --- Node.js / Frontend ---
+**/node_modules/
+**/dist/
+**/.vite/
+**/.npm/
+**/coverage/
+*.tsbuildinfo
+
+# --- Vue / Vite ---
+**/.eslintcache
+
+# --- IDE: IntelliJ IDEA ---
+.idea/
+*.iml
+
+# --- IDE: VS Code ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# --- OS: macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- OS: Windows ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Docker / Local volumes ---
+**/.docker/
+**/docker-data/
+postgres_data/
+redis_data/
+
+# --- Environment files ---
+.env
+.env.local
+.env.*.local
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Build outputs ---
+out/
+build/

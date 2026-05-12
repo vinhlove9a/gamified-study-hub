@@ -1,0 +1,8 @@
+services:
+  backend:
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+
+  frontend:
+    environment:
+      APP_ENV: ${APP_ENV:-local}
