@@ -113,7 +113,7 @@ Environment defaults are documented in `.env.example`.
 
 Key groups:
 - App: `APP_ENV`, `APP_NAME`
-- Backend: `BACKEND_PORT`, `SPRING_PROFILES_ACTIVE`
+- Backend: `BACKEND_PORT`, `SPRING_PROFILES_ACTIVE`, `FRONTEND_ORIGIN`
 - Frontend: `FRONTEND_PORT`, `VITE_API_BASE_URL`
 - PostgreSQL: `POSTGRES_*`
 - Redis: `REDIS_*`
