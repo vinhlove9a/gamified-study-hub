@@ -66,8 +66,13 @@ Expected JSON:
 
 ```json
 {
-  "status": "UP",
-  "service": "gamified-study-hub-backend"
+  "success": true,
+  "message": "Backend service is running",
+  "data": {
+    "status": "UP",
+    "service": "gamified-study-hub-backend"
+  },
+  "timestamp": "2026-05-12T00:00:00Z"
 }
 ```
 
