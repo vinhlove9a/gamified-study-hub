@@ -1,7 +1,9 @@
 package com.gamifiedstudyhub.backend;
 
+import com.gamifiedstudyhub.backend.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest(properties = {
         "spring.autoconfigure.exclude="
@@ -11,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
         "app.jpa.auditing.enabled=false"
 })
 class GamifiedStudyHubBackendApplicationTests {
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     void contextLoads() {

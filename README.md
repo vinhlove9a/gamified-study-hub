@@ -8,10 +8,10 @@ The long-term platform direction includes workspace-based learning management, d
 ## Current Status
 **Base project foundation**
 
-This repository currently provides the monorepo structure, backend/frontend base setup, infrastructure configuration, backend foundation conventions, and MVP database foundation schema.
+This repository currently provides the monorepo structure, backend/frontend base setup, infrastructure configuration, backend foundation conventions, MVP database foundation schema, and authentication foundation APIs.
 
 Not implemented yet:
-- Authentication and authorization
+- Advanced authentication and authorization features
 - Business/domain modules
 - Document/coin/mission/gamification logic
 - Multi-tenant domain behavior
@@ -19,6 +19,7 @@ Not implemented yet:
 Architecture docs:
 - `docs/architecture/backend-foundation.md`
 - `docs/architecture/database-foundation.md`
+- `docs/architecture/auth-foundation.md`
 
 ## Tech Stack
 - Backend: Java 21, Spring Boot 3.x, Maven, PostgreSQL, Flyway
@@ -117,6 +118,7 @@ Environment defaults are documented in `.env.example`.
 Key groups:
 - App: `APP_ENV`, `APP_NAME`
 - Backend: `BACKEND_PORT`, `SPRING_PROFILES_ACTIVE`, `FRONTEND_ORIGIN`
+- Auth: `JWT_SECRET`, `JWT_ACCESS_TOKEN_EXPIRATION_MINUTES`
 - Frontend: `FRONTEND_PORT`, `VITE_API_BASE_URL`
 - PostgreSQL: `POSTGRES_*`
 - Redis: `REDIS_*`
@@ -129,7 +131,7 @@ Key groups:
 - Keep documentation and decisions versioned in the repository.
 
 ## Future Modules (Planned, Not Implemented)
-- Identity and access management (auth/authz)
+- Identity and access management enhancements (refresh tokens, verification, RBAC)
 - Workspace and tenant model
 - Document management and unlocking
 - Coin/reward engine

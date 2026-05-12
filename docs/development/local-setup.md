@@ -15,6 +15,7 @@ cp .env.example .env
 ```
 
 Update values only if your local ports or credentials need changes.
+For auth foundation, make sure `JWT_SECRET` is set with a strong value (at least 32 characters).
 
 ## 2) Start PostgreSQL and Redis
 Infrastructure-only startup (plus app containers if defined in compose):

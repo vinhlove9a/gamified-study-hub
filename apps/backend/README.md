@@ -8,10 +8,12 @@ Implemented:
 - Environment profile configuration
 - PostgreSQL/Flyway connectivity configuration
 - `/api/health` endpoint
+- Authentication foundation (`/api/v1/auth/register`, `/api/v1/auth/login`, `/api/v1/auth/me`)
+- JWT access token support
 - Basic context-load test
 
 Not implemented yet:
-- Authentication/authorization
+- Refresh tokens and advanced auth flows
 - Business/domain modules
 - Database business schema
 

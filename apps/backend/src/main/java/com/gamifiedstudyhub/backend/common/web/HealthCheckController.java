@@ -2,6 +2,7 @@ package com.gamifiedstudyhub.backend.common.web;
 
 import com.gamifiedstudyhub.backend.common.constant.AppConstants;
 import com.gamifiedstudyhub.backend.common.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
     @GetMapping("/health")
+    @Operation(summary = "Health check endpoint", security = {})
     public ApiResponse<Map<String, String>> health() {
         Map<String, String> health = Map.of(
                 "status", "UP",
