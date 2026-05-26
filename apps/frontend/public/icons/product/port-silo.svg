@@ -1,0 +1,22 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Port Silo Main Body -->
+  <rect x="20" y="16" width="24" height="40" rx="2" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <!-- Silo Dome -->
+  <path d="M20 16C20 10 26 6 32 6C38 6 44 10 44 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Silo Stripes (industrial texture) -->
+  <path d="M26 16V48M32 16V52M38 16V48" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+  <!-- Discharge Pipe -->
+  <rect x="28" y="52" width="8" height="6" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M26 58H38" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Support Structure -->
+  <path d="M24 56L16 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 56L48 62" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <rect x="14" y="60" width="36" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Loading Arm -->
+  <path d="M44 24L52 24L56 32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Crane/Structure -->
+  <path d="M52 6V24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M48 6H56" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Platform -->
+  <rect x="48" y="34" width="10" height="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+</svg>

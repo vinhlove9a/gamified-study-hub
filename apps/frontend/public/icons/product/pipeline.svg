@@ -1,0 +1,21 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main Pipeline -->
+  <path d="M8 20H56" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <!-- Vertical Pipe -->
+  <path d="M32 20V48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <!-- Elbow Joint Left -->
+  <path d="M8 20L8 12H16" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Elbow Joint Right -->
+  <path d="M56 20L56 12H48" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Valve Wheel -->
+  <ellipse cx="32" cy="20" rx="10" ry="4" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M32 16V12M28 14L32 10L36 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Flow Indicator -->
+  <circle cx="32" cy="34" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M32 34L34 38M32 34L30 38" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Flange Joints -->
+  <rect x="6" y="18" width="4" height="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <rect x="54" y="18" width="4" height="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Ground/Base -->
+  <rect x="26" y="52" width="12" height="4" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+</svg>

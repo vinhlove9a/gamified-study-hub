@@ -1,0 +1,14 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Scale/Libra -->
+  <path d="M4 8H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Center Pillar -->
+  <path d="M12 8V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Balance Beam -->
+  <path d="M5 5L12 8L19 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Left Pan -->
+  <path d="M2 5L5 8L8 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right Pan -->
+  <path d="M16 5L19 8L22 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Value Indicator Arrow -->
+  <path d="M12 10V16M10 14L12 16L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

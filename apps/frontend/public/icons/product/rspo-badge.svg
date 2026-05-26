@@ -1,0 +1,12 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- RSPO Logo Style -->
+  <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <!-- Palm Leaf Suggestion -->
+  <path d="M32 12C32 12 24 20 20 28C20 28 24 24 32 24C40 24 44 28 44 28C40 20 32 12 32 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 24C32 24 26 30 26 36C26 36 32 36 32 36C32 36 38 36 38 36C38 30 32 24 32 24Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Text Lines -->
+  <path d="M20 46H44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 50H42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Star -->
+  <path d="M32 56L33 59L36 59L33.5 61L34.5 64L32 62L29.5 64L30.5 61L28 59L31 59L32 56Z" fill="currentColor"/>
+</svg>

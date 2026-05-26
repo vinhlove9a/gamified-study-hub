@@ -1,0 +1,12 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- ISCC Style Badge -->
+  <path d="M32 8L8 16V32C8 46 20 56 32 58C44 56 56 46 56 32V16L32 8Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Leaf Element -->
+  <path d="M32 20C32 20 22 28 22 36C22 42 28 46 32 46C36 46 42 42 42 36C42 28 32 20 32 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Globe Lines -->
+  <ellipse cx="32" cy="36" rx="12" ry="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <path d="M20 36H44" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- EU Stars -->
+  <circle cx="32" cy="54" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <path d="M32 51L33 53L35 53L33.5 54.5L34 57L32 55.5L30 57L30.5 54.5L29 53L31 53L32 51Z" fill="currentColor"/>
+</svg>

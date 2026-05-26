@@ -1,0 +1,8 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Oil Drop Shape -->
+  <path d="M32 8C32 8 20 26 20 36C20 44 25 50 32 50C39 50 44 44 44 36C44 26 32 8 32 8Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Highlight/Reflection -->
+  <path d="M28 24C28 24 26 30 26 34C26 36 27 38 29 38" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <!-- Inner Glow Ring -->
+  <ellipse cx="32" cy="40" rx="8" ry="4" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+</svg>
