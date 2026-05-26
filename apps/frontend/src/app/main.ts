@@ -1,5 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import gsapPlugin from '../plugins/gsapPlugin';
 import '../styles/main.css';
 
-createApp(App).mount('#app');
+const app = createApp(App);
+app.use(gsapPlugin);
+app.mount('#app');

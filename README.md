@@ -20,6 +20,7 @@ Architecture docs:
 - `docs/architecture/backend-foundation.md`
 - `docs/architecture/database-foundation.md`
 - `docs/architecture/auth-foundation.md`
+- `docs/architecture/frontend-landing-page.md`
 
 ## Tech Stack
 - Backend: Java 21, Spring Boot 3.x, Maven, PostgreSQL, Flyway

@@ -1,0 +1,30 @@
+<template>
+  <svg viewBox="0 0 100 100" fill="none" class="w-full h-full opacity-0.05">
+    <rect width="100" height="100" fill="#c45b28" />
+    <circle cx="10" cy="10" r="2" fill="#d4a24c" />
+    <circle cx="30" cy="10" r="2" fill="#d4a24c" />
+    <circle cx="50" cy="10" r="2" fill="#d4a24c" />
+    <circle cx="70" cy="10" r="2" fill="#d4a24c" />
+    <circle cx="90" cy="10" r="2" fill="#d4a24c" />
+    <circle cx="10" cy="30" r="2" fill="#d4a24c" />
+    <circle cx="30" cy="30" r="2" fill="#d4a24c" />
+    <circle cx="50" cy="30" r="2" fill="#d4a24c" />
+    <circle cx="70" cy="30" r="2" fill="#d4a24c" />
+    <circle cx="90" cy="30" r="2" fill="#d4a24c" />
+    <circle cx="10" cy="50" r="2" fill="#d4a24c" />
+    <circle cx="30" cy="50" r="2" fill="#d4a24c" />
+    <circle cx="50" cy="50" r="2" fill="#d4a24c" />
+    <circle cx="70" cy="50" r="2" fill="#d4a24c" />
+    <circle cx="90" cy="50" r="2" fill="#d4a24c" />
+    <circle cx="10" cy="70" r="2" fill="#d4a24c" />
+    <circle cx="30" cy="70" r="2" fill="#d4a24c" />
+    <circle cx="50" cy="70" r="2" fill="#d4a24c" />
+    <circle cx="70" cy="70" r="2" fill="#d4a24c" />
+    <circle cx="90" cy="70" r="2" fill="#d4a24c" />
+    <circle cx="10" cy="90" r="2" fill="#d4a24c" />
+    <circle cx="30" cy="90" r="2" fill="#d4a24c" />
+    <circle cx="50" cy="90" r="2" fill="#d4a24c" />
+    <circle cx="70" cy="90" r="2" fill="#d4a24c" />
+    <circle cx="90" cy="90" r="2" fill="#d4a24c" />
+  </svg>
+</template>

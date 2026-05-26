@@ -1,0 +1,19 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Plantation Icon -->
+  <path d="M32 12L20 28H44L32 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M32 12V28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Tree Trunks -->
+  <rect x="29" y="28" width="6" height="10" stroke="currentColor" stroke-width="2" fill="none"/>
+  <!-- Factory -->
+  <rect x="8" y="40" width="20" height="16" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M8 46H28" stroke="currentColor" stroke-width="1.5"/>
+  <rect x="12" y="50" width="4" height="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Port/Ship -->
+  <path d="M40 44H56L54 52H42L40 44Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M44 48H52" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Pipeline Connections -->
+  <path d="M28 50H40" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 2"/>
+  <!-- Flow Arrows -->
+  <path d="M32 36L32 44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 40L32 44L36 40" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
