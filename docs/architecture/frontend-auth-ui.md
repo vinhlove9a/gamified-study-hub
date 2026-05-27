@@ -230,11 +230,12 @@
 - No backend dependencies added.
 
 ## Current limitations
-- Frontend UI only.
-- No API integration.
-- No token storage.
-- No real authentication or JWT handling.
-- Auth UI pages are complete; backend integration/auth business flow is pending.
+- Frontend auth pages are now wired to backend auth APIs for login/register/forgot/reset/verify.
+- Access token is stored in `localStorage` via `authTokenStorage` for MVP only.
+- Route guards are not implemented yet.
+- Dashboard/workspace flow redirect is not implemented yet.
+- Refresh token flow is not implemented.
+- Backend email provider delivery is still not implemented.
 - Social login buttons are presentation-only.
 
 ## Integration contract reference
@@ -247,7 +248,30 @@
   - `POST /api/v1/auth/reset-password`
   - `POST /api/v1/auth/verify-email`
   - `POST /api/v1/auth/resend-verification`
-- Frontend auth pages are still not wired to backend APIs in this step.
+- Frontend auth pages are wired to these endpoints in this integration branch.
+
+## Frontend API integration foundation
+- Added frontend API helpers:
+  - `apps/frontend/src/lib/api/httpClient.ts`
+  - `apps/frontend/src/lib/api/apiError.ts`
+- Added auth API service:
+  - `apps/frontend/src/features/auth/authApi.ts`
+- Added token storage helper:
+  - `apps/frontend/src/features/auth/authTokenStorage.ts`
+- Environment variable convention:
+  - `VITE_API_BASE_URL` (see `apps/frontend/.env.example`)
+
+## Wired page behavior
+- `LoginPage` -> calls `POST /api/v1/auth/login`, stores access token, verifies with `/api/v1/auth/me`, then redirects to `/` as a temporary placeholder until dashboard flow exists.
+- `RegisterPage` -> calls `POST /api/v1/auth/register`, stores access token when returned, routes to `/auth/notice?type=registration-success`.
+- `ForgotPasswordPage` -> calls `POST /api/v1/auth/forgot-password`, routes to `/auth/notice?type=reset-link-sent`.
+- `ResetPasswordPage` -> reads `token` from query and calls `POST /api/v1/auth/reset-password`, routes to `/auth/notice?type=password-reset-success`.
+- `VerifyEmailPage`:
+  - when `token` query exists: calls `POST /api/v1/auth/verify-email`, routes to `/auth/notice?type=email-verified`
+  - when no token but `email` query exists: calls `POST /api/v1/auth/resend-verification`
+- `AuthNoticePage` resend action:
+  - for `registration-success` + `email` query: calls `POST /api/v1/auth/resend-verification`
+  - for `reset-link-sent` + `email` query: calls `POST /api/v1/auth/forgot-password`
 
 ## Recommended next steps
 1. Integrate authentication API and session strategy.

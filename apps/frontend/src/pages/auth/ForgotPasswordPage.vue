@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
   email: string;
@@ -9,6 +11,7 @@ interface FormState {
 const form = reactive<FormState>({
   email: ''
 });
+const router = useRouter();
 
 const loading = ref(false);
 const formMessage = ref('');
@@ -33,9 +36,21 @@ const handleSubmit = async () => {
   if (!validate()) return;
 
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  formMessage.value = 'Liên kết đặt lại mật khẩu sẽ được gửi qua email ở bước tích hợp API.';
+  try {
+    const response = await authApi.forgotPassword({
+      email: form.email.trim()
+    });
+    formMessage.value = response.message;
+    await router.push(`/auth/notice?type=reset-link-sent&email=${encodeURIComponent(form.email.trim())}`);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { setAccessToken } from '@/features/auth/authTokenStorage';
+import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
   fullName: string;
@@ -17,6 +20,7 @@ const form = reactive<FormState>({
   confirmPassword: '',
   acceptedTerms: false
 });
+const router = useRouter();
 
 const loading = ref(false);
 const formMessage = ref('');
@@ -29,6 +33,21 @@ const errors = reactive<{
 }>({});
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const applyFieldErrors = (fieldErrors?: Array<{ field: string; message: string }>) => {
+  if (!fieldErrors) return;
+  for (const fieldError of fieldErrors) {
+    if (fieldError.field === 'fullName') {
+      errors.fullName = fieldError.message;
+    }
+    if (fieldError.field === 'email') {
+      errors.email = fieldError.message;
+    }
+    if (fieldError.field === 'password') {
+      errors.password = fieldError.message;
+    }
+  }
+};
 
 const passwordStrength = computed(() => {
   const value = form.password.trim();
@@ -84,9 +103,27 @@ const handleSubmit = async () => {
   if (!validate()) return;
 
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  formMessage.value = 'Chức năng đăng ký sẽ được kết nối API ở bước tiếp theo.';
+  try {
+    const response = await authApi.register({
+      fullName: form.fullName.trim(),
+      email: form.email.trim(),
+      password: form.password
+    });
+    if (response.accessToken) {
+      setAccessToken(response.accessToken);
+    }
+    formMessage.value = 'Tạo tài khoản thành công.';
+    await router.push('/auth/notice?type=registration-success');
+  } catch (error) {
+    if (error instanceof ApiError) {
+      applyFieldErrors(error.fieldErrors);
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
