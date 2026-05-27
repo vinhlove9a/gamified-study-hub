@@ -2,13 +2,16 @@
 
 ## Scope
 - This document defines the API contract for auth integration between frontend auth UI and backend.
-- This is design/documentation only.
-- No backend auth business implementation is added in this step.
+- Controller exposure status is tracked here for implementation alignment.
 
 ## Current backend foundation (inspected)
 - Existing endpoints:
   - `POST /api/v1/auth/register`
   - `POST /api/v1/auth/login`
+  - `POST /api/v1/auth/forgot-password`
+  - `POST /api/v1/auth/reset-password`
+  - `POST /api/v1/auth/verify-email`
+  - `POST /api/v1/auth/resend-verification`
   - `GET /api/v1/auth/me`
 - Security:
   - Stateless JWT auth via `Authorization: Bearer <token>`.
@@ -318,6 +321,12 @@
 ## Database impact
 - Applied migration:
   - `V3__auth_email_verification_and_reset_tokens.sql`
+
+## Implementation status (current branch)
+- Controller endpoints for forgot/reset/verify/resend are exposed under `/api/v1/auth`.
+- Email sending remains deferred (token persistence only, no provider integration yet).
+- Frontend integration remains deferred (auth UI not wired to backend endpoints yet).
+- Refresh token and logout/token blacklist endpoints remain deferred.
 - Added to `users`:
   - `email_verified BOOLEAN NOT NULL DEFAULT FALSE`
   - `email_verified_at TIMESTAMPTZ NULL`
