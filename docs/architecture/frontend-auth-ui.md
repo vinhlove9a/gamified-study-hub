@@ -233,7 +233,7 @@
 - Frontend auth pages are now wired to backend auth APIs for login/register/forgot/reset/verify.
 - Access token is stored in `localStorage` via `authTokenStorage` for MVP only.
 - Route guards are not implemented yet.
-- Dashboard/workspace flow redirect is not implemented yet.
+- Dashboard/protected business pages are not implemented yet.
 - Refresh token flow is not implemented.
 - Backend email provider delivery is still not implemented.
 - Social login buttons are presentation-only.
@@ -258,12 +258,30 @@
   - `apps/frontend/src/features/auth/authApi.ts`
 - Added token storage helper:
   - `apps/frontend/src/features/auth/authTokenStorage.ts`
+- Added auth session singleton:
+  - `apps/frontend/src/features/auth/authSession.ts`
 - Environment variable convention:
   - `VITE_API_BASE_URL` (see `apps/frontend/.env.example`)
 
+## Auth session foundation
+- Session state is centralized in `useAuthSession()`:
+  - `currentUser`
+  - `isAuthenticated`
+  - `isBootstrapping`
+  - `sessionError`
+- Session actions:
+  - `bootstrapSession()` calls `GET /api/v1/auth/me` once on app startup when access token exists.
+  - `setSessionFromAuthResponse()` stores access token and current user from login/register response.
+  - `logout()` clears access token and in-memory session state.
+  - `clearSession()` clears in-memory session state.
+- Invalid token behavior:
+  - if `/me` bootstrap fails, access token and session are cleared silently.
+- No refresh token behavior exists in this phase.
+
 ## Wired page behavior
-- `LoginPage` -> calls `POST /api/v1/auth/login`, stores access token, verifies with `/api/v1/auth/me`, then redirects to `/` as a temporary placeholder until dashboard flow exists.
-- `RegisterPage` -> calls `POST /api/v1/auth/register`, stores access token when returned, routes to `/auth/notice?type=registration-success`.
+- `App.vue` bootstraps auth session once via `bootstrapSession()` on mount (no redirect, no full-screen blocker).
+- `LoginPage` -> calls `POST /api/v1/auth/login`, applies `setSessionFromAuthResponse()`, then redirects to `/` as a temporary placeholder until dashboard flow exists.
+- `RegisterPage` -> calls `POST /api/v1/auth/register`, applies `setSessionFromAuthResponse()` when token exists, routes to `/auth/notice?type=registration-success`.
 - `ForgotPasswordPage` -> calls `POST /api/v1/auth/forgot-password`, routes to `/auth/notice?type=reset-link-sent`.
 - `ResetPasswordPage` -> reads `token` from query and calls `POST /api/v1/auth/reset-password`, routes to `/auth/notice?type=password-reset-success`.
 - `VerifyEmailPage`:
@@ -272,6 +290,11 @@
 - `AuthNoticePage` resend action:
   - for `registration-success` + `email` query: calls `POST /api/v1/auth/resend-verification`
   - for `reset-link-sent` + `email` query: calls `POST /api/v1/auth/forgot-password`
+
+## Route guard status
+- Router guard is intentionally not implemented yet.
+- Public routes remain accessible without session checks.
+- Guard logic for protected pages will be added in a later step when protected pages exist.
 
 ## Recommended next steps
 1. Integrate authentication API and session strategy.

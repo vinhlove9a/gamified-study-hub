@@ -2,7 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
-import { setAccessToken } from '@/features/auth/authTokenStorage';
+import { useAuthSession } from '@/features/auth/authSession';
 import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
@@ -21,6 +21,7 @@ const form = reactive<FormState>({
   acceptedTerms: false
 });
 const router = useRouter();
+const { setSessionFromAuthResponse } = useAuthSession();
 
 const loading = ref(false);
 const formMessage = ref('');
@@ -110,7 +111,7 @@ const handleSubmit = async () => {
       password: form.password
     });
     if (response.accessToken) {
-      setAccessToken(response.accessToken);
+      setSessionFromAuthResponse(response);
     }
     formMessage.value = 'Tạo tài khoản thành công.';
     await router.push('/auth/notice?type=registration-success');
