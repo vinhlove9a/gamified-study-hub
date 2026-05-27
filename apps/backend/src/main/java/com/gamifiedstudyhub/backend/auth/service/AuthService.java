@@ -1,9 +1,14 @@
 package com.gamifiedstudyhub.backend.auth.service;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
+import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
+import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
@@ -31,19 +36,22 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthMapper authMapper;
     private final PasswordPolicyValidator passwordPolicyValidator;
+    private final AuthTokenService authTokenService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             AuthMapper authMapper,
-            PasswordPolicyValidator passwordPolicyValidator
+            PasswordPolicyValidator passwordPolicyValidator,
+            AuthTokenService authTokenService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authMapper = authMapper;
         this.passwordPolicyValidator = passwordPolicyValidator;
+        this.authTokenService = authTokenService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -117,6 +125,50 @@ public class AuthService {
         }
 
         return authMapper.toUserSummary(customUserDetails.getUser());
+    }
+
+    public AuthMessageResponse forgotPassword(ForgotPasswordRequest request) {
+        String email = normalizeEmail(request.email());
+
+        userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
+                .filter(user -> !UserStatus.DISABLED.equals(user.getStatus()))
+                .ifPresent(authTokenService::createPasswordResetToken);
+
+        return new AuthMessageResponse(
+                "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn."
+        );
+    }
+
+    public AuthMessageResponse resetPassword(ResetPasswordRequest request) {
+        passwordPolicyValidator.validateOrThrow(request.newPassword());
+
+        User user = authTokenService.consumePasswordResetToken(request.token()).getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+
+        return new AuthMessageResponse("Mật khẩu đã được cập nhật. Bạn có thể đăng nhập bằng mật khẩu mới.");
+    }
+
+    public AuthMessageResponse verifyEmail(VerifyEmailRequest request) {
+        User user = authTokenService.consumeEmailVerificationToken(request.token()).getUser();
+        user.setEmailVerified(true);
+        user.setEmailVerifiedAt(DateTimeUtils.nowUtc());
+        userRepository.save(user);
+
+        return new AuthMessageResponse("Email đã được xác thực thành công.");
+    }
+
+    public AuthMessageResponse resendVerification(ResendVerificationRequest request) {
+        String email = normalizeEmail(request.email());
+
+        userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
+                .filter(user -> !user.isEmailVerified())
+                .filter(user -> !UserStatus.DISABLED.equals(user.getStatus()))
+                .ifPresent(authTokenService::createEmailVerificationToken);
+
+        return new AuthMessageResponse(
+                "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn."
+        );
     }
 
     private String normalizeEmail(String email) {
