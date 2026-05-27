@@ -7,6 +7,7 @@ import ResetPasswordPage from '@/pages/auth/ResetPasswordPage.vue';
 import VerifyEmailPage from '@/pages/auth/VerifyEmailPage.vue';
 import AuthNoticePage from '@/pages/auth/AuthNoticePage.vue';
 import AuthErrorPage from '@/pages/auth/AuthErrorPage.vue';
+import AppHomePage from '@/pages/app/AppHomePage.vue';
 import { authGuard } from './authGuard';
 
 const router = createRouter({
@@ -16,6 +17,14 @@ const router = createRouter({
       path: '/',
       name: 'landing',
       component: LandingPage
+    },
+    {
+      path: '/app',
+      name: 'app-home',
+      component: AppHomePage,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/auth/login',
