@@ -1,9 +1,14 @@
 package com.gamifiedstudyhub.backend.auth.controller;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
+import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
+import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.common.constant.AppConstants;
 import com.gamifiedstudyhub.backend.common.response.ApiResponse;
@@ -38,6 +43,36 @@ public class AuthController {
     public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
         return ApiResponse.success("Login successful", response);
+    }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Request password reset instructions", security = {})
+    public ApiResponse<AuthMessageResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        AuthMessageResponse response = authService.forgotPassword(request);
+        return ApiResponse.success("Forgot password request accepted", response);
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password with a valid reset token", security = {})
+    public ApiResponse<AuthMessageResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        AuthMessageResponse response = authService.resetPassword(request);
+        return ApiResponse.success("Password reset completed", response);
+    }
+
+    @PostMapping("/verify-email")
+    @Operation(summary = "Verify user email with a valid verification token", security = {})
+    public ApiResponse<AuthMessageResponse> verifyEmail(@Valid @RequestBody VerifyEmailRequest request) {
+        AuthMessageResponse response = authService.verifyEmail(request);
+        return ApiResponse.success("Email verification completed", response);
+    }
+
+    @PostMapping("/resend-verification")
+    @Operation(summary = "Request a new email verification link", security = {})
+    public ApiResponse<AuthMessageResponse> resendVerification(
+            @Valid @RequestBody ResendVerificationRequest request
+    ) {
+        AuthMessageResponse response = authService.resendVerification(request);
+        return ApiResponse.success("Resend verification request accepted", response);
     }
 
     @GetMapping("/me")

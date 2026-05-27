@@ -241,6 +241,14 @@
 - Backend API contract for upcoming auth integration:
   - `docs/architecture/auth-api-contract.md`
 
+## Backend endpoint exposure note
+- Backend now exposes these auth flow endpoints:
+  - `POST /api/v1/auth/forgot-password`
+  - `POST /api/v1/auth/reset-password`
+  - `POST /api/v1/auth/verify-email`
+  - `POST /api/v1/auth/resend-verification`
+- Frontend auth pages are still not wired to backend APIs in this step.
+
 ## Recommended next steps
 1. Integrate authentication API and session strategy.
 2. Wire real resend/verify/reset flows and backend error handling.
