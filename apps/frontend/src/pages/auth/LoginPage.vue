@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
-import { clearAccessToken, setAccessToken } from '@/features/auth/authTokenStorage';
+import { useAuthSession } from '@/features/auth/authSession';
 import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
@@ -17,6 +17,7 @@ const form = reactive<FormState>({
   remember: false
 });
 const router = useRouter();
+const { setSessionFromAuthResponse, logout } = useAuthSession();
 
 const showPassword = ref(false);
 const loading = ref(false);
@@ -70,12 +71,11 @@ const handleSubmit = async () => {
       email: form.email.trim(),
       password: form.password
     });
-    setAccessToken(response.accessToken);
-    await authApi.me();
+    setSessionFromAuthResponse(response);
     formMessage.value = 'Đăng nhập thành công.';
     await router.push('/');
   } catch (error) {
-    clearAccessToken();
+    logout();
     if (error instanceof ApiError) {
       applyFieldErrors(error.fieldErrors);
       formMessage.value = error.message;
