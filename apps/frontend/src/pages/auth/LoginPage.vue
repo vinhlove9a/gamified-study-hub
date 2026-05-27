@@ -37,11 +37,11 @@ const getSafeRedirectPath = (): string => {
   const redirectQuery = route.query.redirect;
   const redirectPath = Array.isArray(redirectQuery) ? redirectQuery[0] : redirectQuery;
   if (typeof redirectPath !== 'string') {
-    return '/';
+    return '/app';
   }
 
   if (!redirectPath.startsWith('/') || redirectPath.startsWith('//')) {
-    return '/';
+    return '/app';
   }
 
   return redirectPath;

@@ -23,7 +23,7 @@ export const authGuard: NavigationGuardWithThis<undefined> = async (to) => {
   }
 
   if (to.meta.guestOnly && isAuthenticated.value) {
-    return { path: '/' };
+    return { path: '/app' };
   }
 
   return true;
