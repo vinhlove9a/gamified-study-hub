@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 interface FormState {
   email: string;
@@ -242,7 +243,7 @@ onUnmounted(() => {
                 <input v-model="form.remember" type="checkbox" class="remember-checkbox" />
                 <span>Ghi nhớ đăng nhập</span>
               </label>
-              <a href="#" class="auth-link">Quên mật khẩu?</a>
+              <RouterLink to="/auth/forgot-password" class="auth-link">Quên mật khẩu?</RouterLink>
             </div>
 
             <button type="submit" class="submit-btn btn-shimmer animate-slide-up delay-500" :disabled="loading" :aria-busy="loading">
@@ -254,7 +255,7 @@ onUnmounted(() => {
 
           <p class="register-row">
             Chưa có tài khoản?
-            <a href="#" class="auth-link auth-link--strong">Tạo tài khoản</a>
+            <RouterLink to="/auth/register" class="auth-link auth-link--strong">Tạo tài khoản</RouterLink>
           </p>
 
           <a href="/" class="back-home-link">Quay lại trang chủ</a>
