@@ -315,21 +315,23 @@
   - Prefer opaque random tokens stored hashed in DB (safer than long-lived JWT for one-time flows).
   - One-time use, short TTL, revoke on consumption.
 
-## Database impact (design only)
-- Current schema lacks:
-  - email verification status on `users`
-  - verification token storage
-  - password reset token storage
-  - refresh token storage
-- Proposed migration names (do not create yet):
+## Database impact
+- Applied migration:
   - `V3__auth_email_verification_and_reset_tokens.sql`
-  - `V4__auth_refresh_tokens.sql` (only if refresh-token feature is enabled later)
-- Proposed additions:
-  - `users.email_verified BOOLEAN NOT NULL DEFAULT FALSE`
-  - `users.email_verified_at TIMESTAMPTZ NULL`
-  - `auth_email_verification_tokens` table
-  - `auth_password_reset_tokens` table
-  - `auth_refresh_tokens` table (deferred)
+- Added to `users`:
+  - `email_verified BOOLEAN NOT NULL DEFAULT FALSE`
+  - `email_verified_at TIMESTAMPTZ NULL`
+- Added tables:
+  - `auth_email_verification_tokens`
+  - `auth_password_reset_tokens`
+- Token storage rules:
+  - only `token_hash` is persisted
+  - raw token values are never stored in database
+  - `consumed_at` marks one-time token usage
+- Referential behavior:
+  - token tables use `ON DELETE CASCADE` to remove orphaned auth tokens when a user is deleted
+- Deferred:
+  - refresh token table remains deferred (`V4__auth_refresh_tokens.sql` when refresh-token feature is enabled)
 
 ## Frontend integration mapping
 - `LoginPage` -> `POST /api/v1/auth/login`
