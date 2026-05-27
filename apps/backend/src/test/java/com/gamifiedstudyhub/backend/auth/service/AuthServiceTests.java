@@ -6,12 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
+import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
+import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
+import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
+import com.gamifiedstudyhub.backend.auth.entity.EmailVerificationToken;
+import com.gamifiedstudyhub.backend.auth.entity.PasswordResetToken;
 import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.JwtProperties;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
@@ -39,6 +47,9 @@ class AuthServiceTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private AuthTokenService authTokenService;
+
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
     private AuthService authService;
@@ -55,7 +66,8 @@ class AuthServiceTests {
                 passwordEncoder,
                 jwtService,
                 new AuthMapper(),
-                new PasswordPolicyValidator()
+                new PasswordPolicyValidator(),
+                authTokenService
         );
     }
 
@@ -139,5 +151,135 @@ class AuthServiceTests {
         assertEquals(ErrorCodes.INVALID_CREDENTIALS, exception.getCode());
         assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatus());
         assertEquals("Invalid email or password", exception.getMessage());
+    }
+
+    @Test
+    void forgotPassword_shouldReturnGenericMessageAndCreateTokenForExistingUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setStatus(UserStatus.ACTIVE);
+
+        when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
+                .thenReturn(Optional.of(user));
+
+        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest(" test@example.com "));
+
+        assertEquals(
+                "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn.",
+                response.message()
+        );
+        verify(authTokenService).createPasswordResetToken(user);
+    }
+
+    @Test
+    void forgotPassword_shouldReturnGenericMessageForUnknownEmail() {
+        when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("unknown@example.com"))
+                .thenReturn(Optional.empty());
+
+        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest("unknown@example.com"));
+
+        assertEquals(
+                "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn.",
+                response.message()
+        );
+        verify(authTokenService, never()).createPasswordResetToken(any(User.class));
+    }
+
+    @Test
+    void resendVerification_shouldCreateTokenForUnverifiedUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setStatus(UserStatus.ACTIVE);
+        user.setEmailVerified(false);
+
+        when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
+                .thenReturn(Optional.of(user));
+
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"));
+
+        assertEquals(
+                "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",
+                response.message()
+        );
+        verify(authTokenService).createEmailVerificationToken(user);
+    }
+
+    @Test
+    void resendVerification_shouldNotCreateTokenForVerifiedUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setStatus(UserStatus.ACTIVE);
+        user.setEmailVerified(true);
+
+        when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
+                .thenReturn(Optional.of(user));
+
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"));
+
+        assertEquals(
+                "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",
+                response.message()
+        );
+        verify(authTokenService, never()).createEmailVerificationToken(any(User.class));
+    }
+
+    @Test
+    void resendVerification_shouldReturnGenericMessageForUnknownEmail() {
+        when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("unknown@example.com"))
+                .thenReturn(Optional.empty());
+
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("unknown@example.com"));
+
+        assertEquals(
+                "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",
+                response.message()
+        );
+        verify(authTokenService, never()).createEmailVerificationToken(any(User.class));
+    }
+
+    @Test
+    void resetPassword_shouldUpdatePasswordForValidToken() {
+        User user = new User();
+        user.setPasswordHash(passwordEncoder.encode("oldPassword123"));
+
+        PasswordResetToken token = new PasswordResetToken();
+        token.setUser(user);
+        when(authTokenService.consumePasswordResetToken("valid-token")).thenReturn(token);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        AuthMessageResponse response = authService.resetPassword(new ResetPasswordRequest("valid-token", "NewPassword123"));
+
+        assertEquals("Mật khẩu đã được cập nhật. Bạn có thể đăng nhập bằng mật khẩu mới.", response.message());
+        assertTrue(passwordEncoder.matches("NewPassword123", user.getPasswordHash()));
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void resetPassword_shouldThrowWeakPasswordError() {
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> authService.resetPassword(new ResetPasswordRequest("valid-token", "weak"))
+        );
+
+        assertEquals(ErrorCodes.AUTH_PASSWORD_WEAK, exception.getCode());
+        verify(authTokenService, never()).consumePasswordResetToken(any(String.class));
+    }
+
+    @Test
+    void verifyEmail_shouldMarkUserVerifiedForValidToken() {
+        User user = new User();
+        user.setEmailVerified(false);
+
+        EmailVerificationToken token = new EmailVerificationToken();
+        token.setUser(user);
+        when(authTokenService.consumeEmailVerificationToken("verify-token")).thenReturn(token);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        AuthMessageResponse response = authService.verifyEmail(new VerifyEmailRequest("verify-token"));
+
+        assertEquals("Email đã được xác thực thành công.", response.message());
+        assertTrue(user.isEmailVerified());
+        assertNotNull(user.getEmailVerifiedAt());
+        verify(userRepository).save(user);
     }
 }

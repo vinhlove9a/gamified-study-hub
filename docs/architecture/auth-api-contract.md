@@ -358,8 +358,14 @@
   - `AuthMapper` for `User -> UserSummaryResponse` and `AuthResponse` mapping
   - `PasswordPolicyValidator` with minimum password policy (>=8 chars, at least one letter, one number)
   - `AuthTokenService` for opaque URL-safe token generation, SHA-256 hashing, and token persistence helpers
+- Service-layer auth flow methods implemented in `AuthService`:
+  - `forgotPassword(ForgotPasswordRequest)` with anti-enumeration generic response
+  - `resetPassword(ResetPasswordRequest)` with token consume + password update
+  - `verifyEmail(VerifyEmailRequest)` with token consume + `emailVerified` update
+  - `resendVerification(ResendVerificationRequest)` with anti-enumeration generic response
+  - these methods are internal service layer only; no new controllers/endpoints exposed yet
 - Existing register/login/me foundation remains operational with `UserSummaryResponse`.
 - Not implemented yet:
-  - forgot/reset/verify/resend business service flows
   - email sending integration
+  - frontend integration wiring for forgot/reset/verify/resend
   - refresh token flow
