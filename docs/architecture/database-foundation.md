@@ -33,6 +33,14 @@ Core tables in `V2__core_schema.sql`:
 - `download_logs`
 - `daily_checkins`
 
+Auth tables in `V3__auth_email_verification_and_reset_tokens.sql`:
+- `auth_email_verification_tokens`
+- `auth_password_reset_tokens`
+
+Auth columns added to `users` in V3:
+- `email_verified`
+- `email_verified_at`
+
 ## 4) Relationship Overview
 - Users ↔ Workspaces: many-to-many via `workspace_members`
 - Workspace → Documents/Categories/Tags/Missions/Wallets/Logs: one-to-many
@@ -99,6 +107,7 @@ Indexes are added for:
 
 ## 12) Intentionally Not Implemented Yet
 - Authentication/JWT and security policy enforcement
+- Auth business flows (email verification handling, password reset handling)
 - Authorization rules and role-policy engine
 - Business services/controllers/repositories for domain workflows
 - File upload storage integration and signed URL flows

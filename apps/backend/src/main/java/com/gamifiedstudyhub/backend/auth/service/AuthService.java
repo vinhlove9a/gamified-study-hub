@@ -1,9 +1,9 @@
 package com.gamifiedstudyhub.backend.auth.service;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
-import com.gamifiedstudyhub.backend.auth.dto.CurrentUserResponse;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
@@ -91,7 +91,7 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public CurrentUserResponse getCurrentUser() {
+    public UserSummaryResponse getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new UnauthorizedException("Unauthorized");
@@ -102,7 +102,7 @@ public class AuthService {
             throw new UnauthorizedException("Unauthorized");
         }
 
-        return toCurrentUserResponse(customUserDetails.getUser());
+        return toUserSummaryResponse(customUserDetails.getUser());
     }
 
     private AuthResponse buildAuthResponse(User user, String accessToken) {
@@ -110,17 +110,19 @@ public class AuthService {
                 accessToken,
                 "Bearer",
                 jwtService.getAccessTokenExpirationSeconds(),
-                toCurrentUserResponse(user)
+                toUserSummaryResponse(user)
         );
     }
 
-    private CurrentUserResponse toCurrentUserResponse(User user) {
-        return new CurrentUserResponse(
+    private UserSummaryResponse toUserSummaryResponse(User user) {
+        return new UserSummaryResponse(
                 user.getId(),
-                user.getEmail(),
                 user.getFullName(),
-                user.getAvatarUrl(),
-                user.getStatus().name()
+                user.getEmail(),
+                user.getStatus().name(),
+                user.isEmailVerified(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 

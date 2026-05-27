@@ -4,6 +4,6 @@ public record AuthResponse(
         String accessToken,
         String tokenType,
         long expiresInSeconds,
-        CurrentUserResponse user
+        UserSummaryResponse user
 ) {
 }
