@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
   password: string;
@@ -11,6 +13,8 @@ const form = reactive<FormState>({
   password: '',
   confirmPassword: ''
 });
+const route = useRoute();
+const router = useRouter();
 
 const loading = ref(false);
 const formMessage = ref('');
@@ -66,17 +70,41 @@ const validate = () => {
     errors.confirmPassword = 'Xác nhận mật khẩu không khớp';
   }
 
-  return !errors.password && !errors.confirmPassword;
+  const token = typeof route.query.token === 'string' ? route.query.token.trim() : '';
+  if (!token) {
+    formMessage.value = 'Thiếu token đặt lại mật khẩu. Vui lòng mở lại liên kết từ email.';
+  }
+
+  return !errors.password && !errors.confirmPassword && !!token;
 };
 
 const handleSubmit = async () => {
   formMessage.value = '';
   if (!validate()) return;
 
+  const token = typeof route.query.token === 'string' ? route.query.token.trim() : '';
+  if (!token) {
+    formMessage.value = 'Thiếu token đặt lại mật khẩu. Vui lòng mở lại liên kết từ email.';
+    return;
+  }
+
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  formMessage.value = 'Chức năng đặt lại mật khẩu sẽ được kết nối API ở bước tiếp theo.';
+  try {
+    const response = await authApi.resetPassword({
+      token,
+      newPassword: form.password
+    });
+    formMessage.value = response.message;
+    await router.push('/auth/notice?type=password-reset-success');
+  } catch (error) {
+    if (error instanceof ApiError) {
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

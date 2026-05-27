@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { clearAccessToken, setAccessToken } from '@/features/auth/authTokenStorage';
+import { ApiError } from '@/lib/api/apiError';
 
 interface FormState {
   email: string;
@@ -13,6 +16,7 @@ const form = reactive<FormState>({
   password: '',
   remember: false
 });
+const router = useRouter();
 
 const showPassword = ref(false);
 const loading = ref(false);
@@ -26,6 +30,18 @@ let cleanupMouseMove: (() => void) | null = null;
 let cleanupResize: (() => void) | null = null;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const applyFieldErrors = (fieldErrors?: Array<{ field: string; message: string }>) => {
+  if (!fieldErrors) return;
+  for (const fieldError of fieldErrors) {
+    if (fieldError.field === 'email') {
+      errors.email = fieldError.message;
+    }
+    if (fieldError.field === 'password') {
+      errors.password = fieldError.message;
+    }
+  }
+};
 
 const validate = () => {
   errors.email = '';
@@ -49,9 +65,26 @@ const handleSubmit = async () => {
   if (!validate()) return;
 
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  formMessage.value = 'Chức năng đăng nhập sẽ được kết nối API ở bước tiếp theo.';
+  try {
+    const response = await authApi.login({
+      email: form.email.trim(),
+      password: form.password
+    });
+    setAccessToken(response.accessToken);
+    await authApi.me();
+    formMessage.value = 'Đăng nhập thành công.';
+    await router.push('/');
+  } catch (error) {
+    clearAccessToken();
+    if (error instanceof ApiError) {
+      applyFieldErrors(error.fieldErrors);
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(() => {

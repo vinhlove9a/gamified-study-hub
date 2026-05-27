@@ -1,18 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, ref } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { ApiError } from '@/lib/api/apiError';
 
 const loading = ref(false);
 const resendCount = ref(0);
 const formMessage = ref('');
+const route = useRoute();
+const router = useRouter();
+
+const verifyToken = computed(() => (typeof route.query.token === 'string' ? route.query.token.trim() : ''));
+const emailFromQuery = computed(() => (typeof route.query.email === 'string' ? route.query.email.trim() : ''));
+const actionLabel = computed(() => (verifyToken.value ? 'Xác thực email' : 'Gửi lại email xác thực'));
 
 const handleResend = async () => {
   formMessage.value = '';
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  resendCount.value += 1;
-  formMessage.value = 'Email xác thực sẽ được gửi lại ở bước tích hợp API.';
+  try {
+    if (verifyToken.value) {
+      const response = await authApi.verifyEmail({ token: verifyToken.value });
+      formMessage.value = response.message;
+      await router.push('/auth/notice?type=email-verified');
+      return;
+    }
+
+    if (!emailFromQuery.value) {
+      formMessage.value = 'Thiếu email để gửi lại xác thực. Vui lòng đăng ký lại hoặc đăng nhập.';
+      return;
+    }
+
+    const response = await authApi.resendVerification({ email: emailFromQuery.value });
+    resendCount.value += 1;
+    formMessage.value = response.message;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -65,7 +94,7 @@ const handleResend = async () => {
 
             <div class="form-stack" role="group" aria-label="Hành động xác thực email">
               <button type="button" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading" @click="handleResend">
-                {{ loading ? 'Đang xử lý...' : 'Gửi lại email xác thực' }}
+                {{ loading ? 'Đang xử lý...' : actionLabel }}
               </button>
 
               <p class="helper-note">Không thấy email? Hãy kiểm tra thư mục spam hoặc gửi lại liên kết xác thực.</p>

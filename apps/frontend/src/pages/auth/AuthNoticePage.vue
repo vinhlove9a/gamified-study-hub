@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
+import { authApi } from '@/features/auth/authApi';
+import { ApiError } from '@/lib/api/apiError';
 
 const route = useRoute();
 const loading = ref(false);
 const formMessage = ref('');
+const queryEmail = computed(() => (typeof route.query.email === 'string' ? route.query.email.trim() : ''));
 
 const supportedTypes = ['registration-success', 'reset-link-sent', 'password-reset-success', 'email-verified'] as const;
 type NoticeType = (typeof supportedTypes)[number] | 'default';
@@ -71,10 +74,33 @@ const noticeConfig = computed(() => {
 
 const handleResend = async () => {
   formMessage.value = '';
+  if (!queryEmail.value) {
+    formMessage.value = 'Thiếu email để gửi lại yêu cầu.';
+    return;
+  }
+
   loading.value = true;
-  await new Promise((resolve) => setTimeout(resolve, 700));
-  loading.value = false;
-  formMessage.value = 'Yêu cầu gửi lại sẽ được kết nối API ở bước tiếp theo.';
+  try {
+    if (noticeType.value === 'registration-success') {
+      const response = await authApi.resendVerification({ email: queryEmail.value });
+      formMessage.value = response.message;
+      return;
+    }
+    if (noticeType.value === 'reset-link-sent') {
+      const response = await authApi.forgotPassword({ email: queryEmail.value });
+      formMessage.value = response.message;
+      return;
+    }
+    formMessage.value = 'Không có hành động gửi lại cho trạng thái hiện tại.';
+  } catch (error) {
+    if (error instanceof ApiError) {
+      formMessage.value = error.message;
+    } else {
+      formMessage.value = 'Không thể kết nối máy chủ. Vui lòng thử lại.';
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
