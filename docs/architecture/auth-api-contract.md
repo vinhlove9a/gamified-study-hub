@@ -354,6 +354,10 @@
 - Token persistence foundation created:
   - `EmailVerificationToken` entity + repository
   - `PasswordResetToken` entity + repository
+- Service foundation helpers added:
+  - `AuthMapper` for `User -> UserSummaryResponse` and `AuthResponse` mapping
+  - `PasswordPolicyValidator` with minimum password policy (>=8 chars, at least one letter, one number)
+  - `AuthTokenService` for opaque URL-safe token generation, SHA-256 hashing, and token persistence helpers
 - Existing register/login/me foundation remains operational with `UserSummaryResponse`.
 - Not implemented yet:
   - forgot/reset/verify/resend business service flows

@@ -4,6 +4,7 @@ import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
+import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
@@ -28,14 +29,25 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthMapper authMapper;
+    private final PasswordPolicyValidator passwordPolicyValidator;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            AuthMapper authMapper,
+            PasswordPolicyValidator passwordPolicyValidator
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.authMapper = authMapper;
+        this.passwordPolicyValidator = passwordPolicyValidator;
     }
 
     public AuthResponse register(RegisterRequest request) {
+        passwordPolicyValidator.validateOrThrow(request.password());
         String email = normalizeEmail(request.email());
         if (userRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull(email)) {
             throw new BusinessException(
@@ -50,11 +62,13 @@ public class AuthService {
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setFullName(request.fullName().trim());
         user.setStatus(UserStatus.ACTIVE);
+        user.setEmailVerified(false);
+        user.setEmailVerifiedAt(null);
 
         User savedUser = userRepository.save(user);
         String accessToken = jwtService.generateAccessToken(savedUser);
 
-        return buildAuthResponse(savedUser, accessToken);
+        return authMapper.toAuthResponse(accessToken, jwtService.getAccessTokenExpirationSeconds(), savedUser);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -87,7 +101,7 @@ public class AuthService {
         userRepository.save(user);
 
         String accessToken = jwtService.generateAccessToken(user);
-        return buildAuthResponse(user, accessToken);
+        return authMapper.toAuthResponse(accessToken, jwtService.getAccessTokenExpirationSeconds(), user);
     }
 
     @Transactional(readOnly = true)
@@ -102,28 +116,7 @@ public class AuthService {
             throw new UnauthorizedException("Unauthorized");
         }
 
-        return toUserSummaryResponse(customUserDetails.getUser());
-    }
-
-    private AuthResponse buildAuthResponse(User user, String accessToken) {
-        return new AuthResponse(
-                accessToken,
-                "Bearer",
-                jwtService.getAccessTokenExpirationSeconds(),
-                toUserSummaryResponse(user)
-        );
-    }
-
-    private UserSummaryResponse toUserSummaryResponse(User user) {
-        return new UserSummaryResponse(
-                user.getId(),
-                user.getFullName(),
-                user.getEmail(),
-                user.getStatus().name(),
-                user.isEmailVerified(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
+        return authMapper.toUserSummary(customUserDetails.getUser());
     }
 
     private String normalizeEmail(String email) {

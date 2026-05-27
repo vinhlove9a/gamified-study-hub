@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.JwtProperties;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
@@ -49,7 +50,13 @@ class AuthServiceTests {
         jwtProperties.setSecret("test-secret-key-at-least-32-characters-long");
         jwtProperties.setAccessTokenExpirationMinutes(60);
         jwtService = new JwtService(jwtProperties);
-        authService = new AuthService(userRepository, passwordEncoder, jwtService);
+        authService = new AuthService(
+                userRepository,
+                passwordEncoder,
+                jwtService,
+                new AuthMapper(),
+                new PasswordPolicyValidator()
+        );
     }
 
     @Test
