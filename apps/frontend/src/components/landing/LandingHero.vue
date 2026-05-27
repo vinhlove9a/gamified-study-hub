@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, inject } from 'vue';
+import { useRouter } from 'vue-router';
 import type { AnimationAPI } from '@/types/gsap';
 import FlowParticles from '@/components/ui/FlowParticles.vue';
 import { useKeyboardNavigation } from '@/composables/useKeyboardNavigation';
@@ -8,17 +9,15 @@ type GsapType = typeof import('gsap').gsap;
 
 const gsap = inject<GsapType | null>('gsap', null);
 const animation = inject<AnimationAPI | null>('animation', null);
+const router = useRouter();
 const { handleEnterOrSpace } = useKeyboardNavigation();
 
 const ctaButtonRef = ref<HTMLButtonElement | null>(null);
 let bgParallaxTween: ReturnType<GsapType['to']> | null = null;
 let cleanupFns: Array<() => void> = [];
 
-const scrollToNextSection = () => {
-  const nextSection = document.querySelector('#sustainability');
-  if (nextSection) {
-    nextSection.scrollIntoView({ behavior: 'smooth' });
-  }
+const goToLoginPage = () => {
+  router.push('/auth/login');
 };
 
 const onImageLoad = () => {
@@ -47,7 +46,7 @@ onMounted(() => {
   if (!gsap) return;
 
   if (ctaButtonRef.value) {
-    const cleanupKeyboard = handleEnterOrSpace(ctaButtonRef.value, scrollToNextSection);
+    const cleanupKeyboard = handleEnterOrSpace(ctaButtonRef.value, goToLoginPage);
     if (cleanupKeyboard) cleanupFns.push(cleanupKeyboard);
   }
 
@@ -189,7 +188,7 @@ onUnmounted(() => {
             ref="ctaButtonRef"
             class="hero-cta" 
             aria-label="Bắt đầu"
-            @click="scrollToNextSection"
+            @click="goToLoginPage"
           >
             <span>Bắt đầu</span>
             <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
