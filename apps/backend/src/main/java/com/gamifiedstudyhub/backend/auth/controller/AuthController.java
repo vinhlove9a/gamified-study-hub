@@ -1,9 +1,9 @@
 package com.gamifiedstudyhub.backend.auth.controller;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
-import com.gamifiedstudyhub.backend.auth.dto.CurrentUserResponse;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
+import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.common.constant.AppConstants;
 import com.gamifiedstudyhub.backend.common.response.ApiResponse;
@@ -42,8 +42,8 @@ public class AuthController {
 
     @GetMapping("/me")
     @Operation(summary = "Get current authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
-    public ApiResponse<CurrentUserResponse> me() {
-        CurrentUserResponse response = authService.getCurrentUser();
+    public ApiResponse<UserSummaryResponse> me() {
+        UserSummaryResponse response = authService.getCurrentUser();
         return ApiResponse.success("Current user retrieved", response);
     }
 }

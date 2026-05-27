@@ -20,7 +20,7 @@ class AuthRequestValidationTests {
 
     @Test
     void registerRequest_shouldFailValidationWhenFieldsAreInvalid() {
-        RegisterRequest request = new RegisterRequest("", "123", "");
+        RegisterRequest request = new RegisterRequest("", "", "123");
 
         Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(request);
 

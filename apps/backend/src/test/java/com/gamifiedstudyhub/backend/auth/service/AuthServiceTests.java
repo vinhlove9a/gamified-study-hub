@@ -54,7 +54,7 @@ class AuthServiceTests {
 
     @Test
     void register_shouldCreateUserAndReturnToken() {
-        RegisterRequest request = new RegisterRequest("  Test@Example.com ", "password123", "Test User");
+        RegisterRequest request = new RegisterRequest("Test User", "  Test@Example.com ", "password123");
 
         when(userRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
@@ -85,7 +85,7 @@ class AuthServiceTests {
 
     @Test
     void register_shouldFailWhenEmailAlreadyExists() {
-        RegisterRequest request = new RegisterRequest("test@example.com", "password123", "Test User");
+        RegisterRequest request = new RegisterRequest("Test User", "test@example.com", "password123");
 
         when(userRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com")).thenReturn(true);
 

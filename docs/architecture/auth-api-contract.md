@@ -346,3 +346,16 @@
 - Controller/service/repository business implementation.
 - Email provider integration details.
 - Refresh token persistence and logout invalidation logic.
+
+## Implementation status (backend foundation)
+- DTOs created/aligned for contract:
+  - `RegisterRequest`, `LoginRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`, `VerifyEmailRequest`, `ResendVerificationRequest`
+  - `UserSummaryResponse`, `AuthResponse`, `AuthMessageResponse`
+- Token persistence foundation created:
+  - `EmailVerificationToken` entity + repository
+  - `PasswordResetToken` entity + repository
+- Existing register/login/me foundation remains operational with `UserSummaryResponse`.
+- Not implemented yet:
+  - forgot/reset/verify/resend business service flows
+  - email sending integration
+  - refresh token flow
