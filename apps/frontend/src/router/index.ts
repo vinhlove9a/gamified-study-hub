@@ -7,6 +7,7 @@ import ResetPasswordPage from '@/pages/auth/ResetPasswordPage.vue';
 import VerifyEmailPage from '@/pages/auth/VerifyEmailPage.vue';
 import AuthNoticePage from '@/pages/auth/AuthNoticePage.vue';
 import AuthErrorPage from '@/pages/auth/AuthErrorPage.vue';
+import { authGuard } from './authGuard';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -19,12 +20,18 @@ const router = createRouter({
     {
       path: '/auth/login',
       name: 'auth-login',
-      component: LoginPage
+      component: LoginPage,
+      meta: {
+        guestOnly: true
+      }
     },
     {
       path: '/auth/register',
       name: 'auth-register',
-      component: RegisterPage
+      component: RegisterPage,
+      meta: {
+        guestOnly: true
+      }
     },
     {
       path: '/auth/forgot-password',
@@ -53,5 +60,7 @@ const router = createRouter({
     }
   ]
 });
+
+router.beforeEach(authGuard);
 
 export default router;

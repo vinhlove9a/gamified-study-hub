@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
 import { useAuthSession } from '@/features/auth/authSession';
 import { ApiError } from '@/lib/api/apiError';
@@ -17,6 +17,7 @@ const form = reactive<FormState>({
   remember: false
 });
 const router = useRouter();
+const route = useRoute();
 const { setSessionFromAuthResponse, logout } = useAuthSession();
 
 const showPassword = ref(false);
@@ -31,6 +32,20 @@ let cleanupMouseMove: (() => void) | null = null;
 let cleanupResize: (() => void) | null = null;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const getSafeRedirectPath = (): string => {
+  const redirectQuery = route.query.redirect;
+  const redirectPath = Array.isArray(redirectQuery) ? redirectQuery[0] : redirectQuery;
+  if (typeof redirectPath !== 'string') {
+    return '/';
+  }
+
+  if (!redirectPath.startsWith('/') || redirectPath.startsWith('//')) {
+    return '/';
+  }
+
+  return redirectPath;
+};
 
 const applyFieldErrors = (fieldErrors?: Array<{ field: string; message: string }>) => {
   if (!fieldErrors) return;
@@ -73,7 +88,7 @@ const handleSubmit = async () => {
     });
     setSessionFromAuthResponse(response);
     formMessage.value = 'Đăng nhập thành công.';
-    await router.push('/');
+    await router.push(getSafeRedirectPath());
   } catch (error) {
     logout();
     if (error instanceof ApiError) {

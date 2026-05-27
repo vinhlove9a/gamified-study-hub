@@ -6,6 +6,7 @@ import { ApiError } from '@/lib/api/apiError';
 const currentUser = ref<UserSummary | null>(null);
 const isBootstrapping = ref(false);
 const sessionError = ref<ApiError | null>(null);
+let bootstrapPromise: Promise<void> | null = null;
 
 const isAuthenticated = computed(() => Boolean(currentUser.value && getAccessToken()));
 
@@ -16,6 +17,9 @@ function clearSession(): void {
 
 async function bootstrapSession(): Promise<void> {
   if (isBootstrapping.value) {
+    if (bootstrapPromise) {
+      await bootstrapPromise;
+    }
     return;
   }
 
@@ -26,25 +30,30 @@ async function bootstrapSession(): Promise<void> {
   }
 
   isBootstrapping.value = true;
-  try {
-    const user = await authApi.me();
-    currentUser.value = user;
-    sessionError.value = null;
-  } catch (error) {
-    clearAccessToken();
-    currentUser.value = null;
-    if (error instanceof ApiError) {
-      sessionError.value = error;
-    } else {
-      sessionError.value = new ApiError({
-        code: 'SESSION_BOOTSTRAP_FAILED',
-        message: 'Failed to bootstrap session',
-        status: 0
-      });
+  bootstrapPromise = (async () => {
+    try {
+      const user = await authApi.me();
+      currentUser.value = user;
+      sessionError.value = null;
+    } catch (error) {
+      clearAccessToken();
+      currentUser.value = null;
+      if (error instanceof ApiError) {
+        sessionError.value = error;
+      } else {
+        sessionError.value = new ApiError({
+          code: 'SESSION_BOOTSTRAP_FAILED',
+          message: 'Failed to bootstrap session',
+          status: 0
+        });
+      }
+    } finally {
+      isBootstrapping.value = false;
+      bootstrapPromise = null;
     }
-  } finally {
-    isBootstrapping.value = false;
-  }
+  })();
+
+  await bootstrapPromise;
 }
 
 function setSessionFromAuthResponse(authResponse: AuthResponse): void {
@@ -70,4 +79,3 @@ export function useAuthSession() {
     clearSession
   };
 }
-

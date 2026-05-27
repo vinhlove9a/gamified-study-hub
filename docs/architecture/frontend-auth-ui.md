@@ -232,7 +232,7 @@
 ## Current limitations
 - Frontend auth pages are now wired to backend auth APIs for login/register/forgot/reset/verify.
 - Access token is stored in `localStorage` via `authTokenStorage` for MVP only.
-- Route guards are not implemented yet.
+- Route guard foundation exists, but no protected business route is enabled yet.
 - Dashboard/protected business pages are not implemented yet.
 - Refresh token flow is not implemented.
 - Backend email provider delivery is still not implemented.
@@ -276,11 +276,28 @@
   - `clearSession()` clears in-memory session state.
 - Invalid token behavior:
   - if `/me` bootstrap fails, access token and session are cleared silently.
+- Concurrent bootstrap behavior:
+  - guard/app bootstrap reuse one in-flight `bootstrapSession()` promise to avoid duplicate `/me` requests.
 - No refresh token behavior exists in this phase.
+
+## Route guard foundation
+- Added router guard: `apps/frontend/src/router/authGuard.ts`
+- Meta typing:
+  - `requiresAuth?: boolean`
+  - `guestOnly?: boolean`
+- Guard behavior:
+  - `requiresAuth=true`: if unauthenticated with stored token, attempts `bootstrapSession()`.
+  - if still unauthenticated, redirects to `/auth/login?redirect=<originalFullPath>`.
+  - `guestOnly=true`: if authenticated, redirects to `/`.
+  - routes without auth meta remain public.
+- Current metadata usage:
+  - `/auth/login` and `/auth/register` use `guestOnly=true`.
+  - `/`, `/auth/forgot-password`, `/auth/reset-password`, `/auth/verify-email`, `/auth/notice`, `/auth/error` remain public.
+- No protected business pages are defined in this phase.
 
 ## Wired page behavior
 - `App.vue` bootstraps auth session once via `bootstrapSession()` on mount (no redirect, no full-screen blocker).
-- `LoginPage` -> calls `POST /api/v1/auth/login`, applies `setSessionFromAuthResponse()`, then redirects to `/` as a temporary placeholder until dashboard flow exists.
+- `LoginPage` -> calls `POST /api/v1/auth/login`, applies `setSessionFromAuthResponse()`, then redirects to a safe internal `redirect` query path when present, otherwise `/`.
 - `RegisterPage` -> calls `POST /api/v1/auth/register`, applies `setSessionFromAuthResponse()` when token exists, routes to `/auth/notice?type=registration-success`.
 - `ForgotPasswordPage` -> calls `POST /api/v1/auth/forgot-password`, routes to `/auth/notice?type=reset-link-sent`.
 - `ResetPasswordPage` -> reads `token` from query and calls `POST /api/v1/auth/reset-password`, routes to `/auth/notice?type=password-reset-success`.
@@ -292,9 +309,9 @@
   - for `reset-link-sent` + `email` query: calls `POST /api/v1/auth/forgot-password`
 
 ## Route guard status
-- Router guard is intentionally not implemented yet.
-- Public routes remain accessible without session checks.
-- Guard logic for protected pages will be added in a later step when protected pages exist.
+- Router guard foundation is implemented.
+- Public routes remain accessible without broad blocking.
+- `requiresAuth` behavior is available for future protected routes, but no protected business route is enabled yet.
 
 ## Recommended next steps
 1. Integrate authentication API and session strategy.
