@@ -121,6 +121,7 @@ const handleSubmit = async () => {
                   placeholder="hello@example.com"
                   autocomplete="email"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.email)"
                   :aria-describedby="errors.email ? 'email-error' : undefined"
                 />

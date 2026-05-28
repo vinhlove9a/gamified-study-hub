@@ -249,6 +249,7 @@ onUnmounted(() => {
                   placeholder="hello@example.com"
                   autocomplete="email"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.email)"
                   :aria-describedby="errors.email ? 'email-error' : undefined"
                   @focus="emailFocused = true"
@@ -271,12 +272,14 @@ onUnmounted(() => {
                   placeholder="••••••••"
                   autocomplete="current-password"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.password)"
                   :aria-describedby="errors.password ? 'password-error' : undefined"
                 />
                 <button
                   type="button"
                   class="password-toggle"
+                  :disabled="loading"
                   :aria-label="showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
                   @click="showPassword = !showPassword"
                 >
@@ -288,7 +291,7 @@ onUnmounted(() => {
 
             <div class="option-row animate-fade-in delay-500">
               <label class="remember-label">
-                <input v-model="form.remember" type="checkbox" class="remember-checkbox" />
+                <input v-model="form.remember" type="checkbox" class="remember-checkbox" :disabled="loading" />
                 <span>Ghi nhớ đăng nhập</span>
               </label>
               <RouterLink to="/auth/forgot-password" class="auth-link">Quên mật khẩu?</RouterLink>

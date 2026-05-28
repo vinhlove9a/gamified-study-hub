@@ -324,6 +324,21 @@
 - `requiresAuth` behavior is now exercised by `/app`.
 - No backend logout endpoint is used in this phase; logout remains frontend-only.
 
+## UX hardening (Step 9C)
+- Improved loading/disabled interaction states for auth forms:
+  - login/register/forgot/reset inputs are disabled while submitting.
+  - submit buttons keep `aria-busy` and prevent double-submit interactions.
+  - async feedback remains exposed through `aria-live` status messages.
+- Redirect hardening:
+  - guestOnly routes now attempt one session bootstrap when token exists but user memory is empty, reducing redirect flicker after reload.
+  - safe redirect behavior remains: only internal paths are accepted; fallback target is `/app`.
+- App shell hardening:
+  - logout button now has explicit in-progress state (`Đang đăng xuất...`) and is disabled while navigation completes.
+  - user display fallback remains: `fullName` -> `email` -> `Người dùng`.
+- No refresh token logic added.
+- No backend email sending changes.
+- No business CRUD modules were introduced.
+
 ## Recommended next steps
 1. Integrate authentication API and session strategy.
 2. Wire real resend/verify/reset flows and backend error handling.
