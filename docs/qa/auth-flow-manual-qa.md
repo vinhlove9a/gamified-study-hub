@@ -49,3 +49,16 @@ Branch: `feat/auth-flow-manual-qa`
 - No real email link delivery flow for reset/verify.
 - Token storage is MVP-level (frontend local storage) and not production-hardened yet.
 - `mvn test` may fail in this environment due to Java 25 + Mockito inline MockMaker initialization/self-attach issue (environment-related).
+
+## Step 9C retest and hardening
+- Retested API/route flows after UX hardening updates.
+- Implemented frontend-only UX hardening fixes:
+  - disable auth inputs while submit is in flight (login/register/forgot/reset).
+  - preserve async feedback announcements via `aria-live`.
+  - guard guestOnly behavior now re-checks session by bootstrap when token exists but in-memory user is missing.
+  - app shell logout now has explicit loading/disabled state to avoid repeated clicks.
+- No backend API contract changes.
+- No refresh token/email sender/business CRUD additions.
+- Manual browser interactions that may still need human verification on a local browser:
+  - detailed visual/animation smoothness during redirects
+  - final UX perception of login->/app and logout->/auth/login transitions

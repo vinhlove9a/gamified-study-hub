@@ -179,6 +179,7 @@ const handleSubmit = async () => {
                   type="text"
                   autocomplete="name"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.fullName)"
                   :aria-describedby="errors.fullName ? 'full-name-error' : undefined"
                 />
@@ -196,6 +197,7 @@ const handleSubmit = async () => {
                   placeholder="hello@example.com"
                   autocomplete="email"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.email)"
                   :aria-describedby="errors.email ? 'email-error' : undefined"
                 />
@@ -212,6 +214,7 @@ const handleSubmit = async () => {
                   type="password"
                   autocomplete="new-password"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.password)"
                   :aria-describedby="errors.password ? 'password-error password-strength' : 'password-strength'"
                 />
@@ -231,6 +234,7 @@ const handleSubmit = async () => {
                   type="password"
                   autocomplete="new-password"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.confirmPassword)"
                   :aria-describedby="errors.confirmPassword ? 'confirm-password-error' : undefined"
                 />
@@ -244,6 +248,7 @@ const handleSubmit = async () => {
                     v-model="form.acceptedTerms"
                     class="terms-checkbox"
                     type="checkbox"
+                    :disabled="loading"
                     :aria-invalid="Boolean(errors.acceptedTerms)"
                     :aria-describedby="errors.acceptedTerms ? 'accepted-terms-error' : undefined"
                   />

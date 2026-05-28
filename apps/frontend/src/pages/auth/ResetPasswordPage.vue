@@ -165,6 +165,7 @@ const handleSubmit = async () => {
                   type="password"
                   autocomplete="new-password"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.password)"
                   :aria-describedby="errors.password ? 'password-error password-strength' : 'password-strength'"
                 />
@@ -184,6 +185,7 @@ const handleSubmit = async () => {
                   type="password"
                   autocomplete="new-password"
                   required
+                  :disabled="loading"
                   :aria-invalid="Boolean(errors.confirmPassword)"
                   :aria-describedby="errors.confirmPassword ? 'confirm-password-error' : undefined"
                 />

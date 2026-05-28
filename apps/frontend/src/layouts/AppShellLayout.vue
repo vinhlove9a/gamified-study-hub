@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthSession } from '@/features/auth/authSession';
 
 const router = useRouter();
 const { currentUser, logout } = useAuthSession();
+const loggingOut = ref(false);
 
 const displayName = computed(() => {
   if (currentUser.value?.fullName?.trim()) {
@@ -14,8 +15,17 @@ const displayName = computed(() => {
 });
 
 const handleLogout = async () => {
-  logout();
-  await router.push('/auth/login');
+  if (loggingOut.value) {
+    return;
+  }
+
+  loggingOut.value = true;
+  try {
+    logout();
+    await router.push('/auth/login');
+  } finally {
+    loggingOut.value = false;
+  }
 };
 </script>
 
@@ -44,8 +54,8 @@ const handleLogout = async () => {
           <p class="header-title">Khu vực đăng nhập</p>
           <p class="header-subtitle">Xin chào, {{ displayName }}</p>
         </div>
-        <button type="button" class="logout-btn" @click="handleLogout">
-          Đăng xuất
+        <button type="button" class="logout-btn" :disabled="loggingOut" :aria-busy="loggingOut" @click="handleLogout">
+          {{ loggingOut ? 'Đang đăng xuất...' : 'Đăng xuất' }}
         </button>
       </header>
 
