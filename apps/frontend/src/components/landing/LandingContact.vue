@@ -46,23 +46,23 @@ const contactInfo: ContactInfo[] = [
     id: 'email',
     type: 'Email',
     label: 'Email',
-    value: 'you@example.com',
+    value: 'xuanvinhchan@gmail.com',
     icon: 'email',
-    link: 'mailto:you@example.com'
+    link: 'mailto:xuanvinhchan@gmail.com'
   },
   {
     id: 'phone',
     type: 'Liên hệ',
-    label: 'Trao đổi thêm',
-    value: 'Gamified Study Hub',
+    label: 'Điện thoại',
+    value: '099999999',
     icon: 'phone',
-    link: '#'
+    link: 'tel:099999999'
   },
   {
     id: 'trade',
     type: 'Demo',
-    label: 'Xem demo',
-    value: 'Đặt lịch giới thiệu',
+    label: 'Mission Control',
+    value: 'Đặt lịch xem workspace',
     icon: 'trade',
     link: '#'
   }
@@ -311,30 +311,30 @@ onUnmounted(() => {
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
           </span>
-          <span class="badge-text">Bắt đầu từ kho tài liệu bạn đang có</span>
+          <span class="badge-text">Kết nối kho tri thức vào quỹ đạo học tập</span>
         </div>
 
         <h2 class="hero-title">
-          Sẵn sàng dựng cổng học tập riêng
-          <span class="title-accent">cho cộng đồng của bạn?</span>
+          Sẵn sàng mở Deep Workspace
+          <span class="title-accent cosmic-gradient-text">cho cộng đồng của bạn?</span>
         </h2>
 
         <p class="hero-description">
-          Bạn có thể bắt đầu từ kho tài liệu hiện có. Chúng tôi giúp biến nó thành một cổng học tập có cấu trúc, có nhiệm vụ, có điểm thưởng và có lý do để học viên quay lại.
+          Bắt đầu từ tài liệu đang có, rồi đưa chúng vào một hệ thống có mission, coin, streak và cổng mở khóa VIP để học viên có lý do quay lại mỗi ngày.
         </p>
 
         <div class="hero-stats">
           <div class="hero-stat">
             <span class="stat-value">1</span>
-            <span class="stat-label">Nền tảng</span>
+            <span class="stat-label">Workspace</span>
           </div>
           <div class="hero-stat">
             <span class="stat-value">24/7</span>
-            <span class="stat-label">Truy cập tài liệu</span>
+            <span class="stat-label">Orbit online</span>
           </div>
           <div class="hero-stat">
             <span class="stat-value">0</span>
-            <span class="stat-label">Chi phí khởi đầu</span>
+            <span class="stat-label">Rào cản khởi đầu</span>
           </div>
         </div>
       </div>
@@ -446,7 +446,7 @@ onUnmounted(() => {
                     id="email"
                     v-model="formData.email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder="xuanvinhchan@gmail.com"
                     class="form-input"
                     :class="{ 'form-input-error': formErrors.email }"
                     :aria-required="true"
@@ -506,7 +506,7 @@ onUnmounted(() => {
               </div>
 
               <button
-                class="submit-btn"
+                class="submit-btn cosmic-btn"
                 :disabled="submitting"
                 :aria-label="submitting ? 'Đang gửi yêu cầu' : 'Gửi yêu cầu'"
                 @click="submitForm"
@@ -644,14 +644,14 @@ onUnmounted(() => {
 .contact-section {
   width: 100%;
   min-height: 100vh;
-  background: #f5f0e8;
+  background: oklch(0.09 0.02 282 / 80%);
 }
 
 .contact-hero {
   position: relative;
   width: 100%;
   padding: 5rem 5rem 4rem;
-  background: #2c2416;
+  background: linear-gradient(135deg, oklch(0.1 0.03 285 / 85%), oklch(0.08 0.02 280 / 80%));
   overflow: hidden;
 }
 
@@ -676,9 +676,9 @@ onUnmounted(() => {
   height: 150%;
   background: conic-gradient(
     from 180deg at 50% 50%,
-    rgba(196, 91, 40, 0.12) 0deg,
-    rgba(42, 92, 85, 0.08) 120deg,
-    rgba(196, 91, 40, 0.05) 240deg,
+    oklch(0.78 0.18 195 / 14%) 0deg,
+    oklch(0.68 0.22 350 / 12%) 120deg,
+    oklch(0.78 0.18 195 / 6%) 240deg,
     transparent 360deg
   );
 }
@@ -696,7 +696,7 @@ onUnmounted(() => {
   top: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #c45b28 0%, #e6b84d 50%, #c45b28 100%);
+  background: linear-gradient(180deg, oklch(0.78 0.18 195) 0%, oklch(0.68 0.22 350) 50%, oklch(0.78 0.18 195) 100%);
 }
 
 .hero-content {
@@ -710,8 +710,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  background: rgba(196, 91, 40, 0.15);
-  border: 1px solid rgba(230, 184, 77, 0.3);
+  background: oklch(0.78 0.18 195 / 12%);
+  border: 1px solid oklch(0.78 0.18 195 / 30%);
   border-radius: 100px;
   margin-bottom: 1.5rem;
 }
@@ -722,7 +722,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
 }
 
 .badge-icon svg {
@@ -735,13 +735,13 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
 }
 
 .hero-title {
   font-size: clamp(2.25rem, 4.5vw, 3.5rem);
   font-weight: 700;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
   line-height: 1.15;
   margin-bottom: 1.25rem;
   font-family: 'Jakarta Sans', sans-serif;
@@ -749,13 +749,13 @@ onUnmounted(() => {
 
 .title-accent {
   display: block;
-  color: #c45b28;
+  color: oklch(0.78 0.18 195);
 }
 
 .hero-description {
   font-size: 1.125rem;
   line-height: 1.7;
-  color: rgba(245, 240, 232, 0.7);
+  color: oklch(0.96 0.01 240 / 70%);
   margin-bottom: 2.5rem;
   max-width: 600px;
 }
@@ -774,7 +774,7 @@ onUnmounted(() => {
 .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
   line-height: 1;
   font-family: 'Jakarta Sans', sans-serif;
 }
@@ -783,7 +783,7 @@ onUnmounted(() => {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(245, 240, 232, 0.5);
+  color: oklch(0.7 0.03 240);
 }
 
 .contact-content {
@@ -807,7 +807,7 @@ onUnmounted(() => {
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.75rem;
   font-family: 'Jakarta Sans', sans-serif;
 }
@@ -815,7 +815,7 @@ onUnmounted(() => {
 .section-description {
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(44, 36, 22, 0.7);
+  color: oklch(0.96 0.01 240 / 70%);
   margin-bottom: 1.5rem;
 }
 
@@ -830,16 +830,18 @@ onUnmounted(() => {
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  background: #ffffff;
-  border: 1px solid rgba(44, 36, 22, 0.08);
+  background: oklch(0.13 0.025 280 / 55%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 12px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .info-card:hover {
-  border-color: rgba(196, 91, 40, 0.3);
-  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.08);
+  border-color: oklch(0.78 0.18 195 / 45%);
+  box-shadow: 0 8px 24px oklch(0 0 0 / 40%), 0 0 28px oklch(0.78 0.18 195 / 18%);
 }
 
 .info-icon {
@@ -848,25 +850,25 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(196, 91, 40, 0.1);
+  background: oklch(0.78 0.18 195 / 12%);
   border-radius: 10px;
   flex-shrink: 0;
   transition: all 0.3s ease;
 }
 
 .info-card:hover .info-icon {
-  background: #c45b28;
+  background: oklch(0.78 0.18 195);
 }
 
 .info-icon svg {
   width: 22px;
   height: 22px;
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
   transition: all 0.3s ease;
 }
 
 .info-card:hover .info-icon svg {
-  color: #ffffff;
+  color: oklch(0.08 0.02 280);
 }
 
 .info-details {
@@ -880,13 +882,13 @@ onUnmounted(() => {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(44, 36, 22, 0.5);
+  color: oklch(0.7 0.03 240);
 }
 
 .info-value {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
 }
 
 .info-arrow {
@@ -895,12 +897,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(44, 36, 22, 0.3);
+  color: oklch(0.7 0.03 240);
   transition: all 0.3s ease;
 }
 
 .info-card:hover .info-arrow {
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
   transform: translateX(4px);
 }
 
@@ -917,14 +919,18 @@ onUnmounted(() => {
 
 .office-card {
   padding: 1.25rem;
-  background: #2c2416;
+  background: oklch(0.15 0.03 280 / 65%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 12px;
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   will-change: transform, opacity;
 }
 
 .office-card:hover {
-  box-shadow: 0 12px 32px rgba(44, 36, 22, 0.2);
+  border-color: oklch(0.78 0.18 195 / 40%);
+  box-shadow: 0 12px 32px oklch(0 0 0 / 45%), 0 0 30px oklch(0.78 0.18 195 / 16%);
 }
 
 .office-header {
@@ -944,31 +950,31 @@ onUnmounted(() => {
 }
 
 .badge-hq {
-  background: rgba(196, 91, 40, 0.25);
-  color: #e6b84d;
+  background: oklch(0.78 0.18 195 / 20%);
+  color: oklch(0.82 0.16 195);
 }
 
 .badge-regional {
-  background: rgba(212, 162, 76, 0.2);
-  color: #d4a24c;
+  background: oklch(0.68 0.22 350 / 20%);
+  color: oklch(0.74 0.2 350);
 }
 
 .office-role {
   font-size: 0.7rem;
-  color: rgba(245, 240, 232, 0.5);
+  color: oklch(0.7 0.03 240);
 }
 
 .office-name {
   display: block;
   font-size: 1rem;
   font-weight: 600;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.375rem;
 }
 
 .office-address {
   font-size: 0.8rem;
-  color: rgba(245, 240, 232, 0.6);
+  color: oklch(0.7 0.03 240);
   line-height: 1.4;
 }
 
@@ -981,9 +987,12 @@ onUnmounted(() => {
   width: 100%;
   max-width: 480px;
   padding: 2.5rem;
-  background: #ffffff;
+  background: oklch(0.12 0.025 280 / 70%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(44, 36, 22, 0.08);
+  box-shadow: 0 8px 40px oklch(0 0 0 / 45%);
 }
 
 .form-header {
@@ -996,19 +1005,19 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
   margin-bottom: 0.5rem;
 }
 
 .form-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   font-family: 'Jakarta Sans', sans-serif;
 }
 
 .title-highlight {
-  color: #c45b28;
+  color: oklch(0.78 0.18 195);
 }
 
 .form-row {
@@ -1025,7 +1034,7 @@ onUnmounted(() => {
   display: block;
   font-size: 0.8rem;
   font-weight: 500;
-  color: rgba(44, 36, 22, 0.6);
+  color: oklch(0.7 0.03 240);
   margin-bottom: 0.5rem;
 }
 
@@ -1033,41 +1042,41 @@ onUnmounted(() => {
 .form-textarea {
   width: 100%;
   padding: 0.875rem 1rem;
-  background: #faf7f2;
-  border: 1px solid rgba(44, 36, 22, 0.1);
+  background: oklch(0.13 0.025 280 / 60%);
+  border: 1px solid oklch(0.7 0.1 280 / 25%);
   border-radius: 8px;
   font-size: 0.95rem;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   transition: all 0.3s ease;
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: rgba(44, 36, 22, 0.3);
+  color: oklch(0.7 0.03 240);
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #c45b28;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(196, 91, 40, 0.1);
+  border-color: oklch(0.78 0.18 195);
+  background: oklch(0.15 0.03 280 / 70%);
+  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 25%), 0 0 18px oklch(0.78 0.18 195 / 20%);
 }
 
 .form-input-error {
-  border-color: #c45b28;
-  background: #fff5f0;
+  border-color: oklch(0.65 0.25 25 / 80%);
+  background: oklch(0.16 0.04 25 / 50%);
 }
 
 .form-input-error:focus {
-  border-color: #c45b28;
-  box-shadow: 0 0 0 3px rgba(196, 91, 40, 0.2);
+  border-color: oklch(0.65 0.25 25 / 80%);
+  box-shadow: 0 0 0 3px oklch(0.65 0.25 25 / 25%);
 }
 
 .form-error {
   display: block;
   font-size: 0.8rem;
-  color: #c45b28;
+  color: oklch(0.72 0.2 20);
   margin-top: 0.375rem;
   font-weight: 500;
 }
@@ -1080,8 +1089,8 @@ onUnmounted(() => {
 .submit-btn {
   width: 100%;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #c45b28 0%, #b54a1e 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.68 0.22 350));
+  color: oklch(0.08 0.02 280);
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -1093,7 +1102,7 @@ onUnmounted(() => {
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(196, 91, 40, 0.35);
+  box-shadow: 0 8px 24px oklch(0.78 0.18 195 / 45%);
 }
 
 .submit-btn:disabled {
@@ -1131,20 +1140,20 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(42, 92, 85, 0.1);
+  background: oklch(0.75 0.18 145 / 12%);
   border-radius: 50%;
 }
 
 .success-icon svg {
   width: 32px;
   height: 32px;
-  color: #2a5c55;
+  color: oklch(0.75 0.18 145);
 }
 
 .success-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.5rem;
   font-family: 'Jakarta Sans', sans-serif;
 }
@@ -1152,33 +1161,33 @@ onUnmounted(() => {
 .success-desc {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: rgba(44, 36, 22, 0.7);
+  color: oklch(0.7 0.03 240);
   margin-bottom: 1.5rem;
 }
 
 .reset-btn {
   padding: 0.75rem 1.5rem;
   background: transparent;
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
   font-size: 0.9rem;
   font-weight: 600;
-  border: 2px solid #c45b28;
+  border: 2px solid oklch(0.78 0.18 195);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .reset-btn:hover {
-  background: #c45b28;
-  color: #ffffff;
+  background: oklch(0.78 0.18 195);
+  color: oklch(0.08 0.02 280);
 }
 
 .landing-footer {
   position: relative;
   overflow: hidden;
-  background: #2c2416;
-  color: rgba(245, 240, 232, 0.78);
-  border-top: 1px solid rgba(245, 240, 232, 0.08);
+  background: oklch(0.07 0.02 280 / 92%);
+  color: oklch(0.96 0.01 240 / 78%);
+  border-top: 1px solid oklch(0.7 0.1 280 / 12%);
 }
 
 .footer-background {
@@ -1198,15 +1207,15 @@ onUnmounted(() => {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  filter: grayscale(0.12) contrast(1.12) brightness(1.08);
-  opacity: 0.22;
+  filter: hue-rotate(150deg) brightness(0.6) contrast(1.12);
+  opacity: 0.14;
   transform: none;
 }
 
 .footer-map-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(44, 36, 22, 0.82) 18%, rgba(44, 36, 22, 0.68) 56%, rgba(44, 36, 22, 0.78) 100%);
+  background: linear-gradient(100deg, oklch(0.08 0.02 280 / 88%) 18%, oklch(0.1 0.03 285 / 72%) 56%, oklch(0.07 0.02 280 / 85%) 100%);
 }
 
 .footer-noise-overlay {
@@ -1231,7 +1240,7 @@ onUnmounted(() => {
 }
 
 .footer-brand-title {
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
 }
 
 .footer-heading {
@@ -1239,7 +1248,7 @@ onUnmounted(() => {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
   margin-bottom: 0.8rem;
 }
 
@@ -1265,39 +1274,39 @@ onUnmounted(() => {
 }
 
 .footer-contact-list {
-  color: rgba(245, 240, 232, 0.7);
+  color: oklch(0.7 0.03 240);
   font-size: 0.92rem;
   line-height: 1.5;
 }
 
 .contact-name {
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
   font-weight: 600;
 }
 
 .footer-link {
-  color: rgba(245, 240, 232, 0.78);
+  color: oklch(0.7 0.03 240);
   text-decoration: none;
   transition: color 0.2s ease;
   text-underline-offset: 0.18em;
 }
 
 .footer-link:hover {
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
   text-decoration: underline;
 }
 
 .footer-link:focus-visible {
-  outline: 2px solid #e6b84d;
+  outline: 2px solid oklch(0.78 0.18 195);
   outline-offset: 2px;
   border-radius: 3px;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
 }
 
 .footer-bottom {
   margin-top: 2.25rem;
   padding-top: 1.1rem;
-  border-top: 1px solid rgba(245, 240, 232, 0.12);
+  border-top: 1px solid oklch(0.96 0.01 240 / 10%);
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -1308,7 +1317,7 @@ onUnmounted(() => {
 .footer-copyright {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(245, 240, 232, 0.58);
+  color: oklch(0.7 0.03 240);
 }
 
 .footer-bottom-links {

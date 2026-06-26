@@ -19,28 +19,48 @@ const sizeMap = {
 <template>
   <svg
     :viewBox="`0 0 ${sizeMap[size] * 3} ${sizeMap[size]}`"
-    :class="['npi-logo', `npi-logo--${variant}`, `npi-logo--${size}`]"
+    :class="['gsh-logo', `gsh-logo--${variant}`, `gsh-logo--${size}`]"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     :aria-label="`Gamified Study Hub`"
   >
-    <path
-      class="npi-logo__palm"
-      d="M45 25C45 25 35 20 25 25C15 30 10 40 15 45L20 40C18 38 18 35 20 32C22 29 25 28 28 28C32 28 35 30 37 33C39 36 40 40 38 43L42 40C44 38 45 32 45 25Z"
-      :fill="variant === 'light' ? '#c45b28' : '#c45b28'"
-    />
-    <path
-      class="npi-logo__palm-mid"
-      d="M40 20C40 20 32 15 25 20C18 25 15 32 18 38L22 34C20 32 20 30 22 28C24 26 26 25 28 25C31 25 33 27 35 29C37 31 38 34 36 38L39 36C41 35 42 30 42 25L40 20Z"
-      :fill="variant === 'light' ? '#d4a24c' : '#d4a24c'"
-    />
+    <g class="gsh-logo__mark">
+      <circle
+        cx="28"
+        cy="28"
+        r="7"
+        :fill="variant === 'light' ? '#22e0d6' : '#0d9488'"
+      />
+      <circle
+        cx="28"
+        cy="28"
+        r="16"
+        :stroke="variant === 'light' ? '#22e0d6' : '#0d9488'"
+        stroke-width="2"
+        stroke-opacity="0.55"
+      />
+      <path
+        d="M9 31C17 16 38 13 49 24"
+        :stroke="variant === 'light' ? '#f8d66d' : '#b7791f'"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <path
+        d="M8 35C21 46 41 42 50 29"
+        :stroke="variant === 'light' ? '#9b5cff' : '#6d28d9'"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+      <circle cx="9" cy="31" r="3" :fill="variant === 'light' ? '#f8d66d' : '#b7791f'" />
+      <circle cx="50" cy="29" r="3" :fill="variant === 'light' ? '#9b5cff' : '#6d28d9'" />
+    </g>
 
-    <g class="npi-logo__text">
+    <g class="gsh-logo__text">
       <text
         x="54"
         y="34"
-        :fill="variant === 'light' ? '#ffffff' : '#2c2416'"
-        font-family="'Jakarta Sans', sans-serif"
+        :fill="variant === 'light' ? '#ffffff' : '#0f172a'"
+        font-family="'Plus Jakarta Sans', sans-serif"
         font-size="32"
         font-weight="800"
         letter-spacing="2"
@@ -49,12 +69,12 @@ const sizeMap = {
       </text>
     </g>
 
-    <g v-if="size === 'lg'" class="npi-logo__fullname">
+    <g v-if="size === 'lg'" class="gsh-logo__fullname">
       <text
         x="145"
         y="28"
-        :fill="variant === 'light' ? '#ffffff' : '#2c2416'"
-        font-family="'Jakarta Sans', sans-serif"
+        :fill="variant === 'light' ? '#ffffff' : '#0f172a'"
+        font-family="'Plus Jakarta Sans', sans-serif"
         font-size="12"
         font-weight="500"
         letter-spacing="0.5"
@@ -66,40 +86,36 @@ const sizeMap = {
 </template>
 
 <style scoped>
-.npi-logo {
+.gsh-logo {
   display: inline-block;
   vertical-align: middle;
 }
 
-.npi-logo--light .npi-logo__text,
-.npi-logo--light .npi-logo__palm,
-.npi-logo--light .npi-logo__palm-mid {
+.gsh-logo--light .gsh-logo__text,
+.gsh-logo--light .gsh-logo__mark {
   transition: opacity 0.3s ease;
 }
 
-.npi-logo--sm {
+.gsh-logo--sm {
   width: 80px;
   height: 28px;
 }
 
-.npi-logo--md {
+.gsh-logo--md {
   width: 120px;
   height: 40px;
 }
 
-.npi-logo--lg {
+.gsh-logo--lg {
   width: 300px;
   height: 50px;
 }
 
-.npi-logo:hover .npi-logo__palm {
-  transform: scale(1.05);
-  transform-origin: center;
-  transition: transform 0.3s ease;
+.gsh-logo:hover .gsh-logo__mark {
+  transform: translateY(-1px) scale(1.03);
 }
 
-.npi-logo__palm,
-.npi-logo__palm-mid {
+.gsh-logo__mark {
   transition: transform 0.3s ease;
   transform-origin: center;
 }

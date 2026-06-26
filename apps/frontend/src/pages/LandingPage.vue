@@ -2,11 +2,17 @@
 import { provide } from 'vue';
 import LandingNavigation from '@/components/landing/LandingNavigation.vue';
 import LandingHero from '@/components/landing/LandingHero.vue';
-import LandingSustainability from '@/components/landing/LandingSustainability.vue';
-import LandingMission from '@/components/landing/LandingMission.vue';
-import LandingGeographic from '@/components/landing/LandingGeographic.vue';
-import LandingProduct from '@/components/landing/LandingProduct.vue';
-import LandingContact from '@/components/landing/LandingContact.vue';
+import LandingMarquee from '@/components/landing/LandingMarquee.vue';
+import LandingInteractiveLab from '@/components/landing/LandingInteractiveLab.vue';
+import LandingStatsBand from '@/components/landing/LandingStatsBand.vue';
+import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue';
+import LandingAchievements from '@/components/landing/LandingAchievements.vue';
+import LandingTestimonials from '@/components/landing/LandingTestimonials.vue';
+import LandingVipTiers from '@/components/landing/LandingVipTiers.vue';
+import LandingFaq from '@/components/landing/LandingFaq.vue';
+import LandingFinalCta from '@/components/landing/LandingFinalCta.vue';
+import LandingReelBackdrop from '@/components/landing/LandingReelBackdrop.vue';
+import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
 
 const scrollToSection = (href: string) => {
   const element = document.querySelector(href) as HTMLElement | null;
@@ -21,15 +27,21 @@ provide('scrollToSection', scrollToSection);
 </script>
 
 <template>
-  <div id="top" class="relative min-h-screen overflow-x-hidden">
+  <div id="top" class="cosmic-page relative min-h-screen overflow-x-hidden">
+    <LandingReelBackdrop />
+    <StarfieldCanvas />
     <LandingNavigation />
-    <main id="main-content">
+    <main id="main-content" class="relative z-10">
       <LandingHero />
-      <LandingSustainability />
-      <LandingMission />
-      <LandingGeographic />
-      <LandingProduct />
-      <LandingContact />
+      <LandingMarquee />
+      <LandingStatsBand />
+      <LandingHowItWorks />
+      <LandingInteractiveLab />
+      <LandingAchievements />
+      <LandingTestimonials />
+      <LandingVipTiers />
+      <LandingFaq />
+      <LandingFinalCta />
     </main>
   </div>
 </template>

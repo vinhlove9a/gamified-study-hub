@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, nextTick, inject } from 'vue';
+import { inject, nextTick, onMounted, onUnmounted } from 'vue';
 import type { AnimationAPI } from '@/types/gsap';
 import { useAriaLive } from '@/composables/useAriaLive';
-import IconRspoSmall from '@/components/ui/icons/IconRspoSmall.vue';
-import IconIsccSmall from '@/components/ui/icons/IconIsccSmall.vue';
-import IconHectaresPremium from '@/components/ui/icons/IconHectaresPremium.vue';
-import IconExportsPremium from '@/components/ui/icons/IconExportsPremium.vue';
-import IconEmployeesPremium from '@/components/ui/icons/IconEmployeesPremium.vue';
 
 interface StatItem {
   id: string;
-  value: number;
   displayValue: string;
   suffix: string;
   label: string;
-  icon: object;
+  signal: string;
   accentColor: string;
 }
 
@@ -24,14 +18,57 @@ const gsap = inject<GsapType | null>('gsap', null);
 const animation = inject<AnimationAPI | null>('animation', null);
 const { announce } = useAriaLive();
 
-const stats: StatItem[] = [
-  { id: 'platform', value: 1, displayValue: '1', suffix: ' nền tảng', label: 'Quản lý tài liệu, nhiệm vụ, coin và mở khóa trong cùng một hệ thống.', icon: IconHectaresPremium, accentColor: '#d4a24c' },
-  { id: 'users', value: 4, displayValue: '4', suffix: ' nhóm dùng', label: 'Phù hợp cho CLB đại học, gia sư, nhóm luyện thi và trung tâm nhỏ.', icon: IconExportsPremium, accentColor: '#c45b28' },
-  { id: 'access', value: 24, displayValue: '24/7', suffix: ' truy cập', label: 'Học viên có thể tìm tài liệu và hoàn thành nhiệm vụ mọi lúc.', icon: IconEmployeesPremium, accentColor: '#2a5c55' }
-];
-
 let cleanupFns: Array<() => void> = [];
 const announcedStats = new Set<string>();
+
+const registerCleanup = (item: unknown) => {
+  if (!item) return;
+  if (Array.isArray(item)) {
+    item.forEach(registerCleanup);
+    return;
+  }
+  if (typeof item === 'function') {
+    cleanupFns.push(item as () => void);
+    return;
+  }
+  if (typeof (item as { kill?: () => void }).kill === 'function') {
+    cleanupFns.push(() => (item as { kill: () => void }).kill());
+  }
+};
+
+const stats: StatItem[] = [
+  {
+    id: 'vault',
+    displayValue: '01',
+    suffix: 'vault',
+    label: 'Một kho tri thức thống nhất cho tài liệu, tag, danh mục và quyền truy cập.',
+    signal: 'Knowledge Core',
+    accentColor: '#22e0d6'
+  },
+  {
+    id: 'loop',
+    displayValue: '04',
+    suffix: 'loops',
+    label: 'Tài liệu, nhiệm vụ, coin và mở khóa VIP tạo thành chu trình giữ động lực.',
+    signal: 'Mission Loop',
+    accentColor: '#9b5cff'
+  },
+  {
+    id: 'access',
+    displayValue: '24/7',
+    suffix: 'online',
+    label: 'Học viên truy cập tài liệu, nhận nhiệm vụ và xem tiến độ ở mọi thời điểm.',
+    signal: 'Always-on Orbit',
+    accentColor: '#f8d66d'
+  }
+];
+
+const telemetryRows = [
+  ['Workspace', 'CLB, gia sư, nhóm luyện thi'],
+  ['Data layer', 'Tài liệu, danh mục, tag, quyền'],
+  ['Reward layer', 'Coin, streak, VIP unlock'],
+  ['Admin layer', 'Theo dõi tiến độ và nhiệm vụ']
+];
 
 onMounted(() => {
   if (!gsap) return;
@@ -39,152 +76,117 @@ onMounted(() => {
   const shouldReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (shouldReduceMotion) {
-    gsap.set(['.hero-content', '.stat-row', '.cert-row'], { opacity: 1 });
-    nextTick(() => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (entry.target.classList.contains('stat-row')) {
-              const statIndex = Array.from(document.querySelectorAll('.stat-row')).indexOf(entry.target as HTMLElement);
-              if (statIndex >= 0 && statIndex < stats.length) {
-                const stat = stats[statIndex];
-                if (!announcedStats.has(stat.id)) {
-                  announcedStats.add(stat.id);
-                  announce(`${stat.displayValue} ${stat.suffix}, ${stat.label}`);
-                }
-              }
-            } else if (entry.target.classList.contains('cert-row')) {
-              if (!announcedStats.has('certifications')) {
-                announcedStats.add('certifications');
-                announce('0 chi phí khởi đầu, có thể bắt đầu từ kho tài liệu hiện có.');
-              }
-            }
-          }
-        });
-      }, { threshold: 0.5 });
-
-      document.querySelectorAll('.stat-row, .cert-row').forEach((row) => {
-        observer.observe(row);
-      });
-
-      cleanupFns.push(() => observer.disconnect());
-    });
+    gsap.set(['.stats-intro > *', '.telemetry-row', '.stat-row', '.control-chip'], { opacity: 1, y: 0 });
     return;
   }
 
   nextTick(() => {
-    animation?.batchReveal?.('.hero-content', {
+    registerCleanup(animation?.batchReveal?.('.stats-intro > *', {
       trigger: '#stats',
-      duration: 0.8,
-      y: 30
-    });
+      duration: 0.7,
+      stagger: 0.08,
+      y: 24
+    }));
 
-    animation?.batchReveal?.('.stat-row', {
-      trigger: '#stats',
-      stagger: 0.12,
-      y: 40
-    });
-
-    animation?.batchReveal?.('.cert-row', {
+    registerCleanup(animation?.batchReveal?.('.control-chip', {
       trigger: '#stats',
       duration: 0.5,
-      y: 20
-    });
+      stagger: 0.08,
+      y: 18
+    }));
+
+    registerCleanup(animation?.batchReveal?.('.stat-row', {
+      trigger: '#stats',
+      duration: 0.6,
+      stagger: 0.12,
+      y: 28
+    }));
 
     document.querySelectorAll('.stat-row').forEach((row) => {
-      const cleanup = animation?.hoverScale?.(row as HTMLElement, { scale: 1.02, duration: 0.3 });
-      if (cleanup) cleanupFns.push(cleanup);
+      registerCleanup(animation?.hoverScale?.(row as HTMLElement, { scale: 1.015, duration: 0.25 }));
     });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target.classList.contains('stat-row')) {
-            const statIndex = Array.from(document.querySelectorAll('.stat-row')).indexOf(entry.target as HTMLElement);
-            if (statIndex >= 0 && statIndex < stats.length) {
-              const stat = stats[statIndex];
-              if (!announcedStats.has(stat.id)) {
-                announcedStats.add(stat.id);
-                announce(`${stat.displayValue} ${stat.suffix}, ${stat.label}`);
-              }
-            }
-          } else if (entry.target.classList.contains('cert-row')) {
-            if (!announcedStats.has('certifications')) {
-              announcedStats.add('certifications');
-              announce('0 chi phí khởi đầu, có thể bắt đầu từ kho tài liệu hiện có.');
-            }
-          }
+        if (!entry.isIntersecting) return;
+
+        const statIndex = Array.from(document.querySelectorAll('.stat-row')).indexOf(entry.target as HTMLElement);
+        const stat = stats[statIndex];
+
+        if (stat && !announcedStats.has(stat.id)) {
+          announcedStats.add(stat.id);
+          announce(`${stat.displayValue} ${stat.suffix}, ${stat.label}`);
         }
       });
     }, { threshold: 0.5 });
 
-    document.querySelectorAll('.stat-row, .cert-row').forEach((row) => {
-      observer.observe(row);
-    });
-
+    document.querySelectorAll('.stat-row').forEach((row) => observer.observe(row));
     cleanupFns.push(() => observer.disconnect());
   });
 });
 
 onUnmounted(() => {
-  cleanupFns.forEach((fn) => fn && typeof fn === 'function' && fn());
+  cleanupFns.forEach((fn) => {
+    if (fn && typeof fn === 'function') fn();
+  });
 });
 </script>
 
 <template>
-  <section id="stats" class="stats-section panel min-h-screen lg:h-screen flex flex-col lg:flex-row overflow-hidden">
-    <div class="hero-statement w-full lg:w-1/2 bg-[#f5f0e8] flex flex-col justify-center px-8 lg:px-24 py-16 lg:py-0 relative">
-      <div class="hero-content max-w-xl">
-        <h2 class="section-label text-sm uppercase tracking-[0.3em] text-[#c45b28] mb-8 block">
-          Tác động rõ ràng
-        </h2>
-
-        <div class="revenue-hero mb-10">
-          <span class="revenue-currency text-4xl lg:text-6xl font-light text-[#2c2416]">1</span>
-          <span class="revenue-value text-7xl lg:text-[10rem] leading-[0.9] font-bold text-[#2c2416] tabular-nums">NỀN TẢNG</span>
-          <span class="revenue-suffix text-2xl lg:text-3xl text-[#d4a24c]">+</span>
-          <div class="revenue-label mt-6 text-lg lg:text-xl text-[#2c2416]/60">
-            Từ thư mục lưu trữ thành hệ thống học tập có tương tác.
-          </div>
-        </div>
-
-        <p class="narrative-text text-xl lg:text-2xl text-[#2c2416]/80 leading-relaxed mb-12">
-          Không chỉ là nơi để tải tài liệu, hệ thống giúp học viên có lý do để quay lại, hoàn thành nhiệm vụ và mở khóa nội dung giá trị hơn.
-        </p>
-
-        <div class="cert-row flex flex-wrap items-center gap-6 lg:gap-8" role="group" aria-label="Khởi đầu">
-          <span class="text-xs uppercase tracking-widest text-[#2c2416]/40">Khởi đầu</span>
-          <div class="w-px h-8 bg-[#2c2416]/10" aria-hidden="true"></div>
-          <div class="flex items-center gap-4" role="group" aria-label="Certification badges">
-            <IconRspoSmall class="w-10 h-10 lg:w-12 lg:h-12" role="img" aria-label="Kho tài liệu" />
-            <IconIsccSmall class="w-10 h-10 lg:w-12 lg:h-12" role="img" aria-label="Nhiệm vụ và coin" />
-          </div>
-          <span class="text-sm lg:text-base text-[#2c2416]/60 hidden sm:block">0 chi phí khởi đầu: bắt đầu từ kho tài liệu sẵn có.</span>
-        </div>
-      </div>
+  <section id="stats" class="stats-section panel" aria-labelledby="stats-title">
+    <div class="stats-effects" aria-hidden="true">
+      <span class="stats-sweep stats-sweep--one"></span>
+      <span class="stats-sweep stats-sweep--two"></span>
+      <span class="stats-ring stats-ring--one"></span>
+      <span class="stats-ring stats-ring--two"></span>
     </div>
 
-    <div class="stats-column w-full lg:w-1/2 bg-[#2c2416] flex flex-col justify-center px-8 lg:px-16 py-16 lg:py-0" role="group" aria-label="Statistics">
-      <div
-        v-for="(stat, index) in stats"
-        :key="stat.id"
-        class="stat-row flex items-center gap-6 lg:gap-10 mb-10 lg:mb-16 pb-10 lg:pb-16 border-b border-[#f5f0e8]/10"
-        :class="{ 'border-b-0': index === stats.length - 1 }"
-        role="group"
-        :aria-label="`${stat.label}: ${stat.displayValue} ${stat.suffix}`"
-        tabindex="0"
-      >
-        <div class="stat-icon w-16 h-16 lg:w-20 lg:h-20 flex-shrink-0" :style="{ color: stat.accentColor }" aria-hidden="true">
-          <component :is="stat.icon" />
+    <div class="stats-shell">
+      <div class="stats-intro">
+        <span class="stats-kicker">Workspace telemetry</span>
+        <h2 id="stats-title">
+          Một buồng điều khiển cho toàn bộ hành trình học.
+        </h2>
+        <p>
+          Gamified Study Hub không chỉ lưu file. Nền tảng biến kho tài liệu thành hệ thống có nhiệm vụ,
+          phần thưởng, tiến độ và quyền truy cập rõ ràng cho từng cộng đồng.
+        </p>
+
+        <div class="control-grid" aria-label="Các lớp vận hành">
+          <div v-for="[label, value] in telemetryRows" :key="label" class="control-chip">
+            <span>{{ label }}</span>
+            <strong>{{ value }}</strong>
+          </div>
         </div>
-        <div>
-          <div class="stat-value flex items-baseline gap-2 lg:gap-3">
-            <span class="text-5xl lg:text-7xl font-bold text-[#f5f0e8] tabular-nums tracking-tight">{{ stat.displayValue }}</span>
-            <span class="text-xl lg:text-2xl" :style="{ color: stat.accentColor }">{{ stat.suffix }}</span>
-          </div>
-          <div class="stat-label text-xs lg:text-sm uppercase tracking-widest text-[#f5f0e8]/40 mt-3 lg:mt-4">
-            {{ stat.label }}
-          </div>
+      </div>
+
+      <div class="stats-console" role="group" aria-label="Chỉ số sản phẩm">
+        <div class="console-header">
+          <span class="console-dot"></span>
+          <span>Live system signals</span>
+        </div>
+
+        <div class="stat-list">
+          <article
+            v-for="stat in stats"
+            :key="stat.id"
+            class="stat-row"
+            :style="{ '--accent': stat.accentColor }"
+            tabindex="0"
+            :aria-label="`${stat.displayValue} ${stat.suffix}: ${stat.label}`"
+          >
+            <div class="stat-node" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="stat-copy">
+              <span class="stat-signal">{{ stat.signal }}</span>
+              <strong>
+                {{ stat.displayValue }}
+                <small>{{ stat.suffix }}</small>
+              </strong>
+              <p>{{ stat.label }}</p>
+            </div>
+          </article>
         </div>
       </div>
     </div>
@@ -193,159 +195,461 @@ onUnmounted(() => {
 
 <style scoped>
 .stats-section {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
+  padding: clamp(4rem, 8vw, 7rem) 1.5rem;
+  color: var(--workspace-text);
+  background:
+    linear-gradient(135deg, oklch(0.08 0.025 280 / 94%), oklch(0.105 0.032 255 / 92%)),
+    var(--workspace-bg);
+  isolation: isolate;
 }
 
-.section-label {
-  font-size: 0.875rem;
-  letter-spacing: 0.3em;
+.stats-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(oklch(0.96 0.01 240 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.96 0.01 240 / 3%) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, transparent, black 14%, black 86%, transparent);
 }
 
-.revenue-currency {
-  font-size: 1.5rem;
+.stats-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.revenue-value {
-  font-size: 7rem;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
+.stats-sweep {
+  position: absolute;
+  left: -24vw;
+  width: min(64vw, 860px);
+  height: 2px;
+  transform: rotate(-16deg);
+  background: linear-gradient(90deg, transparent, oklch(0.82 0.16 195 / 58%), oklch(0.84 0.16 85 / 44%), transparent);
+  box-shadow: 0 0 24px oklch(0.82 0.16 195 / 26%);
+  animation: statsSweep 12s linear infinite;
+}
+
+.stats-sweep--one {
+  top: 20%;
+}
+
+.stats-sweep--two {
+  top: 68%;
+  animation-delay: -5s;
+  animation-duration: 17s;
+  background: linear-gradient(90deg, transparent, oklch(0.78 0.16 150 / 46%), oklch(0.68 0.22 330 / 34%), transparent);
+}
+
+.stats-ring {
+  position: absolute;
+  border: 1px dashed oklch(0.82 0.16 195 / 20%);
+  border-radius: 999px;
+  animation: statsRing 44s linear infinite;
+}
+
+.stats-ring--one {
+  top: 12%;
+  right: -170px;
+  width: 520px;
+  height: 520px;
+}
+
+.stats-ring--two {
+  bottom: -220px;
+  left: -260px;
+  width: 720px;
+  height: 720px;
+  border-color: oklch(0.84 0.16 85 / 16%);
+  animation-direction: reverse;
+  animation-duration: 64s;
+}
+
+.stats-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1400px, 100%);
+  min-height: calc(100vh - 10rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.75fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.stats-intro {
+  max-width: 760px;
+}
+
+.stats-kicker,
+.console-header,
+.control-chip span,
+.stat-signal {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.stats-kicker {
+  display: inline-flex;
+  color: var(--workspace-cyan);
+  margin-bottom: 1rem;
+}
+
+.stats-intro h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.stats-intro p {
+  max-width: 680px;
+  margin: 1.4rem 0 2rem;
+  color: var(--workspace-muted);
+  font-size: clamp(1rem, 1.5vw, 1.18rem);
+  line-height: 1.75;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.control-chip {
+  position: relative;
+  overflow: hidden;
+  min-height: 96px;
+  padding: 1rem;
+  border: 1px solid var(--workspace-border);
+  border-radius: 8px;
+  background: linear-gradient(145deg, oklch(0.16 0.035 280 / 68%), oklch(0.11 0.024 280 / 72%));
+  box-shadow: 0 18px 50px oklch(0 0 0 / 30%);
+}
+
+.control-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, oklch(0.82 0.16 195 / 14%), transparent);
+  transform: translateX(-120%);
+  animation: chipDataFlow 5.5s ease-in-out infinite;
+}
+
+.control-chip:nth-child(2)::before {
+  animation-delay: -1.2s;
+}
+
+.control-chip:nth-child(3)::before {
+  animation-delay: -2.4s;
+}
+
+.control-chip:nth-child(4)::before {
+  animation-delay: -3.6s;
+}
+
+.control-chip > * {
+  position: relative;
+  z-index: 1;
+}
+
+.control-chip span {
   display: block;
+  color: var(--workspace-cyan);
+  margin-bottom: 0.55rem;
 }
 
-.revenue-suffix {
-  font-size: 1.25rem;
+.control-chip strong {
+  display: block;
+  color: var(--workspace-text);
+  line-height: 1.45;
 }
 
-.revenue-label {
-  font-size: 1.125rem;
-  margin-top: 1.5rem;
+.stats-console {
+  position: relative;
+  padding: 1.25rem;
+  border: 1px solid oklch(0.78 0.18 195 / 22%);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, oklch(0.16 0.035 280 / 78%), oklch(0.1 0.026 280 / 86%));
+  box-shadow:
+    0 28px 80px oklch(0 0 0 / 42%),
+    inset 0 0 0 1px oklch(0.96 0.01 240 / 4%);
+  overflow: hidden;
 }
 
-.stat-value {
+.stats-console::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 38%, oklch(0.82 0.16 195 / 11%) 50%, transparent 62% 100%),
+    radial-gradient(ellipse at 20% 15%, oklch(0.84 0.16 85 / 10%), transparent 45%);
+  background-size: 240% 100%, 100% 100%;
+  animation: consoleSweep 7s linear infinite;
+}
+
+.stats-console::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0 48%, oklch(0.82 0.16 195 / 7%) 50%, transparent 52% 100%);
+  background-size: 100% 12px;
+  opacity: 0.5;
+}
+
+.console-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 1rem;
+  color: oklch(0.82 0.04 240 / 76%);
+  border-bottom: 1px solid oklch(0.96 0.01 240 / 9%);
+}
+
+.console-dot {
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 999px;
+  background: var(--workspace-cyan);
+  box-shadow: 0 0 16px oklch(0.82 0.16 195 / 70%);
+}
+
+.stat-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.9rem;
+  padding-top: 1rem;
+}
+
+.stat-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid color-mix(in oklch, var(--accent), transparent 68%);
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--accent), transparent 92%);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.stat-row::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--accent), transparent 72%), transparent);
+  opacity: 0;
+  transform: translateX(-110%);
+  transition: opacity 0.25s ease;
+}
+
+.stat-row:hover::after,
+.stat-row:focus-visible::after {
+  opacity: 1;
+  animation: statRowScan 0.95s ease-out;
+}
+
+.stat-row:hover,
+.stat-row:focus-visible {
+  border-color: color-mix(in oklch, var(--accent), white 14%);
+  box-shadow: 0 0 34px color-mix(in oklch, var(--accent), transparent 76%);
+}
+
+.stat-node {
+  position: relative;
+  z-index: 1;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--accent), transparent 35%);
+  box-shadow: inset 0 0 18px color-mix(in oklch, var(--accent), transparent 82%);
+}
+
+.stat-node::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 1px solid color-mix(in oklch, var(--accent), transparent 62%);
+  border-radius: inherit;
+  animation: statNodePulse 2.8s ease-in-out infinite;
+}
+
+.stat-node span {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 18px var(--accent);
+}
+
+.stat-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-copy strong {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.35rem;
+  color: var(--workspace-text);
+  font-size: clamp(2rem, 4vw, 3.4rem);
   line-height: 1;
 }
 
-.stat-icon :deep(svg) {
-  width: 100%;
-  height: 100%;
+.stat-copy small {
+  font-size: 0.82rem;
+  color: color-mix(in oklch, var(--accent), white 18%);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.stat-row:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 4px;
-  border-radius: 4px;
+.stat-signal {
+  color: var(--accent);
+}
+
+.stat-copy p {
+  margin: 0;
+  color: var(--workspace-muted);
+  line-height: 1.55;
+}
+
+@keyframes statsSweep {
+  from {
+    translate: -20vw 0;
+    opacity: 0;
+  }
+
+  16%,
+  74% {
+    opacity: 1;
+  }
+
+  to {
+    translate: 130vw 0;
+    opacity: 0;
+  }
+}
+
+@keyframes statsRing {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.03);
+  }
+
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes chipDataFlow {
+  0%,
+  42% {
+    transform: translateX(-120%);
+  }
+
+  72%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes consoleSweep {
+  from {
+    background-position: 170% 0, 0 0;
+  }
+
+  to {
+    background-position: -70% 0, 0 0;
+  }
+}
+
+@keyframes statRowScan {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes statNodePulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
 }
 
 @media (max-width: 1024px) {
-  .revenue-value {
-    font-size: 6rem;
-  }
-
-  .stat-icon {
-    width: 4rem;
-    height: 4rem;
-  }
-
-  .stat-value span:first-child {
-    font-size: 3.5rem;
+  .stats-shell {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .stats-section {
-    height: auto;
-    min-height: 100vh;
+    padding: 4rem 1rem;
   }
 
-  .hero-statement {
-    padding: 4rem 2rem;
+  .control-grid {
+    grid-template-columns: 1fr;
   }
 
-  .stats-column {
-    padding: 4rem 2rem;
-  }
-
-  .revenue-hero {
-    margin-bottom: 3rem;
-  }
-
-  .revenue-currency {
-    font-size: 1.25rem;
-  }
-
-  .revenue-value {
-    font-size: 4.5rem;
-  }
-
-  .revenue-suffix {
-    font-size: 1.125rem;
-  }
-
-  .revenue-label {
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
-
-  .narrative-text {
-    font-size: 1.125rem;
-    margin-bottom: 3rem;
+  .stats-console {
+    padding: 1rem;
   }
 
   .stat-row {
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-    padding-bottom: 2.5rem;
+    grid-template-columns: 42px minmax(0, 1fr);
+    padding: 0.9rem;
   }
 
-  .stat-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
-
-  .stat-value span:first-child {
-    font-size: 2.5rem;
-  }
-
-  .stat-icon :deep(svg) {
-    width: 100%;
-    height: 100%;
+  .stat-node {
+    width: 42px;
+    height: 42px;
   }
 }
 
-@media (max-width: 480px) {
-  .hero-statement {
-    padding: 3rem 1.5rem;
-  }
-
-  .stats-column {
-    padding: 3rem 1.5rem;
-  }
-
-  .revenue-value {
-    font-size: 3.5rem;
-  }
-
-  .cert-row {
-    gap: 1rem;
-  }
-
-  .cert-row .w-px {
-    display: none;
-  }
-
-  .stat-row {
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-  }
-
-  .stat-icon {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  .stat-value span:first-child {
-    font-size: 2rem;
+@media (prefers-reduced-motion: reduce) {
+  .stats-sweep,
+  .stats-ring,
+  .control-chip::before,
+  .stats-console::before,
+  .stat-row:hover::after,
+  .stat-row:focus-visible::after,
+  .stat-node::before {
+    animation: none;
   }
 }
 </style>

@@ -19,6 +19,20 @@ export default {
           purple: '#7C3AED',
           amber: '#F59E0B',
           success: '#059669'
+        },
+        // Deep Space dashboard tokens (ported from deep-workspace).
+        // Hardcoded oklch with the <alpha-value> placeholder so opacity modifiers
+        // like `bg-background/60` resolve to `oklch(... / 0.6)` — Tailwind v3 cannot
+        // derive alpha from a `var()`-based color, hence literal values here.
+        background: 'oklch(0.08 0.02 280 / <alpha-value>)',
+        foreground: 'oklch(0.96 0.01 240 / <alpha-value>)',
+        card: {
+          DEFAULT: 'oklch(0.13 0.025 280 / <alpha-value>)',
+          foreground: 'oklch(0.96 0.01 240 / <alpha-value>)'
+        },
+        muted: {
+          DEFAULT: 'oklch(0.18 0.03 280 / <alpha-value>)',
+          foreground: 'oklch(0.7 0.03 240 / <alpha-value>)'
         }
       },
       fontFamily: {
