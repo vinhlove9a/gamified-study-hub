@@ -62,3 +62,8 @@ pnpm-debug.log*
 # --- Build outputs ---
 out/
 build/
+
+# --- Local tooling / scratch (không commit) ---
+.claude/
+.codegraph/
+ex.html
