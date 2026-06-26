@@ -47,6 +47,7 @@ import AppDownloadsPage from '@/pages/app/AppDownloadsPage.vue';
 import AppHistoryPage from '@/pages/app/AppHistoryPage.vue';
 import AppHelpPage from '@/pages/app/AppHelpPage.vue';
 import AppFeedbackPage from '@/pages/app/AppFeedbackPage.vue';
+import AdminDashboardPage from '@/pages/admin/AdminDashboardPage.vue';
 import { comingSoonRoutes } from '@/features/app-shell/navigation';
 import { authGuard } from './authGuard';
 
@@ -124,6 +125,15 @@ const router = createRouter({
         { path: 'feedback', name: 'app-feedback', component: AppFeedbackPage },
         ...generatedComingSoon
       ]
+    },
+    {
+      path: '/admin',
+      name: 'admin-dashboard',
+      component: AdminDashboardPage,
+      meta: {
+        // requiresAuth: true,
+        // requiresAdmin: true
+      }
     },
     {
       path: '/auth/login',
