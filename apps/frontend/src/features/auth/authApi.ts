@@ -1,11 +1,16 @@
 import { request } from '@/lib/api/httpClient';
 
+export type UserRole = 'admin' | 'user' | (string & {});
+
 export interface UserSummary {
   id: string;
   fullName: string;
   email: string;
   status: string;
   emailVerified: boolean;
+  // Optional so the type stays compatible with backends that don't yet emit it;
+  // the admin dashboard gate checks `role === 'admin'`.
+  role?: UserRole;
   createdAt: string;
   updatedAt: string;
 }
