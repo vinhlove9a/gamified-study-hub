@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: gsh-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-gamified_study_hub}
       POSTGRES_USER: ${POSTGRES_USER:-gsh_user}
@@ -22,6 +23,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: gsh-redis
+    restart: unless-stopped
     command: >
       sh -c "if [ -n \"$${REDIS_PASSWORD}\" ];
       then redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\";
@@ -47,6 +49,7 @@ services:
       context: ./apps/backend
       dockerfile: Dockerfile
     container_name: gsh-backend
+    restart: unless-stopped
     environment:
       APP_ENV: ${APP_ENV:-local}
       APP_NAME: "${APP_NAME:-Gamified Study Hub}"
@@ -85,6 +88,7 @@ services:
         # lives on a different origin than the frontend.
         VITE_API_BASE_URL: ${VITE_API_BASE_URL-}
     container_name: gsh-frontend
+    restart: unless-stopped
     environment:
       APP_ENV: ${APP_ENV:-local}
       APP_NAME: "${APP_NAME:-Gamified Study Hub}"
@@ -96,6 +100,7 @@ services:
   nginx:
     image: nginx:1.27-alpine
     container_name: gsh-nginx
+    restart: unless-stopped
     depends_on:
       - frontend
       - backend
