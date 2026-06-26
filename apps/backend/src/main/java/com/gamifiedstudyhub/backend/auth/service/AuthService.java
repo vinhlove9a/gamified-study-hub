@@ -12,6 +12,7 @@ import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
+import com.gamifiedstudyhub.backend.authz.service.AuthorityService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
 import com.gamifiedstudyhub.backend.common.exception.UnauthorizedException;
@@ -19,9 +20,11 @@ import com.gamifiedstudyhub.backend.common.util.DateTimeUtils;
 import com.gamifiedstudyhub.backend.user.entity.User;
 import com.gamifiedstudyhub.backend.user.entity.UserStatus;
 import com.gamifiedstudyhub.backend.user.repository.UserRepository;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,7 @@ public class AuthService {
     private final AuthMapper authMapper;
     private final PasswordPolicyValidator passwordPolicyValidator;
     private final AuthTokenService authTokenService;
+    private final AuthorityService authorityService;
 
     public AuthService(
             UserRepository userRepository,
@@ -44,7 +48,8 @@ public class AuthService {
             JwtService jwtService,
             AuthMapper authMapper,
             PasswordPolicyValidator passwordPolicyValidator,
-            AuthTokenService authTokenService
+            AuthTokenService authTokenService,
+            AuthorityService authorityService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -52,6 +57,7 @@ public class AuthService {
         this.authMapper = authMapper;
         this.passwordPolicyValidator = passwordPolicyValidator;
         this.authTokenService = authTokenService;
+        this.authorityService = authorityService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -74,9 +80,13 @@ public class AuthService {
         user.setEmailVerifiedAt(null);
 
         User savedUser = userRepository.save(user);
-        String accessToken = jwtService.generateAccessToken(savedUser);
+        authorityService.assignDefaultRole(savedUser.getId());
 
-        return authMapper.toAuthResponse(accessToken, jwtService.getAccessTokenExpirationSeconds(), savedUser);
+        String accessToken = jwtService.generateAccessToken(savedUser);
+        List<String> authorities = authorityService.resolveAuthorityCodes(savedUser.getId());
+
+        return authMapper.toAuthResponse(
+                accessToken, jwtService.getAccessTokenExpirationSeconds(), savedUser, authorities);
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -109,7 +119,9 @@ public class AuthService {
         userRepository.save(user);
 
         String accessToken = jwtService.generateAccessToken(user);
-        return authMapper.toAuthResponse(accessToken, jwtService.getAccessTokenExpirationSeconds(), user);
+        List<String> authorities = authorityService.resolveAuthorityCodes(user.getId());
+        return authMapper.toAuthResponse(
+                accessToken, jwtService.getAccessTokenExpirationSeconds(), user, authorities);
     }
 
     @Transactional(readOnly = true)
@@ -124,7 +136,10 @@ public class AuthService {
             throw new UnauthorizedException("Unauthorized");
         }
 
-        return authMapper.toUserSummary(customUserDetails.getUser());
+        List<String> authorities = customUserDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        return authMapper.toUserSummary(customUserDetails.getUser(), authorities);
     }
 
     public AuthMessageResponse forgotPassword(ForgotPasswordRequest request) {

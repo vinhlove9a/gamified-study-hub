@@ -3,7 +3,7 @@ package com.gamifiedstudyhub.backend.auth.security;
 import com.gamifiedstudyhub.backend.user.entity.User;
 import com.gamifiedstudyhub.backend.user.entity.UserStatus;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +11,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
+        this(user, List.of());
+    }
+
+    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
         this.user = user;
+        this.authorities = authorities == null ? List.of() : List.copyOf(authorities);
     }
 
     public UUID getUserId() {
@@ -26,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return authorities;
     }
 
     @Override

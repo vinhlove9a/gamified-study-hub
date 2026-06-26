@@ -19,6 +19,7 @@ import com.gamifiedstudyhub.backend.auth.security.CustomUserDetailsService;
 import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationEntryPoint;
 import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationFilter;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
+import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = AuthController.class)
-@Import({SecurityConfig.class, JwtAuthenticationFilter.class, JwtAuthenticationEntryPoint.class})
+@Import({SecurityConfig.class, JwtAuthenticationFilter.class, JwtAuthenticationEntryPoint.class,
+        RestAccessDeniedHandler.class})
 class AuthControllerTests {
 
     @Autowired

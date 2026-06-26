@@ -14,6 +14,7 @@ import com.gamifiedstudyhub.backend.auth.security.CustomUserDetailsService;
 import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationEntryPoint;
 import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationFilter;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
+import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
 import com.gamifiedstudyhub.backend.document.dto.DocumentDetailResponse;
 import com.gamifiedstudyhub.backend.document.dto.DocumentSummaryResponse;
@@ -32,7 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @WebMvcTest(controllers = DocumentController.class)
-@Import({SecurityConfig.class, JwtAuthenticationFilter.class, JwtAuthenticationEntryPoint.class})
+@Import({SecurityConfig.class, JwtAuthenticationFilter.class, JwtAuthenticationEntryPoint.class,
+        RestAccessDeniedHandler.class})
 class DocumentControllerTests {
 
     @Autowired

@@ -50,6 +50,9 @@ class AuthServiceTests {
     @Mock
     private AuthTokenService authTokenService;
 
+    @Mock
+    private com.gamifiedstudyhub.backend.authz.service.AuthorityService authorityService;
+
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
     private AuthService authService;
@@ -67,7 +70,8 @@ class AuthServiceTests {
                 jwtService,
                 new AuthMapper(),
                 new PasswordPolicyValidator(),
-                authTokenService
+                authTokenService,
+                authorityService
         );
     }
 

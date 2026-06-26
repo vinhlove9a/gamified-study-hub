@@ -71,7 +71,7 @@ const router = createRouter({
       path: '/app',
       component: AppShellLayout,
       meta: {
-        // requiresAuth: true
+        requiresAuth: true
       },
       children: [
         { path: '', name: 'app-home', component: AppHomePage },
@@ -131,8 +131,8 @@ const router = createRouter({
       name: 'admin-dashboard',
       component: AdminDashboardPage,
       meta: {
-        // requiresAuth: true,
-        // requiresAdmin: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
