@@ -130,9 +130,9 @@ jobs:
                 curl -s http://localhost/api/health; echo
                 exit 0
               fi
-              echo "  attempt ${i}: HTTP ${code} — retrying in 5s"
+              echo "  attempt ${i}: HTTP ${code} - retrying in 5s"
               sleep 5
             done
-            echo "Health check FAILED — dumping backend logs:" >&2
+            echo "Health check FAILED - dumping backend logs:" >&2
             docker logs --tail 50 gsh-backend >&2
             exit 1
