@@ -3,7 +3,10 @@ import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
 import { useAuthSession } from '@/features/auth/authSession';
+import { defaultRouteForRole } from '@/router/authGuard';
 import { ApiError } from '@/lib/api/apiError';
+import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
+import AuthShowcasePanel from '@/components/auth/AuthShowcasePanel.vue';
 
 interface FormState {
   email: string;
@@ -18,7 +21,7 @@ const form = reactive<FormState>({
 });
 const router = useRouter();
 const route = useRoute();
-const { setSessionFromAuthResponse, logout } = useAuthSession();
+const { setSessionFromAuthResponse, logout, isAdmin } = useAuthSession();
 
 const showPassword = ref(false);
 const loading = ref(false);
@@ -34,14 +37,17 @@ let cleanupResize: (() => void) | null = null;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const getSafeRedirectPath = (): string => {
+  // An explicit, same-origin ?redirect wins; otherwise admins land on the
+  // Dashboard (/admin) and everyone else on the app shell (/app).
+  const fallback = defaultRouteForRole(isAdmin.value);
   const redirectQuery = route.query.redirect;
   const redirectPath = Array.isArray(redirectQuery) ? redirectQuery[0] : redirectQuery;
   if (typeof redirectPath !== 'string') {
-    return '/app';
+    return fallback;
   }
 
   if (!redirectPath.startsWith('/') || redirectPath.startsWith('//')) {
-    return '/app';
+    return fallback;
   }
 
   return redirectPath;
@@ -118,7 +124,8 @@ onMounted(() => {
     decay: number;
     color: string;
   }> = [];
-  const colors = ['#fb923c', '#fbbf24', '#f472b6', '#a78bfa', '#38bdf8'];
+  // Cosmic cursor-trail palette (cyan / magenta / nebula) to match the deep-space theme.
+  const colors = ['#22d3ee', '#38bdf8', '#e879f9', '#a78bfa', '#34d399'];
 
   const setCanvasSize = () => {
     canvas.width = window.innerWidth;
@@ -176,36 +183,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="login-page">
-    <div class="auth-bg" aria-hidden="true">
-      <div class="blob blob-a"></div>
-      <div class="blob blob-b"></div>
-      <div class="blob blob-c"></div>
-      <div class="blob blob-d"></div>
-      <div class="blob blob-e"></div>
-
-      <div class="shape shape-circle"></div>
-      <div class="shape shape-diamond"></div>
-      <div class="shape shape-triangle"></div>
-      <div class="shape shape-star"></div>
-
-      <div class="sparkle sparkle-a"></div>
-      <div class="sparkle sparkle-b"></div>
-      <div class="sparkle sparkle-c"></div>
-      <div class="sparkle sparkle-d"></div>
-
-      <div class="snow-layer">
-        <span v-for="n in 18" :key="`snow-${n}`" class="snowflake" :style="{ '--i': n }"></span>
-      </div>
-    </div>
+  <div class="login-page cosmic-page">
+    <StarfieldCanvas />
 
     <main class="auth-main">
-      <div class="auth-shell">
+      <div class="auth-split">
+        <div class="auth-shell">
         <div class="auth-brand animate-bounce-in">
           <div class="brand-icon-wrap" aria-hidden="true">
             <div class="pulse pulse-1"></div>
             <div class="pulse pulse-2"></div>
-            <div class="brand-icon animate-gradient animate-wiggle">
+            <div class="brand-icon animate-wiggle">
               <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
@@ -218,11 +206,11 @@ onUnmounted(() => {
           </div>
 
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Đăng nhập vào tài khoản</h1>
+          <h1 class="auth-title cosmic-gradient-text">Đăng nhập vào tài khoản</h1>
           <p class="auth-subtitle animate-fade-in delay-300">Tiếp tục quản lý tài liệu, nhiệm vụ và điểm thưởng cho cộng đồng học tập của bạn.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Form đăng nhập">
+        <section class="auth-card cosmic-glass cosmic-glass-hover animate-slide-up delay-200" aria-label="Form đăng nhập">
           <div class="social-grid animate-fade-in delay-400" aria-hidden="false">
             <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với Google">
               <span>Tiếp tục với Google</span>
@@ -297,7 +285,7 @@ onUnmounted(() => {
               <RouterLink to="/auth/forgot-password" class="auth-link">Quên mật khẩu?</RouterLink>
             </div>
 
-            <button type="submit" class="submit-btn btn-shimmer animate-slide-up delay-500" :disabled="loading" :aria-busy="loading">
+            <button type="submit" class="submit-btn cosmic-btn animate-slide-up delay-500" :disabled="loading" :aria-busy="loading">
               {{ loading ? 'Đang xử lý...' : 'Đăng nhập' }}
             </button>
           </form>
@@ -315,6 +303,9 @@ onUnmounted(() => {
         <div class="wave-row" aria-hidden="true">
           <span>🌸</span><span>🌼</span><span>🦋</span><span>✨</span><span>🌈</span>
         </div>
+        </div>
+
+        <AuthShowcasePanel variant="login" class="auth-aside" />
       </div>
     </main>
     <canvas ref="trailCanvasRef" class="trail-canvas" aria-hidden="true"></canvas>
@@ -323,150 +314,7 @@ onUnmounted(() => {
 
 <style scoped>
 .login-page {
-  min-height: 100vh;
-  position: relative;
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 25%, #fce7f3 50%, #ede9fe 75%, #e0f2fe 100%);
   overflow: hidden;
-}
-
-.auth-bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(2px);
-  animation: float 8s ease-in-out infinite, morph 8s ease-in-out infinite;
-}
-
-.blob-a {
-  top: -5rem;
-  left: -4rem;
-  width: 18rem;
-  height: 18rem;
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.5), rgba(252, 211, 77, 0.4));
-}
-
-.blob-b {
-  top: 28%;
-  right: -4rem;
-  width: 16rem;
-  height: 16rem;
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.35), rgba(251, 113, 133, 0.3));
-  animation-delay: 1.5s;
-}
-
-.blob-c {
-  bottom: -6rem;
-  left: 18%;
-  width: 20rem;
-  height: 20rem;
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.35), rgba(56, 189, 248, 0.3));
-  animation-delay: 2.5s;
-}
-
-.blob-d {
-  top: 5rem;
-  right: 30%;
-  width: 12rem;
-  height: 12rem;
-  background: linear-gradient(135deg, rgba(125, 211, 252, 0.28), rgba(14, 165, 233, 0.2));
-  animation-delay: 0.7s;
-}
-
-.blob-e {
-  bottom: 26%;
-  right: 8%;
-  width: 14rem;
-  height: 14rem;
-  background: linear-gradient(135deg, rgba(134, 239, 172, 0.28), rgba(20, 184, 166, 0.22));
-  animation-delay: 3s;
-}
-
-.shape {
-  position: absolute;
-  opacity: 0.35;
-  animation: float 7s ease-in-out infinite;
-}
-
-.shape-circle {
-  top: 15%;
-  left: 10%;
-  width: 2.2rem;
-  height: 2.2rem;
-  border-radius: 9999px;
-  border: 2px solid #fb923c;
-}
-
-.shape-diamond {
-  top: 26%;
-  right: 15%;
-  width: 1.8rem;
-  height: 1.8rem;
-  border: 2px solid #f472b6;
-  transform: rotate(45deg);
-  animation-delay: 1.2s;
-}
-
-.shape-triangle {
-  bottom: 20%;
-  left: 8%;
-  width: 0;
-  height: 0;
-  border-left: 1rem solid transparent;
-  border-right: 1rem solid transparent;
-  border-bottom: 1.8rem solid rgba(167, 139, 250, 0.5);
-  animation-delay: 2s;
-}
-
-.shape-star {
-  top: 10%;
-  left: 45%;
-  width: 1.4rem;
-  height: 1.4rem;
-  background: #f9a8d4;
-  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
-  animation-delay: 1.5s;
-}
-
-.sparkle {
-  position: absolute;
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 9999px;
-  animation: sparkle 3s ease-in-out infinite;
-}
-
-.sparkle-a { top: 20%; left: 30%; background: #fdba74; }
-.sparkle-b { top: 40%; right: 25%; background: #f9a8d4; animation-delay: 0.7s; }
-.sparkle-c { bottom: 30%; left: 20%; background: #c4b5fd; animation-delay: 1.5s; }
-.sparkle-d { top: 60%; right: 35%; background: #f59e0b; animation-delay: 2s; }
-
-.snow-layer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.snowflake {
-  --size: calc(4px + (var(--i) % 3) * 2px);
-  position: absolute;
-  top: -8%;
-  left: calc((var(--i) * 5.4%) + ((var(--i) % 2) * 2%));
-  width: var(--size);
-  height: var(--size);
-  border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f9ff 60%, #dbeafe 100%);
-  opacity: 0.7;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
-  animation:
-    snowfall calc(7s + (var(--i) % 5) * 1.2s) linear infinite,
-    snowdrift calc(2.8s + (var(--i) % 4) * 0.6s) ease-in-out infinite;
-  animation-delay: calc((var(--i) * -0.55s));
 }
 
 .auth-main {
@@ -479,9 +327,45 @@ onUnmounted(() => {
   padding: 1.5rem;
 }
 
+.auth-split {
+  width: 100%;
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+}
+
 .auth-shell {
   width: 100%;
   max-width: 30rem;
+}
+
+.auth-aside {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .auth-main {
+    padding: 2.5rem;
+  }
+
+  .auth-split {
+    max-width: 70rem;
+    grid-template-columns: minmax(26rem, 30rem) 1fr;
+    align-items: start;
+    gap: 2.5rem;
+    justify-items: stretch;
+  }
+
+  .auth-shell {
+    margin: 0;
+    justify-self: start;
+    position: sticky;
+    top: 2.5rem;
+  }
+
+  .auth-aside {
+    display: flex;
+  }
 }
 
 .auth-brand {
@@ -502,7 +386,7 @@ onUnmounted(() => {
 .pulse {
   position: absolute;
   inset: 0;
-  border: 2px solid rgba(251, 146, 60, 0.45);
+  border: 2px solid oklch(0.78 0.18 195 / 45%);
   border-radius: 9999px;
   animation: ring 2s ease-out infinite;
 }
@@ -518,29 +402,21 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #fb923c, #f59e0b, #facc15);
-  box-shadow: 0 12px 30px rgba(251, 146, 60, 0.35);
+  color: oklch(0.08 0.02 280);
+  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
+  box-shadow: 0 12px 30px oklch(0.78 0.18 195 / 40%), 0 0 28px oklch(0.68 0.22 350 / 30%);
 }
 
-.animate-gradient {
-  background-size: 300% 300%;
-  animation: gradient-shift 8s ease infinite, wiggle 3s ease-in-out infinite;
-}
-
-.animate-gradient-text {
-  background: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: gradient-shift 8s ease infinite;
+.animate-wiggle {
+  animation: wiggle 3s ease-in-out infinite;
 }
 
 .brand-name {
   margin: 0;
-  color: #b45309;
+  color: oklch(0.82 0.16 195);
   font-weight: 600;
   font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 
 .auth-title {
@@ -548,33 +424,18 @@ onUnmounted(() => {
   font-size: 2rem;
   line-height: 1.2;
   font-weight: 700;
-  color: #9a3412;
 }
 
 .auth-subtitle {
   margin: 0;
-  color: rgba(146, 64, 14, 0.78);
+  color: oklch(0.7 0.03 240 / 85%);
   font-size: 0.92rem;
   line-height: 1.5;
 }
 
 .auth-card {
   border-radius: 1.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 22px 56px rgba(251, 146, 60, 0.15);
   padding: 1.5rem;
-}
-
-.card-hover {
-  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 60px rgba(251, 146, 60, 0.14);
 }
 
 .social-grid {
@@ -584,9 +445,9 @@ onUnmounted(() => {
 }
 
 .social-btn {
-  border: 1px solid #fed7aa;
-  background: rgba(255, 255, 255, 0.82);
-  color: #b45309;
+  border: 1px solid oklch(0.7 0.1 280 / 22%);
+  background: oklch(0.13 0.025 280 / 45%);
+  color: oklch(0.92 0.02 240);
   border-radius: 0.95rem;
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -595,8 +456,9 @@ onUnmounted(() => {
 }
 
 .social-btn:hover {
-  border-color: #fb923c;
-  background: #fff7ed;
+  border-color: oklch(0.78 0.18 195 / 45%);
+  background: oklch(0.78 0.18 195 / 10%);
+  color: oklch(0.9 0.12 200);
 }
 
 .floating-icon {
@@ -619,14 +481,14 @@ onUnmounted(() => {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #fdba74, transparent);
+  background: linear-gradient(90deg, transparent, oklch(0.78 0.18 195 / 35%), transparent);
 }
 
 .divider-text {
   font-size: 0.73rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #d97706;
+  color: oklch(0.7 0.03 240 / 80%);
   font-weight: 600;
 }
 
@@ -635,19 +497,20 @@ onUnmounted(() => {
   margin-bottom: 0.45rem;
   margin-left: 0.15rem;
   font-size: 0.87rem;
-  color: #b45309;
+  color: oklch(0.85 0.03 220);
   font-weight: 600;
 }
 
+/* Cosmic glass field (see .cosmic-input recipe in dashboard.css). */
 .field-input {
   width: 100%;
-  border: 2px solid #fed7aa;
-  background: rgba(255, 255, 255, 0.9);
-  color: #9a3412;
+  border: 1px solid oklch(0.7 0.1 280 / 25%);
+  background: oklch(0.13 0.025 280 / 55%);
+  color: oklch(0.96 0.01 240);
   border-radius: 0.95rem;
   padding: 0.75rem 0.95rem;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, transform 0.3s ease;
 }
 
 .input-wrap {
@@ -660,7 +523,6 @@ onUnmounted(() => {
 
 .input-focus-effect:focus {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(251, 146, 60, 0.15);
 }
 
 .input-check {
@@ -669,7 +531,8 @@ onUnmounted(() => {
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.95rem;
-  color: #fb923c;
+  color: oklch(0.78 0.18 195);
+  text-shadow: 0 0 8px oklch(0.78 0.18 195 / 70%);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -679,26 +542,27 @@ onUnmounted(() => {
 }
 
 .field-input::placeholder {
-  color: #fdba74;
+  color: oklch(0.7 0.03 240 / 55%);
 }
 
 .field-input:hover {
-  border-color: #fdba74;
+  border-color: oklch(0.78 0.18 195 / 35%);
 }
 
 .field-input:focus {
   outline: none;
-  border-color: #fb923c;
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.25);
+  border-color: oklch(0.78 0.18 195 / 70%);
+  background: oklch(0.13 0.025 280 / 75%);
+  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%), 0 0 18px oklch(0.78 0.18 195 / 18%);
 }
 
 .field-input--error {
-  border-color: #dc2626;
+  border-color: oklch(0.65 0.25 25 / 80%);
 }
 
 .field-error {
   margin: 0.35rem 0 0;
-  color: #b91c1c;
+  color: oklch(0.72 0.2 20);
   font-size: 0.8rem;
 }
 
@@ -709,7 +573,7 @@ onUnmounted(() => {
   transform: translateY(-50%);
   border: none;
   background: transparent;
-  color: #c2410c;
+  color: oklch(0.82 0.16 195);
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
@@ -726,18 +590,18 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #b45309;
+  color: oklch(0.8 0.03 230);
   font-size: 0.87rem;
 }
 
 .remember-checkbox {
   width: 1rem;
   height: 1rem;
-  accent-color: #f97316;
+  accent-color: oklch(0.78 0.18 195);
 }
 
 .auth-link {
-  color: #ea580c;
+  color: oklch(0.82 0.16 195);
   text-decoration: none;
   font-size: 0.87rem;
   font-weight: 600;
@@ -745,63 +609,32 @@ onUnmounted(() => {
 
 .auth-link:hover {
   text-decoration: underline;
+  color: oklch(0.88 0.14 200);
 }
 
 .submit-btn {
   width: 100%;
   margin-top: 0.2rem;
-  border: none;
   border-radius: 0.95rem;
-  background: linear-gradient(135deg, #fb923c, #f59e0b, #facc15);
-  color: #fff;
   font-size: 0.95rem;
-  font-weight: 700;
   padding: 0.85rem 1rem;
   cursor: pointer;
-  box-shadow: 0 14px 28px rgba(251, 146, 60, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-shimmer::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite;
-}
-
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 30px rgba(251, 146, 60, 0.38);
-}
-
-.submit-btn:disabled {
-  opacity: 0.75;
-  cursor: not-allowed;
 }
 
 .submit-message {
   margin: 0.95rem 0 0;
   border-radius: 0.75rem;
   padding: 0.65rem 0.8rem;
-  background: #ffedd5;
-  color: #9a3412;
+  background: oklch(0.78 0.18 195 / 10%);
+  border: 1px solid oklch(0.78 0.18 195 / 25%);
+  color: oklch(0.9 0.05 210);
   font-size: 0.84rem;
 }
 
 .register-row {
   margin: 1rem 0 0;
   text-align: center;
-  color: #b45309;
+  color: oklch(0.7 0.03 240 / 85%);
   font-size: 0.9rem;
 }
 
@@ -814,13 +647,14 @@ onUnmounted(() => {
   margin-top: 0.9rem;
   display: block;
   text-align: center;
-  color: #a16207;
+  color: oklch(0.7 0.03 240 / 70%);
   text-decoration: none;
   font-size: 0.84rem;
 }
 
 .back-home-link:hover {
   text-decoration: underline;
+  color: oklch(0.82 0.16 195);
 }
 
 .wave-row {
@@ -840,6 +674,7 @@ onUnmounted(() => {
 .wave-row span:nth-child(4) { animation-delay: 0.3s; }
 .wave-row span:nth-child(5) { animation-delay: 0.4s; }
 
+/* Cursor-trail canvas sits above content but ignores pointer events. */
 .trail-canvas {
   position: fixed;
   inset: 0;
@@ -847,121 +682,20 @@ onUnmounted(() => {
   z-index: 50;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-16px);
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 @keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(3deg);
-  }
-  75% {
-    transform: rotate(-3deg);
-  }
-}
-
-@keyframes morph {
-  0%,
-  100% {
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  }
-  25% {
-    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-  }
-  50% {
-    border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
-  }
-  75% {
-    border-radius: 60% 40% 60% 30% / 60% 40% 30% 70%;
-  }
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
 }
 
 @keyframes ring {
-  from {
-    transform: scale(0.8);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1.7);
-    opacity: 0;
-  }
-}
-
-@keyframes sparkle {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0) rotate(0deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1) rotate(180deg);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
+  from { transform: scale(0.8); opacity: 1; }
+  to { transform: scale(1.7); opacity: 0; }
 }
 
 @keyframes wave {
-  0%,
-  100% {
-    transform: translateY(0) scaleY(1);
-  }
-  50% {
-    transform: translateY(-6px) scaleY(1.08);
-  }
-}
-
-@keyframes snowfall {
-  0% {
-    transform: translateY(-10vh);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.75;
-  }
-  100% {
-    transform: translateY(115vh);
-    opacity: 0.2;
-  }
-}
-
-@keyframes snowdrift {
-  0%,
-  100% {
-    margin-left: -6px;
-  }
-  50% {
-    margin-left: 8px;
-  }
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-6px) scaleY(1.08); }
 }
 
 @media (min-width: 640px) {
@@ -996,39 +730,19 @@ onUnmounted(() => {
 .delay-500 { animation-delay: 0.5s; }
 
 @keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes bounce-in {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  70% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
 }
 </style>

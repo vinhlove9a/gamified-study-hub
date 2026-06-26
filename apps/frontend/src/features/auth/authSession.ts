@@ -9,6 +9,7 @@ const sessionError = ref<ApiError | null>(null);
 let bootstrapPromise: Promise<void> | null = null;
 
 const isAuthenticated = computed(() => Boolean(currentUser.value && getAccessToken()));
+const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
 function clearSession(): void {
   currentUser.value = null;
@@ -71,6 +72,7 @@ export function useAuthSession() {
   return {
     currentUser,
     isAuthenticated,
+    isAdmin,
     isBootstrapping,
     sessionError,
     bootstrapSession,

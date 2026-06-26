@@ -4,6 +4,8 @@ import { RouterLink, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
 import { useAuthSession } from '@/features/auth/authSession';
 import { ApiError } from '@/lib/api/apiError';
+import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
+import AuthShowcasePanel from '@/components/auth/AuthShowcasePanel.vue';
 
 interface FormState {
   fullName: string;
@@ -129,34 +131,19 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="register-page">
-    <div class="auth-bg" aria-hidden="true">
-      <div class="blob blob-a"></div>
-      <div class="blob blob-b"></div>
-      <div class="blob blob-c"></div>
-      <div class="blob blob-d"></div>
-      <div class="blob blob-e"></div>
-
-      <div class="shape shape-circle"></div>
-      <div class="shape shape-diamond"></div>
-      <div class="shape shape-triangle"></div>
-      <div class="shape shape-star"></div>
-
-      <div class="sparkle sparkle-a"></div>
-      <div class="sparkle sparkle-b"></div>
-      <div class="sparkle sparkle-c"></div>
-      <div class="sparkle sparkle-d"></div>
-    </div>
+  <div class="register-page cosmic-page">
+    <StarfieldCanvas />
 
     <main class="auth-main">
-      <div class="auth-shell">
+      <div class="auth-split">
+        <div class="auth-shell">
         <div class="auth-brand animate-bounce-in">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Tạo tài khoản mới</h1>
+          <h1 class="auth-title cosmic-gradient-text">Tạo tài khoản mới</h1>
           <p class="auth-subtitle">Bắt đầu xây dựng cổng tài liệu học tập cho cộng đồng của bạn.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Form đăng ký">
+        <section class="auth-card cosmic-glass cosmic-glass-hover animate-slide-up delay-200" aria-label="Form đăng ký">
           <div class="auth-grid">
             <aside class="setup-panel" aria-label="Lộ trình khởi tạo tài khoản">
               <p class="setup-title">Lộ trình khởi tạo</p>
@@ -257,7 +244,7 @@ const handleSubmit = async () => {
                 <p v-if="errors.acceptedTerms" id="accepted-terms-error" class="field-error" role="alert">{{ errors.acceptedTerms }}</p>
               </div>
 
-              <button type="submit" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading">
+              <button type="submit" class="submit-btn cosmic-btn" :disabled="loading" :aria-busy="loading">
                 {{ loading ? 'Đang xử lý...' : 'Tạo tài khoản' }}
               </button>
 
@@ -272,6 +259,9 @@ const handleSubmit = async () => {
             </form>
           </div>
         </section>
+        </div>
+
+        <AuthShowcasePanel variant="register" class="auth-aside" />
       </div>
     </main>
   </div>
@@ -279,51 +269,12 @@ const handleSubmit = async () => {
 
 <style scoped>
 .register-page {
-  min-height: 100vh;
-  position: relative;
-  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 25%, #fce7f3 50%, #ede9fe 75%, #e0f2fe 100%);
   overflow: hidden;
 }
 
-.auth-bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(2px);
-  animation: float 8s ease-in-out infinite, morph 8s ease-in-out infinite;
-}
-
-.blob-a { top: -5rem; left: -4rem; width: 18rem; height: 18rem; background: linear-gradient(135deg, rgba(251, 146, 60, 0.5), rgba(252, 211, 77, 0.4)); }
-.blob-b { top: 28%; right: -4rem; width: 16rem; height: 16rem; background: linear-gradient(135deg, rgba(244, 114, 182, 0.35), rgba(251, 113, 133, 0.3)); animation-delay: 1.5s; }
-.blob-c { bottom: -6rem; left: 18%; width: 20rem; height: 20rem; background: linear-gradient(135deg, rgba(167, 139, 250, 0.35), rgba(56, 189, 248, 0.3)); animation-delay: 2.5s; }
-.blob-d { top: 5rem; right: 30%; width: 12rem; height: 12rem; background: linear-gradient(135deg, rgba(125, 211, 252, 0.28), rgba(14, 165, 233, 0.2)); animation-delay: 0.7s; }
-.blob-e { bottom: 26%; right: 8%; width: 14rem; height: 14rem; background: linear-gradient(135deg, rgba(134, 239, 172, 0.28), rgba(20, 184, 166, 0.22)); animation-delay: 3s; }
-
-.shape {
-  position: absolute;
-  opacity: 0.35;
-  animation: float 7s ease-in-out infinite;
-}
-
-.shape-circle { top: 15%; left: 10%; width: 2.2rem; height: 2.2rem; border-radius: 9999px; border: 2px solid #fb923c; }
-.shape-diamond { top: 26%; right: 15%; width: 1.8rem; height: 1.8rem; border: 2px solid #f472b6; transform: rotate(45deg); animation-delay: 1.2s; }
-.shape-triangle { bottom: 20%; left: 8%; width: 0; height: 0; border-left: 1rem solid transparent; border-right: 1rem solid transparent; border-bottom: 1.8rem solid rgba(167, 139, 250, 0.5); animation-delay: 2s; }
-.shape-star { top: 10%; left: 45%; width: 1.4rem; height: 1.4rem; background: #f9a8d4; clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%); animation-delay: 1.5s; }
-
-.sparkle { position: absolute; width: 0.4rem; height: 0.4rem; border-radius: 9999px; animation: sparkle 3s ease-in-out infinite; }
-.sparkle-a { top: 20%; left: 30%; background: #fdba74; }
-.sparkle-b { top: 40%; right: 25%; background: #f9a8d4; animation-delay: 0.7s; }
-.sparkle-c { bottom: 30%; left: 20%; background: #c4b5fd; animation-delay: 1.5s; }
-.sparkle-d { top: 60%; right: 35%; background: #f59e0b; animation-delay: 2s; }
-
 .auth-main {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -331,9 +282,38 @@ const handleSubmit = async () => {
   padding: 1.25rem;
 }
 
+.auth-split {
+  width: 100%;
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+}
+
 .auth-shell {
   width: 100%;
   max-width: 56rem;
+}
+
+.auth-aside {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .auth-split {
+    max-width: 84rem;
+    grid-template-columns: minmax(40rem, 56rem) 1fr;
+    align-items: start;
+    gap: 2.5rem;
+    justify-items: stretch;
+  }
+
+  .auth-shell {
+    margin: 0;
+  }
+
+  .auth-aside {
+    display: flex;
+  }
 }
 
 .auth-brand {
@@ -343,7 +323,7 @@ const handleSubmit = async () => {
 
 .brand-name {
   margin: 0;
-  color: #b45309;
+  color: oklch(0.82 0.16 195);
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -353,43 +333,19 @@ const handleSubmit = async () => {
   font-size: 2rem;
   line-height: 1.2;
   font-weight: 700;
-  color: #9a3412;
 }
 
 .auth-subtitle {
   margin: 0 auto;
-  color: rgba(146, 64, 14, 0.78);
+  color: oklch(0.7 0.03 240 / 85%);
   font-size: 0.92rem;
   line-height: 1.5;
   max-width: 42rem;
 }
 
-.animate-gradient-text {
-  background: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: gradient-shift 8s ease infinite;
-}
-
 .auth-card {
   border-radius: 1.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 22px 56px rgba(251, 146, 60, 0.15);
   padding: 1.1rem;
-}
-
-.card-hover {
-  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 60px rgba(251, 146, 60, 0.14);
 }
 
 .auth-grid {
@@ -399,8 +355,8 @@ const handleSubmit = async () => {
 
 .setup-panel {
   border-radius: 1rem;
-  border: 1px solid #fde68a;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.88), rgba(255, 247, 237, 0.9));
+  border: 1px solid oklch(0.68 0.22 350 / 25%);
+  background: linear-gradient(155deg, oklch(0.18 0.04 280 / 50%), oklch(0.12 0.03 280 / 40%));
   padding: 0.9rem;
 }
 
@@ -408,7 +364,7 @@ const handleSubmit = async () => {
   margin: 0 0 0.7rem;
   font-size: 0.84rem;
   font-weight: 700;
-  color: #b45309;
+  color: oklch(0.72 0.22 330);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -426,11 +382,11 @@ const handleSubmit = async () => {
   align-items: center;
   gap: 0.55rem;
   font-size: 0.88rem;
-  color: #9a3412;
+  color: oklch(0.85 0.02 240);
   padding: 0.55rem 0.65rem;
-  border: 1px solid #ffedd5;
+  border: 1px solid oklch(0.7 0.1 280 / 14%);
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.8);
+  background: oklch(0.13 0.025 280 / 40%);
   animation: pulse-card 3s ease-in-out infinite;
 }
 
@@ -439,15 +395,16 @@ const handleSubmit = async () => {
 .setup-item:nth-child(4) { animation-delay: 0.6s; }
 
 .setup-item.is-current {
-  border-color: #fdba74;
+  border-color: oklch(0.78 0.18 195 / 45%);
+  box-shadow: 0 0 18px oklch(0.78 0.18 195 / 12%);
 }
 
 .dot {
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #fb923c, #f59e0b);
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.18);
+  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
+  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 18%);
 }
 
 .form-stack {
@@ -460,60 +417,62 @@ const handleSubmit = async () => {
   margin-bottom: 0.45rem;
   margin-left: 0.15rem;
   font-size: 0.87rem;
-  color: #b45309;
+  color: oklch(0.85 0.03 220);
   font-weight: 600;
 }
 
+/* Cosmic glass field. */
 .field-input {
   width: 100%;
-  border: 2px solid #fed7aa;
-  background: rgba(255, 255, 255, 0.9);
-  color: #9a3412;
+  border: 1px solid oklch(0.7 0.1 280 / 25%);
+  background: oklch(0.13 0.025 280 / 55%);
+  color: oklch(0.96 0.01 240);
   border-radius: 0.95rem;
   padding: 0.72rem 0.95rem;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .field-input::placeholder {
-  color: #fdba74;
+  color: oklch(0.7 0.03 240 / 55%);
 }
 
 .field-input:hover {
-  border-color: #fdba74;
+  border-color: oklch(0.78 0.18 195 / 35%);
 }
 
 .field-input:focus {
   outline: none;
-  border-color: #fb923c;
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.25);
+  border-color: oklch(0.78 0.18 195 / 70%);
+  background: oklch(0.13 0.025 280 / 75%);
+  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%), 0 0 18px oklch(0.78 0.18 195 / 18%);
 }
 
 .field-input--error {
-  border-color: #dc2626;
+  border-color: oklch(0.65 0.25 25 / 80%);
 }
 
 .field-error {
   margin: 0.35rem 0 0;
-  color: #b91c1c;
+  color: oklch(0.72 0.2 20);
   font-size: 0.8rem;
 }
 
 .strength-text {
   margin: 0.45rem 0 0;
   font-size: 0.8rem;
-  color: #9a3412;
+  color: oklch(0.7 0.03 240 / 85%);
 }
 
-.strength-text--weak strong { color: #b91c1c; }
-.strength-text--medium strong { color: #b45309; }
-.strength-text--strong strong { color: #15803d; }
+.strength-text--weak strong { color: oklch(0.72 0.2 20); }
+.strength-text--medium strong { color: oklch(0.78 0.16 80); }
+.strength-text--strong strong { color: oklch(0.78 0.16 150); }
 
 .terms-label {
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
-  color: #b45309;
+  color: oklch(0.8 0.03 230);
   font-size: 0.86rem;
   line-height: 1.4;
 }
@@ -522,76 +481,44 @@ const handleSubmit = async () => {
   width: 1rem;
   height: 1rem;
   margin-top: 0.16rem;
-  accent-color: #f97316;
+  accent-color: oklch(0.78 0.18 195);
   flex: 0 0 auto;
 }
 
 .submit-btn {
   width: 100%;
-  border: none;
   border-radius: 0.95rem;
-  background: linear-gradient(135deg, #fb923c, #f59e0b, #facc15);
-  color: #fff;
   font-size: 0.95rem;
-  font-weight: 700;
   padding: 0.85rem 1rem;
   cursor: pointer;
-  box-shadow: 0 14px 28px rgba(251, 146, 60, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 30px rgba(251, 146, 60, 0.38);
-}
-
-.submit-btn:disabled {
-  opacity: 0.75;
-  cursor: not-allowed;
-}
-
-.btn-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-shimmer::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite;
 }
 
 .helper-note {
   margin: 0;
   font-size: 0.82rem;
   line-height: 1.45;
-  color: #9a3412;
+  color: oklch(0.7 0.03 240 / 75%);
 }
 
 .submit-message {
   margin: 0;
   border-radius: 0.75rem;
   padding: 0.65rem 0.8rem;
-  background: #ffedd5;
-  color: #9a3412;
+  background: oklch(0.78 0.18 195 / 10%);
+  border: 1px solid oklch(0.78 0.18 195 / 25%);
+  color: oklch(0.9 0.05 210);
   font-size: 0.84rem;
 }
 
 .register-row {
   margin: 0;
   text-align: center;
-  color: #b45309;
+  color: oklch(0.7 0.03 240 / 85%);
   font-size: 0.9rem;
 }
 
 .auth-link {
-  color: #ea580c;
+  color: oklch(0.82 0.16 195);
   text-decoration: none;
   font-size: 0.87rem;
   font-weight: 600;
@@ -600,6 +527,7 @@ const handleSubmit = async () => {
 .auth-link:hover,
 .auth-link:focus-visible {
   text-decoration: underline;
+  color: oklch(0.88 0.14 200);
 }
 
 .auth-link--strong {
@@ -641,40 +569,8 @@ const handleSubmit = async () => {
 .animate-bounce-in { animation: bounce-in 0.8s ease-out both; }
 .delay-200 { animation-delay: 0.2s; }
 
-@keyframes float {
-  0%,
-  100% { transform: translateY(0); }
-  50% { transform: translateY(-16px); }
-}
-
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes morph {
-  0%,
-  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
-  50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
-  75% { border-radius: 60% 40% 60% 30% / 60% 40% 30% 70%; }
-}
-
-@keyframes sparkle {
-  0%,
-  100% { opacity: 0; transform: scale(0) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1) rotate(180deg); }
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(30deg); }
-  100% { transform: translateX(100%) rotate(30deg); }
-}
-
 @keyframes pulse-card {
-  0%,
-  100% { transform: translateY(0); }
+  0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
 }
 
