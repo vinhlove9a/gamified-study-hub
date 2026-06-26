@@ -1,0 +1,10 @@
+name: ci-test
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "actions compile OK"
