@@ -1,177 +1,87 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthSession } from '@/features/auth/authSession';
+import { ref } from 'vue';
+import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
+import AppSidebar from '@/components/app/AppSidebar.vue';
+import AppTopbar from '@/components/app/AppTopbar.vue';
+import ToastHost from '@/components/app/ToastHost.vue';
 
-const router = useRouter();
-const { currentUser, logout } = useAuthSession();
-const loggingOut = ref(false);
-
-const displayName = computed(() => {
-  if (currentUser.value?.fullName?.trim()) {
-    return currentUser.value.fullName;
-  }
-  return currentUser.value?.email ?? 'Người dùng';
-});
-
-const handleLogout = async () => {
-  if (loggingOut.value) {
-    return;
-  }
-
-  loggingOut.value = true;
-  try {
-    logout();
-    await router.push('/auth/login');
-  } finally {
-    loggingOut.value = false;
-  }
-};
+const mobileOpen = ref(false);
+const collapsed = ref(false);
 </script>
 
 <template>
-  <div class="app-shell">
-    <aside class="app-sidebar" aria-label="Điều hướng ứng dụng">
-      <div class="brand-block">
-        <p class="brand-title">Gamified Study Hub</p>
-        <p class="brand-subtitle">App Shell Foundation</p>
-      </div>
+  <div class="cosmic-dashboard min-h-screen">
+    <StarfieldCanvas />
+    <ToastHost />
 
-      <nav>
-        <ul class="nav-list">
-          <li class="nav-item nav-item--active">Tổng quan</li>
-          <li class="nav-item">Tài liệu</li>
-          <li class="nav-item">Nhiệm vụ</li>
-          <li class="nav-item">Điểm thưởng</li>
-          <li class="nav-item">Cài đặt</li>
-        </ul>
-      </nav>
+    <!-- Desktop sidebar -->
+    <aside
+      class="fixed inset-y-0 left-0 z-20 hidden transition-[width] duration-200 lg:block"
+      :class="collapsed ? 'w-[76px]' : 'w-64'"
+    >
+      <AppSidebar :collapsed="collapsed" @navigate="mobileOpen = false" @toggle-collapse="collapsed = !collapsed" />
     </aside>
 
-    <div class="app-main">
-      <header class="app-header">
-        <div>
-          <p class="header-title">Khu vực đăng nhập</p>
-          <p class="header-subtitle">Xin chào, {{ displayName }}</p>
-        </div>
-        <button type="button" class="logout-btn" :disabled="loggingOut" :aria-busy="loggingOut" @click="handleLogout">
-          {{ loggingOut ? 'Đang đăng xuất...' : 'Đăng xuất' }}
+    <!-- Mobile drawer -->
+    <transition name="fade">
+      <div v-if="mobileOpen" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" @click="mobileOpen = false" />
+    </transition>
+    <transition name="slide">
+      <aside v-if="mobileOpen" class="fixed inset-y-0 left-0 z-50 w-64 shadow-2xl lg:hidden">
+        <button
+          type="button"
+          class="absolute -right-11 top-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-foreground backdrop-blur"
+          aria-label="Đóng menu"
+          @click="mobileOpen = false"
+        >
+          <span class="text-lg leading-none">✕</span>
         </button>
-      </header>
+        <AppSidebar @navigate="mobileOpen = false" />
+      </aside>
+    </transition>
 
-      <main class="app-content">
-        <slot />
+    <!-- Main column -->
+    <div class="flex min-h-screen flex-col transition-[padding] duration-200" :class="collapsed ? 'lg:pl-[76px]' : 'lg:pl-64'">
+      <AppTopbar @open-sidebar="mobileOpen = true" />
+      <main class="cosmic-scroll mx-auto w-full max-w-[1500px] flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <RouterView v-slot="{ Component }">
+          <transition name="page" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </RouterView>
       </main>
     </div>
   </div>
 </template>
 
 <style scoped>
-.app-shell {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  background: linear-gradient(160deg, #fff6e8 0%, #fffaf2 55%, #f7f4ef 100%);
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
-.app-sidebar {
-  border-right: 1px solid #f0e2cf;
-  padding: 1.25rem 1rem;
-  background: #fff9f0;
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.22s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-100%);
 }
 
-.brand-block {
-  margin-bottom: 1.5rem;
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
-
-.brand-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #7b341e;
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
 }
-
-.brand-subtitle {
-  margin: 0.25rem 0 0;
-  font-size: 0.82rem;
-  color: #7c6f60;
-}
-
-.nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.4rem;
-}
-
-.nav-item {
-  padding: 0.65rem 0.75rem;
-  border-radius: 0.55rem;
-  color: #4b3d2e;
-  font-weight: 500;
-  background: transparent;
-}
-
-.nav-item--active {
-  background: #ffe7c2;
-  color: #7b341e;
-}
-
-.app-main {
-  min-width: 0;
-}
-
-.app-header {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid #f0e2cf;
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.header-title {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #7c6f60;
-}
-
-.header-subtitle {
-  margin: 0.2rem 0 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2c2416;
-}
-
-.logout-btn {
-  border: 1px solid #f0d4ab;
-  background: #fff;
-  color: #7b341e;
-  font-weight: 600;
-  border-radius: 0.55rem;
-  padding: 0.5rem 0.85rem;
-  cursor: pointer;
-}
-
-.app-content {
-  padding: 1.25rem;
-}
-
-@media (max-width: 900px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .app-sidebar {
-    border-right: none;
-    border-bottom: 1px solid #f0e2cf;
-    padding: 1rem;
-  }
-
-  .nav-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.page-leave-to {
+  opacity: 0;
 }
 </style>
