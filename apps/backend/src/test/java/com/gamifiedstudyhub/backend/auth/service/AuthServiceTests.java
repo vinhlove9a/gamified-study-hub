@@ -53,6 +53,15 @@ class AuthServiceTests {
     @Mock
     private com.gamifiedstudyhub.backend.authz.service.AuthorityService authorityService;
 
+    @Mock
+    private com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter loginRateLimiter;
+
+    @Mock
+    private com.gamifiedstudyhub.backend.audit.service.AuthAuditService auditService;
+
+    private static final com.gamifiedstudyhub.backend.common.web.RequestMetadata META =
+            new com.gamifiedstudyhub.backend.common.web.RequestMetadata("127.0.0.1", "JUnit");
+
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
     private AuthService authService;
@@ -71,7 +80,9 @@ class AuthServiceTests {
                 new AuthMapper(),
                 new PasswordPolicyValidator(),
                 authTokenService,
-                authorityService
+                authorityService,
+                loginRateLimiter,
+                auditService
         );
     }
 
@@ -132,7 +143,7 @@ class AuthServiceTests {
                 .thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        AuthResponse response = authService.login(new LoginRequest(" Test@example.com ", "password123"));
+        AuthResponse response = authService.login(new LoginRequest(" Test@example.com ", "password123"), META);
 
         assertNotNull(response.accessToken());
         assertTrue(jwtService.isAccessTokenValid(response.accessToken()));
@@ -149,7 +160,7 @@ class AuthServiceTests {
 
         BusinessException exception = assertThrows(
                 BusinessException.class,
-                () -> authService.login(new LoginRequest("test@example.com", "wrongpassword"))
+                () -> authService.login(new LoginRequest("test@example.com", "wrongpassword"), META)
         );
 
         assertEquals(ErrorCodes.INVALID_CREDENTIALS, exception.getCode());

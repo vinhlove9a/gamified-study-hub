@@ -1,5 +1,6 @@
 package com.gamifiedstudyhub.backend;
 
+import com.gamifiedstudyhub.backend.audit.repository.AuthAuditEventRepository;
 import com.gamifiedstudyhub.backend.auth.repository.EmailVerificationTokenRepository;
 import com.gamifiedstudyhub.backend.auth.repository.PasswordResetTokenRepository;
 import com.gamifiedstudyhub.backend.authz.repository.RoleRepository;
@@ -57,6 +58,9 @@ class GamifiedStudyHubBackendApplicationTests {
 
     @MockBean
     private DocumentTagRelationRepository documentTagRelationRepository;
+
+    @MockBean
+    private AuthAuditEventRepository authAuditEventRepository;
 
     @Test
     void contextLoads() {

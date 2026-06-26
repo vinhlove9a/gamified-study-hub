@@ -7,6 +7,12 @@ spring:
     open-in-view: false
   mvc:
     throw-exception-if-no-handler-found: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2s
 
 server:
   port: ${BACKEND_PORT:8080}
@@ -26,3 +32,12 @@ app:
   jwt:
     secret: ${JWT_SECRET}
     access-token-expiration-minutes: ${JWT_ACCESS_TOKEN_EXPIRATION_MINUTES:60}
+  security:
+    ratelimit:
+      ip-per-minute: ${AUTH_RL_IP_PER_MIN:30}
+      account-per-window: ${AUTH_RL_ACCOUNT:5}
+      account-window-seconds: ${AUTH_RL_ACCOUNT_WINDOW:900}
+    lockout:
+      max-attempts: ${AUTH_LOCKOUT_MAX_ATTEMPTS:5}
+      base-lock-seconds: ${AUTH_LOCKOUT_BASE_SECONDS:60}
+      max-tier: ${AUTH_LOCKOUT_MAX_TIER:5}

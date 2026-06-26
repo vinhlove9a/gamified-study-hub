@@ -12,16 +12,21 @@ import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
+import com.gamifiedstudyhub.backend.audit.AuthEventType;
+import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
+import com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter;
 import com.gamifiedstudyhub.backend.authz.service.AuthorityService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
 import com.gamifiedstudyhub.backend.common.exception.UnauthorizedException;
 import com.gamifiedstudyhub.backend.common.util.DateTimeUtils;
+import com.gamifiedstudyhub.backend.common.web.RequestMetadata;
 import com.gamifiedstudyhub.backend.user.entity.User;
 import com.gamifiedstudyhub.backend.user.entity.UserStatus;
 import com.gamifiedstudyhub.backend.user.repository.UserRepository;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,6 +46,8 @@ public class AuthService {
     private final PasswordPolicyValidator passwordPolicyValidator;
     private final AuthTokenService authTokenService;
     private final AuthorityService authorityService;
+    private final LoginRateLimiter loginRateLimiter;
+    private final AuthAuditService auditService;
 
     public AuthService(
             UserRepository userRepository,
@@ -49,7 +56,9 @@ public class AuthService {
             AuthMapper authMapper,
             PasswordPolicyValidator passwordPolicyValidator,
             AuthTokenService authTokenService,
-            AuthorityService authorityService
+            AuthorityService authorityService,
+            LoginRateLimiter loginRateLimiter,
+            AuthAuditService auditService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -58,6 +67,8 @@ public class AuthService {
         this.passwordPolicyValidator = passwordPolicyValidator;
         this.authTokenService = authTokenService;
         this.authorityService = authorityService;
+        this.loginRateLimiter = loginRateLimiter;
+        this.auditService = auditService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -89,13 +100,23 @@ public class AuthService {
                 accessToken, jwtService.getAccessTokenExpirationSeconds(), savedUser, authorities);
     }
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request, RequestMetadata meta) {
         String email = normalizeEmail(request.email());
 
-        User user = userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
-                .orElseThrow(this::invalidCredentialsException);
+        // Throttle / lockout BEFORE doing any password work (throws 429 if blocked).
+        loginRateLimiter.assertAllowed(meta.ip(), email);
 
-        if (user.getPasswordHash() == null || !passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+        User user = userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email).orElse(null);
+
+        boolean badCredentials = user == null
+                || user.getPasswordHash() == null
+                || !passwordEncoder.matches(request.password(), user.getPasswordHash());
+        if (badCredentials) {
+            loginRateLimiter.recordFailure(email);
+            UUID userId = user == null ? null : user.getId();
+            AuthEventType type = loginRateLimiter.isLocked(email)
+                    ? AuthEventType.ACCOUNT_LOCKED : AuthEventType.LOGIN_FAILURE;
+            auditService.record(type, userId, meta, "email=" + email);
             throw invalidCredentialsException();
         }
 
@@ -117,6 +138,8 @@ public class AuthService {
 
         user.setLastLoginAt(DateTimeUtils.nowUtc());
         userRepository.save(user);
+        loginRateLimiter.recordSuccess(email);
+        auditService.record(AuthEventType.LOGIN_SUCCESS, user.getId(), meta);
 
         String accessToken = jwtService.generateAccessToken(user);
         List<String> authorities = authorityService.resolveAuthorityCodes(user.getId());
