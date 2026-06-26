@@ -13,15 +13,17 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Trang chủ', href: '#hero' },
-  { label: 'Vấn đề', href: '#sustainability' },
-  { label: 'Sứ mệnh', href: '#mission' },
-  { label: 'Đối tượng', href: '#geographic' },
-  { label: 'Tính năng', href: '#product' },
-  { label: 'Liên hệ', href: '#contact' }
+  { label: 'Chỉ số', href: '#stats-band' },
+  { label: 'Cách hoạt động', href: '#how-it-works' },
+  { label: 'Simulator', href: '#interactive-lab' },
+  { label: 'Thành tựu', href: '#achievements' },
+  { label: 'Hạng VIP', href: '#vip-tiers' },
+  { label: 'Hỏi đáp', href: '#faq' }
 ];
 
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
+const scrollProgress = ref(0);
 
 const animation = inject<AnimationAPI | null>('animation', null);
 const injectedScrollToSection = inject<((href: string) => void) | null>('scrollToSection', null);
@@ -33,6 +35,8 @@ let focusTrapCleanup: (() => void) | null = null;
 
 const checkScroll = () => {
   isScrolled.value = window.scrollY > 50;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress.value = maxScroll > 0 ? Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100)) : 0;
 };
 
 
@@ -134,6 +138,7 @@ onUnmounted(() => {
     aria-label="Điều hướng chính"
   >
     <SkipLink />
+    <div class="app-nav__progress" :style="{ width: `${scrollProgress}%` }" aria-hidden="true"></div>
     <div class="app-nav__container">
       <button
         class="app-nav__logo"
@@ -225,11 +230,24 @@ onUnmounted(() => {
   background: transparent;
 }
 
+.app-nav__progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1002;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, oklch(0.82 0.16 195), oklch(0.84 0.16 85), oklch(0.72 0.22 330));
+  box-shadow: 0 0 16px oklch(0.82 0.16 195 / 55%);
+  transition: width 0.05s linear;
+}
+
 .app-nav--scrolled {
-  background: rgba(44, 36, 22, 0.95);
-  backdrop-filter: blur(10px);
+  background: oklch(0.10 0.02 280 / 85%);
+  backdrop-filter: blur(16px);
   padding: 0.75rem 2rem;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 24px oklch(0 0 0 / 45%), 0 0 0 1px oklch(0.78 0.18 195 / 8%);
+  border-bottom: 1px solid oklch(0.7 0.1 280 / 15%);
 }
 
 .app-nav__container {
@@ -253,7 +271,7 @@ onUnmounted(() => {
 }
 
 .app-nav__logo:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -284,7 +302,7 @@ onUnmounted(() => {
 .app-nav__link {
   background: none;
   border: none;
-  color: #ffffff;
+  color: oklch(0.96 0.01 240);
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
@@ -297,7 +315,7 @@ onUnmounted(() => {
 }
 
 .app-nav__link:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 2px;
 }
@@ -308,11 +326,12 @@ onUnmounted(() => {
   left: 0;
   width: 0;
   height: 2px;
-  background: #d4a24c;
+  background: linear-gradient(90deg, oklch(0.78 0.18 195), oklch(0.68 0.22 350));
 }
 
 .app-nav__link:hover {
-  color: #d4a24c;
+  color: oklch(0.82 0.16 195);
+  text-shadow: 0 0 10px oklch(0.78 0.18 195 / 50%);
 }
 
 .app-nav__mobile-toggle {
@@ -325,7 +344,8 @@ onUnmounted(() => {
 
 @media (max-width: 767px) {
   .app-nav__mobile-toggle {
-    background: rgba(44, 36, 22, 0.7);
+    background: oklch(0.10 0.02 280 / 85%);
+    backdrop-filter: blur(16px);
     border-radius: 8px;
     padding: 0.75rem;
     transition: background 0.3s ease;
@@ -337,7 +357,7 @@ onUnmounted(() => {
 }
 
 .app-nav__mobile-toggle:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -361,7 +381,7 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 2px;
-  background: #ffffff;
+  background: oklch(0.96 0.01 240);
   transition: all 0.3s ease;
 }
 
@@ -383,7 +403,8 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(44, 36, 22, 0.9);
+  background: oklch(0.08 0.02 280 / 96%);
+  backdrop-filter: blur(16px);
   z-index: 999;
   animation: fadeIn 0.3s ease;
 }
@@ -403,7 +424,8 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2c2416;
+  background: oklch(0.08 0.02 280 / 96%);
+  backdrop-filter: blur(16px);
   padding-top: 80px;
   padding-left: 2rem;
   padding-right: 2rem;
@@ -443,7 +465,7 @@ onUnmounted(() => {
   width: 100%;
   background: none;
   border: none;
-  color: #ffffff;
+  color: oklch(0.96 0.01 240);
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 1.5rem;
   font-weight: 600;
@@ -455,13 +477,14 @@ onUnmounted(() => {
 }
 
 .app-nav__mobile-link:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 2px;
 }
 
 .app-nav__mobile-link:hover {
-  color: #d4a24c;
+  color: oklch(0.82 0.16 195);
+  text-shadow: 0 0 10px oklch(0.78 0.18 195 / 50%);
 }
 
 @media (max-width: 480px) {

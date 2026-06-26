@@ -23,12 +23,12 @@ const animation = inject<AnimationAPI | null>('animation', null);
 let cleanupFns: Array<() => void> = [];
 
 const specifications: Specification[] = [
-  { parameter: 'Kho tài liệu', value: '1', unit: 'hệ thống', icon: 'ffa-test' },
-  { parameter: 'Tìm kiếm nhanh', value: '24/7', unit: 'truy cập', icon: 'moisture' },
-  { parameter: 'Nhiệm vụ', value: 'N', unit: 'không giới hạn', icon: 'iodine' },
-  { parameter: 'Điểm thưởng', value: 'Coin', unit: 'minh bạch', icon: 'melting-point' },
-  { parameter: 'Mở khóa VIP', value: 'Coin', unit: 'thay tiền', icon: 'peroxide' },
-  { parameter: 'Workspace', value: 'White-label', unit: 'riêng', icon: 'cloud-point' }
+  { parameter: 'Knowledge Vault', value: '1', unit: 'lõi dữ liệu', icon: 'ffa-test' },
+  { parameter: 'Search Radar', value: '24/7', unit: 'tìm nhanh', icon: 'moisture' },
+  { parameter: 'Mission Engine', value: 'N', unit: 'nhiệm vụ', icon: 'iodine' },
+  { parameter: 'Coin Wallet', value: 'Coin', unit: 'ghi nhận', icon: 'melting-point' },
+  { parameter: 'VIP Gate', value: 'Unlock', unit: 'bằng coin', icon: 'peroxide' },
+  { parameter: 'Brand Orbit', value: 'White-label', unit: 'workspace', icon: 'cloud-point' }
 ]
 
 const features: ProductFeature[] = [
@@ -177,15 +177,14 @@ onUnmounted(() => {
         <div class="left-content">
           <div class="product-visual">
             <svg viewBox="0 0 64 64" class="tank-icon" fill="none" aria-hidden="true">
-              <rect x="12" y="20" width="40" height="38" rx="2" stroke="currentColor" stroke-width="2.5" />
-              <ellipse cx="32" cy="20" rx="20" ry="6" stroke="currentColor" stroke-width="2.5" />
-              <rect x="28" y="26" width="8" height="24" rx="1" stroke="currentColor" stroke-width="1.5" />
-              <rect x="30" y="32" width="4" height="16" fill="currentColor" opacity="0.3" />
-              <path d="M12 12H4V16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-              <path d="M52 52H60V48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
-              <circle cx="48" cy="14" r="5" stroke="currentColor" stroke-width="1.5" />
-              <path d="M48 14L50 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              <path d="M4 58H60" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <rect x="8" y="12" width="48" height="36" rx="5" stroke="currentColor" stroke-width="2.5" />
+              <path d="M14 22H50" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.45" />
+              <path d="M18 32H30L36 26L46 38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="18" cy="32" r="3" fill="currentColor" />
+              <circle cx="36" cy="26" r="3" fill="currentColor" />
+              <circle cx="46" cy="38" r="3" fill="currentColor" />
+              <path d="M20 54H44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M28 48V54M36 48V54" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
             </svg>
           </div>
 
@@ -204,7 +203,7 @@ onUnmounted(() => {
               <span class="value-number">VIP</span>
               <span class="value-unit">UNLOCK</span>
             </div>
-            <div class="capacity-label">Mở khóa tài liệu VIP</div>
+            <div class="capacity-label">Cổng mở khóa nội dung giá trị</div>
           </div>
 
           <div class="cert-row">
@@ -238,19 +237,19 @@ onUnmounted(() => {
 
       <div class="product-right">
         <div class="right-content">
-          <span class="section-label">Tính năng cốt lõi</span>
+          <span class="section-label">Core modules</span>
 
           <h2 class="product-title">
-            Tất cả những gì cần
-            <span class="title-accent">để vận hành một cổng tài liệu học tập.</span>
+            Các module cần thiết
+            <span class="title-accent">để vận hành một Deep Workspace học tập.</span>
           </h2>
 
           <p class="product-description">
-            Từ lưu trữ tài liệu, tìm kiếm, nhiệm vụ, coin đến mở khóa tài liệu VIP - mọi thứ được thiết kế cho các cộng đồng học tập nhỏ muốn chuyên nghiệp hóa trải nghiệm học viên.
+            Từ Knowledge Vault, Search Radar, Mission Engine, Coin Wallet đến VIP Gate - mọi module được thiết kế cho cộng đồng học tập nhỏ muốn vận hành chuyên nghiệp nhưng vẫn dễ bắt đầu.
           </p>
 
           <div class="specs-section">
-            <h3 class="specs-title">Nhóm chức năng</h3>
+            <h3 class="specs-title">Tầng vận hành</h3>
             <div class="specs-grid">
               <div
                 v-for="spec in specifications"
@@ -275,7 +274,7 @@ onUnmounted(() => {
           </div>
 
           <div class="features-section">
-            <h3 class="features-title">Tính năng sản phẩm</h3>
+            <h3 class="features-title">Trải nghiệm người dùng</h3>
             <div class="features-grid">
               <div
                 v-for="feature in features"
@@ -320,7 +319,7 @@ onUnmounted(() => {
   min-height: 100vh;
   height: auto;
   position: relative;
-  background: #245246;
+  background: linear-gradient(160deg, oklch(0.12 0.04 285), oklch(0.08 0.02 280));
   clip-path: polygon(0 0, calc(100% - 80px) 0, 100% 100%, 0 100%);
 }
 
@@ -344,7 +343,7 @@ onUnmounted(() => {
   right: -20%;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(196, 91, 40, 0.12) 0%, transparent 50%);
+  background: radial-gradient(ellipse at 30% 50%, oklch(0.78 0.18 195 / 14%) 0%, transparent 50%);
 }
 
 .bg-accent-glow {
@@ -353,7 +352,7 @@ onUnmounted(() => {
   left: -10%;
   width: 80%;
   height: 80%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(230, 184, 77, 0.1) 0%, transparent 50%);
+  background: radial-gradient(ellipse at 30% 50%, oklch(0.68 0.22 350 / 12%) 0%, transparent 50%);
 }
 
 .diagonal-overlay {
@@ -361,9 +360,9 @@ onUnmounted(() => {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(196, 91, 40, 0.05) 0%,
+    oklch(0.78 0.18 195 / 6%) 0%,
     transparent 50%,
-    rgba(36, 82, 70, 0.05) 100%
+    oklch(0.68 0.22 350 / 6%) 100%
   );
 }
 
@@ -384,7 +383,7 @@ onUnmounted(() => {
 .tank-icon {
   width: 80px;
   height: 80px;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
   opacity: 0.6;
 }
 
@@ -395,9 +394,9 @@ onUnmounted(() => {
   gap: 0.375rem;
   margin-bottom: 1.5rem;
   padding: 1rem 1.5rem;
-  background: rgba(245, 240, 232, 0.05);
-  border: 1px solid rgba(230, 184, 77, 0.2);
-  border-left: 3px solid #e6b84d;
+  background: oklch(0.78 0.18 195 / 8%);
+  border: 1px solid oklch(0.78 0.18 195 / 25%);
+  border-left: 3px solid oklch(0.82 0.16 195);
 }
 
 .capacity-icon {
@@ -409,7 +408,7 @@ onUnmounted(() => {
 .capacity-icon svg {
   width: 100%;
   height: 100%;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
 }
 
 .capacity-value {
@@ -421,7 +420,7 @@ onUnmounted(() => {
 .value-number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
   line-height: 1;
   font-family: 'Jakarta Sans', sans-serif;
 }
@@ -429,14 +428,14 @@ onUnmounted(() => {
 .value-unit {
   font-size: 1rem;
   font-weight: 600;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
 }
 
 .capacity-label {
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: rgba(245, 240, 232, 0.6);
+  color: oklch(0.7 0.03 240);
 }
 
 .cert-row {
@@ -450,31 +449,32 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: rgba(245, 240, 232, 0.03);
-  border: 1px solid rgba(245, 240, 232, 0.1);
+  background: oklch(0.96 0.01 240 / 4%);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .cert-badge:hover {
-  background: rgba(245, 240, 232, 0.08);
-  border-color: rgba(230, 184, 77, 0.3);
+  background: oklch(0.96 0.01 240 / 8%);
+  border-color: oklch(0.78 0.18 195 / 50%);
+  box-shadow: 0 0 18px oklch(0.78 0.18 195 / 25%);
   transform: translateX(4px);
 }
 
 .cert-badge:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.82 0.16 195);
   outline-offset: 2px;
-  background: rgba(245, 240, 232, 0.08);
-  border-color: rgba(230, 184, 77, 0.4);
+  background: oklch(0.96 0.01 240 / 8%);
+  border-color: oklch(0.78 0.18 195 / 60%);
 }
 
 .cert-badge svg {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
-  color: #e6b84d;
+  color: oklch(0.82 0.16 195);
 }
 
 .cert-text {
@@ -485,12 +485,12 @@ onUnmounted(() => {
 .cert-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
 }
 
 .cert-status {
   font-size: 0.65rem;
-  color: rgba(245, 240, 232, 0.5);
+  color: oklch(0.7 0.03 240);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -499,7 +499,8 @@ onUnmounted(() => {
   width: 55%;
   min-height: 100vh;
   height: auto;
-  background: #f5f0e8;
+  background: oklch(0.10 0.02 282 / 70%);
+  backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -516,27 +517,27 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
   margin-bottom: 0.75rem;
 }
 
 .product-title {
   font-size: clamp(1.75rem, 3vw, 2.25rem);
   font-weight: 700;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   line-height: 1.15;
   margin-bottom: 1rem;
   font-family: 'Jakarta Sans', sans-serif;
 }
 
 .title-accent {
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
 }
 
 .product-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgba(44, 36, 22, 0.75);
+  color: oklch(0.96 0.01 240 / 75%);
   margin-bottom: 1.5rem;
   max-width: 90%;
 }
@@ -550,7 +551,7 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.75rem;
   opacity: 0.8;
 }
@@ -566,15 +567,15 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: #faf7f2;
-  border: 1px solid rgba(44, 36, 22, 0.08);
+  background: oklch(0.13 0.025 280 / 55%);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 6px;
   transition: all 0.3s ease;
 }
 
 .spec-card:hover {
-  border-color: rgba(196, 91, 40, 0.25);
-  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.08);
+  border-color: oklch(0.78 0.18 195 / 55%);
+  box-shadow: 0 8px 24px oklch(0.78 0.18 195 / 18%);
 }
 
 .spec-icon {
@@ -584,7 +585,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(196, 91, 40, 0.08);
+  background: oklch(0.78 0.18 195 / 12%);
   border-radius: 6px;
 }
 
@@ -603,7 +604,7 @@ onUnmounted(() => {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(44, 36, 22, 0.5);
+  color: oklch(0.7 0.03 240);
   font-weight: 500;
 }
 
@@ -616,14 +617,14 @@ onUnmounted(() => {
 .spec-value {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   font-family: 'Jakarta Sans', sans-serif;
 }
 
 .spec-unit {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #c45b28;
+  color: oklch(0.82 0.16 195);
 }
 
 .features-section {
@@ -635,7 +636,7 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #2c2416;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.75rem;
   opacity: 0.8;
 }
@@ -650,20 +651,24 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  background: #2c2416;
+  background: oklch(0.15 0.03 280 / 70%);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 8px;
   transition: all 0.3s ease;
   cursor: default;
 }
 
 .feature-card:hover {
-  background: #3a3025;
+  background: oklch(0.18 0.035 280 / 80%);
+  border-color: oklch(0.78 0.18 195 / 55%);
+  box-shadow: 0 8px 28px oklch(0.78 0.18 195 / 22%);
 }
 
 .feature-card:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.82 0.16 195);
   outline-offset: 2px;
-  background: #3a3025;
+  background: oklch(0.18 0.035 280 / 80%);
+  border-color: oklch(0.78 0.18 195 / 55%);
 }
 
 .feature-icon {
@@ -672,14 +677,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(196, 91, 40, 0.15);
+  background: oklch(0.78 0.18 195 / 15%);
   border-radius: 6px;
   margin-bottom: 0.75rem;
   transition: all 0.3s ease;
 }
 
 .feature-card:hover .feature-icon {
-  background: #c45b28;
+  background: oklch(0.78 0.18 195);
 }
 
 .feature-icon img {
@@ -690,7 +695,7 @@ onUnmounted(() => {
 .feature-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #f5f0e8;
+  color: oklch(0.96 0.01 240);
   margin-bottom: 0.375rem;
   font-family: 'Jakarta Sans', sans-serif;
 }
@@ -698,7 +703,7 @@ onUnmounted(() => {
 .feature-description {
   font-size: 0.75rem;
   line-height: 1.5;
-  color: rgba(245, 240, 232, 0.6);
+  color: oklch(0.7 0.03 240);
 }
 
 @media (max-width: 1200px) {

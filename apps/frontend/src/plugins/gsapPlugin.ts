@@ -181,10 +181,12 @@ const gsapPlugin: Plugin = {
           delay = 0, 
           duration = config.durationMedium, 
           stagger = config.staggerBase,
-          yStart = 40 
+          yStart = 40
         } = options
 
-        if (shouldReduce) {
+        // A hidden tab freezes GSAP's ticker, so a scroll-reveal tween would leave
+        // the element stuck at opacity:0. Show it immediately when hidden.
+        if (shouldReduce || document.hidden) {
           return gsap.set(target, { opacity: 1, y: 0 })
         }
 
@@ -347,7 +349,10 @@ const gsapPlugin: Plugin = {
         const shouldReduce = utils.shouldReduceMotion()
         const { start = 0, end = 100, duration = 1.5, prefix = '', suffix = '' } = options
 
-        if (shouldReduce) {
+        // Treat a hidden tab like reduced motion: GSAP's ticker is asleep while
+        // `document.hidden`, so an animated count-up would freeze mid-number. Write
+        // the final value immediately instead (real, visible users still animate).
+        if (shouldReduce || document.hidden) {
           const el = utils.getElement(target)
           if (el) el.textContent = `${prefix}${end}${suffix}`
           return
@@ -716,7 +721,9 @@ const gsapPlugin: Plugin = {
 
         if (!targetArray.length) return
 
-        if (shouldReduce) {
+        // Hidden tab → GSAP ticker asleep → the batch reveal tween never runs and
+        // elements stay at opacity:0. Reveal them immediately when hidden.
+        if (shouldReduce || document.hidden) {
           return gsap.set(targetArray, { opacity: 1, y: 0 })
         }
 

@@ -41,8 +41,8 @@ const registerCleanup = (item: unknown) => {
 const milestones: Milestone[] = [
   {
     year: '01',
-    title: 'Thư mục ngày càng lộn xộn',
-    description: 'Tài liệu nằm rải rác trong nhiều folder, tên file không thống nhất và rất khó tìm lại.',
+    title: 'Tài liệu trôi trong nhiều quỹ đạo',
+    description: 'File nằm rải rác trong Drive, Zalo, Messenger hoặc nhiều folder, khiến học viên không biết đâu là bản đúng.',
     details: [
       'Nhiều folder trùng nội dung',
       'Khó theo dõi phiên bản tài liệu',
@@ -51,8 +51,8 @@ const milestones: Milestone[] = [
   },
   {
     year: '02',
-    title: 'Học viên thiếu động lực quay lại',
-    description: 'Việc tải tài liệu thường chỉ diễn ra một lần. Không có nhiệm vụ, streak hay điểm thưởng để tạo thói quen học tập thường xuyên.',
+    title: 'Không có mission để kéo học viên quay lại',
+    description: 'Việc tải tài liệu thường chỉ diễn ra một lần. Không có nhiệm vụ, streak hay điểm thưởng để tạo thói quen học tập.',
     details: [
       'Không có vòng lặp học tập',
       'Không có nhiệm vụ định kỳ',
@@ -61,8 +61,8 @@ const milestones: Milestone[] = [
   },
   {
     year: '03',
-    title: 'Không có cơ chế ghi nhận nỗ lực',
-    description: 'Điểm danh, làm bài, đóng góp tài liệu hoặc hoàn thành mục tiêu học tập chưa được ghi nhận thành phần thưởng rõ ràng.',
+    title: 'Nỗ lực học tập chưa thành tín hiệu',
+    description: 'Điểm danh, làm bài, đóng góp tài liệu hoặc hoàn thành mục tiêu chưa được ghi nhận thành coin, streak hay quyền mở khóa.',
     details: [
       'Không có điểm thưởng minh bạch',
       'Học viên không thấy tiến bộ',
@@ -71,8 +71,8 @@ const milestones: Milestone[] = [
   },
   {
     year: '04',
-    title: 'Khó tạo khác biệt cho cộng đồng',
-    description: 'CLB, gia sư hoặc trung tâm nhỏ khó biến kho tài liệu của mình thành một trải nghiệm học tập chuyên nghiệp và có tính gắn kết.',
+    title: 'Người quản lý thiếu cockpit vận hành',
+    description: 'CLB, gia sư hoặc trung tâm nhỏ khó nhìn toàn cảnh tài liệu, nhiệm vụ, tiến độ và phần thưởng của học viên.',
     details: [
       'Khó xây dựng thương hiệu riêng',
       'Trải nghiệm học rời rạc',
@@ -285,8 +285,8 @@ onUnmounted(() => {
     <div class="sustainability-background">
       <div class="bg-image-wrapper">
         <img
-          src="/images/oil-palm.jpg"
-          alt="Hình nền trang trí cho phần giới thiệu"
+          src="/images/study-hub-background.webp"
+          alt="Không gian học tập số được phủ lớp giao diện nhiệm vụ"
           class="bg-image"
         />
       </div>
@@ -297,36 +297,36 @@ onUnmounted(() => {
 
     <div class="sustainability-content">
       <div class="journey-intro">
-        <div class="intro-badge">Vấn đề hiện tại</div>
+        <div class="intro-badge">Tín hiệu nhiễu</div>
         <h2 class="journey-headline">
-          Tài liệu học tập không thiếu. Vấn đề là học viên không tương tác.
+          Tài liệu không thiếu. Vấn đề là chúng chưa có quỹ đạo học tập.
         </h2>
         <p class="journey-description">
-          Nhiều CLB, gia sư và nhóm luyện thi đang dùng thư mục Drive để chia sẻ tài liệu. Nhưng sau một thời gian, thư mục trở nên rối, tài liệu khó tìm, học viên tải về rồi bỏ đó và người quản lý không biết ai đang thực sự học.
+          Nhiều CLB, gia sư và nhóm luyện thi đã có rất nhiều tài liệu. Nhưng nếu thiếu mission, coin, streak và quyền mở khóa, kho tài liệu chỉ là một cụm file tĩnh thay vì một workspace khiến học viên muốn quay lại.
         </p>
 
         <div class="journey-stats">
           <div class="stat-item">
-            <span class="stat-number">Drive</span>
-            <span class="stat-label">dễ thành kho lộn xộn</span>
+            <span class="stat-number">Folder</span>
+            <span class="stat-label">rời rạc nhiều nơi</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">1 lần</span>
-            <span class="stat-label">tải rồi rời đi</span>
+            <span class="stat-number">No mission</span>
+            <span class="stat-label">khó tạo thói quen học</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">0</span>
-            <span class="stat-label">cơ chế thưởng rõ ràng</span>
+            <span class="stat-number">0 signal</span>
+            <span class="stat-label">không thấy nỗ lực thật</span>
           </div>
         </div>
 
         <div class="journey-ctas">
-          <button 
-            class="cta-primary" 
+          <button
+            class="cta-primary cosmic-btn"
             aria-label="Đi đến phần sứ mệnh"
             @click="scrollToMission"
           >
-            Xem cách Gamified Study Hub giải quyết
+            Mở Mission Control
             <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
@@ -373,7 +373,7 @@ onUnmounted(() => {
             <div class="marker-core"></div>
           </div>
 
-          <div class="node-content">
+          <div class="node-content cosmic-glass">
             <div class="node-year">{{ milestone.year }}</div>
             <h3 class="node-title">{{ milestone.title }}</h3>
             <p class="node-description">{{ milestone.description }}</p>
@@ -421,7 +421,7 @@ onUnmounted(() => {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background: #2a5c55;
+  background: oklch(0.09 0.02 282 / 80%);
 }
 
 .sustainability-background {
@@ -442,8 +442,8 @@ onUnmounted(() => {
   object-fit: cover;
   position: absolute;
   top: -10%;
-  opacity: 0.52;
-  filter: saturate(0.55) brightness(0.75);
+  opacity: 0.2;
+  filter: saturate(0.85) brightness(0.36) hue-rotate(175deg);
 }
 
 .bg-overlay {
@@ -451,9 +451,9 @@ onUnmounted(() => {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(22, 36, 34, 0.9) 0%,
-    rgba(26, 47, 43, 0.84) 50%,
-    rgba(23, 41, 38, 0.82) 100%
+    oklch(0.08 0.02 280 / 90%) 0%,
+    oklch(0.09 0.03 282 / 85%) 50%,
+    oklch(0.10 0.04 285 / 80%) 100%
   );
 }
 
@@ -473,12 +473,12 @@ onUnmounted(() => {
   left: -25%;
   background: radial-gradient(
     circle at 30% 20%,
-    rgba(196, 91, 40, 0.15) 0%,
+    oklch(0.78 0.18 195 / 12%) 0%,
     transparent 40%
   ),
   radial-gradient(
     circle at 70% 80%,
-    rgba(212, 162, 76, 0.1) 0%,
+    oklch(0.68 0.22 350 / 10%) 0%,
     transparent 40%
   );
   pointer-events: none;
@@ -507,10 +507,11 @@ onUnmounted(() => {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #d4a24c;
+  color: oklch(0.82 0.16 195);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  background: rgba(212, 162, 76, 0.15);
+  background: oklch(0.78 0.18 195 / 12%);
+  border: 1px solid oklch(0.78 0.18 195 / 25%);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   width: fit-content;
@@ -522,7 +523,7 @@ onUnmounted(() => {
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.1;
-  color: #ffffff;
+  color: oklch(0.96 0.01 240);
   margin: 0 0 1.5rem 0;
   letter-spacing: -0.02em;
 }
@@ -532,7 +533,7 @@ onUnmounted(() => {
   font-size: 1.1rem;
   font-weight: 400;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.85);
+  color: oklch(0.96 0.01 240 / 80%);
   margin: 0 0 2.5rem 0;
 }
 
@@ -551,7 +552,7 @@ onUnmounted(() => {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 2rem;
   font-weight: 800;
-  color: #d4a24c;
+  color: oklch(0.82 0.16 195);
   line-height: 1;
 }
 
@@ -559,7 +560,7 @@ onUnmounted(() => {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: oklch(0.7 0.03 240);
   margin-top: 0.25rem;
 }
 
@@ -574,8 +575,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.5rem;
-  background: #c45b28;
-  color: #ffffff;
+  background: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.68 0.22 350));
+  color: oklch(0.08 0.02 280);
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
@@ -586,9 +587,8 @@ onUnmounted(() => {
 }
 
 .cta-primary:hover {
-  background: #d4a24c;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(196, 91, 40, 0.35);
+  box-shadow: 0 6px 24px oklch(0.78 0.18 195 / 45%);
 }
 
 .cta-arrow {
@@ -631,7 +631,7 @@ onUnmounted(() => {
   top: 0;
   width: 50%;
   height: 100%;
-  background: #d4a24c;
+  background: oklch(0.78 0.18 195);
   animation: scrollFlow 2s ease-in-out infinite;
 }
 
@@ -651,7 +651,7 @@ onUnmounted(() => {
   position: absolute;
   width: 4px;
   height: 80%;
-  background: rgba(255, 255, 255, 0.1);
+  background: oklch(0.96 0.01 240 / 10%);
   border-radius: 2px;
   transform: rotate(-25deg);
 }
@@ -662,7 +662,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 0%;
-  background: linear-gradient(180deg, #c45b28, #d4a24c);
+  background: linear-gradient(180deg, oklch(0.78 0.18 195), oklch(0.68 0.22 350));
   border-radius: 2px;
   transition: height 0.1s linear;
 }
@@ -679,7 +679,7 @@ onUnmounted(() => {
 }
 
 .milestone-node:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 4px;
   transform: scale(1.05);
@@ -694,22 +694,22 @@ onUnmounted(() => {
 .marker-core {
   width: 16px;
   height: 16px;
-  background: #ffffff;
+  background: oklch(0.96 0.01 240);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px oklch(0.96 0.01 240 / 50%);
 }
 
 .node-marker:hover .marker-core,
 .milestone-node.is-active .marker-core {
   width: 20px;
   height: 20px;
-  background: #d4a24c;
-  box-shadow: 0 0 30px rgba(212, 162, 76, 0.6);
+  background: oklch(0.78 0.18 195);
+  box-shadow: 0 0 30px oklch(0.78 0.18 195 / 60%);
 }
 
 .marker-ring {
@@ -719,7 +719,7 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid oklch(0.96 0.01 240 / 30%);
   border-radius: 50%;
   transition: all 0.3s ease;
 }
@@ -728,7 +728,7 @@ onUnmounted(() => {
 .milestone-node.is-active .marker-ring {
   width: 56px;
   height: 56px;
-  border-color: #d4a24c;
+  border-color: oklch(0.78 0.18 195);
   opacity: 0.5;
 }
 
@@ -738,9 +738,9 @@ onUnmounted(() => {
   top: 50%;
   transform: translateY(-50%);
   width: clamp(250px, 23vw, 360px);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: oklch(0.13 0.025 280 / 55%);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.7 0.1 280 / 15%);
   border-radius: 16px;
   padding: 1.25rem;
   opacity: 0;
@@ -755,9 +755,9 @@ onUnmounted(() => {
 
 .milestone-node:hover .node-content,
 .milestone-node.is-active .node-content {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(212, 162, 76, 0.5);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: oklch(0.15 0.03 282 / 65%);
+  border-color: oklch(0.78 0.18 195 / 40%);
+  box-shadow: 0 8px 32px oklch(0.08 0.02 280 / 50%), 0 0 24px oklch(0.78 0.18 195 / 25%);
 }
 
 .node-1 .node-content,
@@ -770,7 +770,7 @@ onUnmounted(() => {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 2rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff, #d4a24c);
+  background: linear-gradient(135deg, oklch(0.96 0.01 240), oklch(0.78 0.18 195));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -781,14 +781,14 @@ onUnmounted(() => {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: oklch(0.96 0.01 240);
   margin: 0 0 0.5rem 0;
 }
 
 .node-description {
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: oklch(0.7 0.03 240);
   margin: 0;
   line-height: 1.5;
 }
@@ -815,7 +815,7 @@ onUnmounted(() => {
 }
 
 .node-details:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -824,7 +824,7 @@ onUnmounted(() => {
   list-style: none;
   padding: 0.75rem 0 0 0;
   margin: 0.75rem 0 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid oklch(0.7 0.1 280 / 15%);
 }
 
 .details-list li {
@@ -833,14 +833,14 @@ onUnmounted(() => {
   gap: 0.5rem;
   font-family: 'Jakarta Sans', sans-serif;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: oklch(0.7 0.03 240);
   padding: 0.35rem 0;
 }
 
 .check-icon {
   width: 16px;
   height: 16px;
-  color: #d4a24c;
+  color: oklch(0.78 0.18 195);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -856,7 +856,7 @@ onUnmounted(() => {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: rgba(212, 162, 76, 0.3);
+  background: oklch(0.78 0.18 195 / 35%);
   border-radius: 50%;
   animation: float 8s ease-in-out infinite;
 }
@@ -877,13 +877,13 @@ onUnmounted(() => {
 .corner-accent.top-left {
   top: -50px;
   left: -50px;
-  background: radial-gradient(circle, rgba(196, 91, 40, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, oklch(0.78 0.18 195 / 18%) 0%, transparent 70%);
 }
 
 .corner-accent.bottom-right {
   bottom: -80px;
   right: -80px;
-  background: radial-gradient(circle, rgba(212, 162, 76, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, oklch(0.68 0.22 350 / 16%) 0%, transparent 70%);
 }
 
 @media (max-width: 1024px) {

@@ -194,7 +194,8 @@ const geographicData = {
 </script>
 
 <template>
-  <section id="geographic" class="geo-section panel relative min-h-[800px] lg:h-screen overflow-hidden bg-[#2c2416]">
+  <section id="geographic" class="geo-section panel relative min-h-[800px] lg:h-screen overflow-hidden bg-[oklch(0.09_0.02_282_/_82%)]">
+    <div class="cosmic-starfield" aria-hidden="true"></div>
     <div class="absolute inset-0 z-0">
       <div class="map-container absolute inset-0" role="region" aria-label="Bản đồ cộng đồng học tập">
         <div class="map-layer absolute">
@@ -202,8 +203,8 @@ const geographicData = {
           <svg class="map-overlay absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <defs>
               <linearGradient id="indonesiaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#2a5c55;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#1a3d35;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:oklch(0.78 0.18 195);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:oklch(0.5 0.14 200);stop-opacity:1" />
               </linearGradient>
               <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="3" result="coloredBlur" />
@@ -268,7 +269,7 @@ const geographicData = {
           </svg>
         </div>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-r from-[#2c2416] via-[#2c2416]/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[oklch(0.08_0.02_280)] via-[oklch(0.08_0.02_280)]/55 to-transparent"></div>
       <div class="absolute inset-0 opacity-[0.04]" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E&quot;);"></div>
     </div>
 
@@ -305,70 +306,70 @@ const geographicData = {
 
     <div class="relative z-20 h-full flex flex-col lg:flex-row">
       <div class="left-panel flex-1 flex flex-col justify-center px-10 lg:px-16 xl:px-20 py-12">
-        <span class="geo-label font-sans text-xs font-semibold tracking-[0.35em] uppercase text-[#d4a24c] mb-6">Dành cho ai?</span>
+        <span class="geo-label font-sans text-xs font-semibold tracking-[0.35em] uppercase text-[oklch(0.68_0.22_350)] mb-6">Dành cho ai?</span>
         <h2 class="geo-title font-sans font-bold text-[clamp(32px,5vw,52px)] leading-tight text-white mb-8">Một nền tảng cho nhiều kiểu cộng đồng học tập.</h2>
-        <p class="geo-description font-sans text-base lg:text-lg text-[#f5f0e8]/80 leading-relaxed mb-8 max-w-3xl">
+        <p class="geo-description font-sans text-base lg:text-lg text-[oklch(0.96_0.01_240)]/80 leading-relaxed mb-8 max-w-3xl">
           Từ CLB đại học đến gia sư cá nhân, từ nhóm luyện thi TOEIC/IELTS đến trung tâm nhỏ, Gamified Study Hub giúp biến kho tài liệu sẵn có thành một cổng học tập có cấu trúc và động lực.
         </p>
 
         <div class="space-y-6">
-          <div id="hq-card" ref="hqCardRef" class="geo-card hq-card bg-[#12100c]/80 backdrop-blur-sm border-l-2 border-[#c45b28] p-6" tabindex="-1">
+          <div id="hq-card" ref="hqCardRef" class="geo-card hq-card bg-[oklch(0.12_0.025_280)]/65 backdrop-blur-md border-l-2 border-[oklch(0.78_0.18_195)] p-6" tabindex="-1">
             <div class="flex items-center gap-3 mb-3">
-              <span class="w-8 h-8 rounded-full border border-[#c45b28] flex items-center justify-center">
-                <span class="w-2 h-2 rounded-full bg-[#c45b28]"></span>
+              <span class="w-8 h-8 rounded-full border border-[oklch(0.78_0.18_195)] flex items-center justify-center">
+                <span class="w-2 h-2 rounded-full bg-[oklch(0.78_0.18_195)]"></span>
               </span>
-              <span class="font-sans text-sm font-bold text-[#c45b28] uppercase tracking-wider">Nhóm tiêu biểu</span>
+              <span class="font-sans text-sm font-bold text-[oklch(0.78_0.18_195)] uppercase tracking-wider">Nhóm tiêu biểu</span>
             </div>
             <h3 class="font-sans text-2xl font-bold text-white mb-2">{{ geographicData.hq.city }}, {{ geographicData.hq.country }}</h3>
-            <p class="font-sans text-sm text-[#f5f0e8]/65 leading-relaxed">{{ geographicData.hq.tagline }}</p>
+            <p class="font-sans text-sm text-[oklch(0.7_0.03_240)]/80 leading-relaxed">{{ geographicData.hq.tagline }}</p>
           </div>
 
           <div class="geo-card grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="plantations-card bg-[#12100c]/60 backdrop-blur-sm border border-[rgba(42,92,85,0.3)] p-5 rounded-sm hover:border-[#2a5c55] transition-all duration-300">
+            <div class="plantations-card bg-[oklch(0.12_0.025_280)]/65 backdrop-blur-md border border-[oklch(0.75_0.18_145)]/30 p-5 rounded-sm hover:border-[oklch(0.75_0.18_145)] transition-all duration-300">
               <div class="flex items-center gap-2 mb-3">
-                <span class="w-6 h-6 rounded-full border border-[#2a5c55] flex items-center justify-center">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#2a5c55]"></span>
+                <span class="w-6 h-6 rounded-full border border-[oklch(0.75_0.18_145)] flex items-center justify-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[oklch(0.75_0.18_145)]"></span>
                 </span>
-                <span class="font-sans text-xs font-semibold text-[#2a5c55] uppercase tracking-wider">Đối tượng</span>
+                <span class="font-sans text-xs font-semibold text-[oklch(0.75_0.18_145)] uppercase tracking-wider">Đối tượng</span>
               </div>
               <ul class="space-y-2">
-                <li v-for="(plantation, index) in geographicData.plantations" :key="index" class="font-sans text-sm text-[#f5f0e8]/80">
+                <li v-for="(plantation, index) in geographicData.plantations" :key="index" class="font-sans text-sm text-[oklch(0.96_0.01_240)]/80">
                   <span class="font-semibold text-white">{{ plantation.region }}</span>
                 </li>
               </ul>
             </div>
 
-            <div class="processing-card bg-[#12100c]/60 backdrop-blur-sm border border-[rgba(212,162,76,0.2)] p-5 rounded-sm hover:border-[#d4a24c] transition-all duration-300">
+            <div class="processing-card bg-[oklch(0.12_0.025_280)]/65 backdrop-blur-md border border-[oklch(0.68_0.22_350)]/25 p-5 rounded-sm hover:border-[oklch(0.68_0.22_350)] transition-all duration-300">
               <div class="flex items-center gap-2 mb-3">
-                <span class="w-6 h-6 rounded-full border border-[#d4a24c] flex items-center justify-center">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#d4a24c]"></span>
+                <span class="w-6 h-6 rounded-full border border-[oklch(0.68_0.22_350)] flex items-center justify-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[oklch(0.68_0.22_350)]"></span>
                 </span>
-                <span class="font-sans text-xs font-semibold text-[#d4a24c] uppercase tracking-wider">Không gian học</span>
+                <span class="font-sans text-xs font-semibold text-[oklch(0.68_0.22_350)] uppercase tracking-wider">Không gian học</span>
               </div>
               <ul class="space-y-2">
-                <li v-for="(facility, index) in geographicData.processing" :key="index" class="font-sans text-sm text-[#f5f0e8]/80">
+                <li v-for="(facility, index) in geographicData.processing" :key="index" class="font-sans text-sm text-[oklch(0.96_0.01_240)]/80">
                   <span class="font-semibold text-white">{{ facility.facility }}</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div class="geo-card markets-card bg-[#12100c]/60 backdrop-blur-sm border border-[rgba(212,162,76,0.15)] p-5">
+          <div class="geo-card markets-card bg-[oklch(0.12_0.025_280)]/65 backdrop-blur-md border border-[oklch(0.78_0.18_195)]/15 p-5">
             <div class="flex items-center gap-3 mb-4">
-              <span class="w-10 h-px bg-gradient-to-r from-[#d4a24c] to-transparent"></span>
-              <span class="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-[#d4a24c]">Cộng đồng phù hợp</span>
+              <span class="w-10 h-px bg-gradient-to-r from-[oklch(0.78_0.18_195)] to-transparent"></span>
+              <span class="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-[oklch(0.78_0.18_195)]">Cộng đồng phù hợp</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <span class="font-sans text-xs font-semibold text-[#d4a24c] uppercase tracking-wider block mb-2">Chính</span>
+                <span class="font-sans text-xs font-semibold text-[oklch(0.78_0.18_195)] uppercase tracking-wider block mb-2">Chính</span>
                 <div class="flex flex-wrap gap-2">
-                  <span v-for="market in geographicData.exportMarkets.primary" :key="market" class="market-item px-3 py-1 bg-[rgba(212,162,76,0.15)] border border-[rgba(212,162,76,0.3)] rounded-sm font-sans text-xs text-[#f5f0e8]">{{ market }}</span>
+                  <span v-for="market in geographicData.exportMarkets.primary" :key="market" class="market-item px-3 py-1 bg-[oklch(0.78_0.18_195)]/12 border border-[oklch(0.78_0.18_195)]/30 rounded-sm font-sans text-xs text-[oklch(0.96_0.01_240)]">{{ market }}</span>
                 </div>
               </div>
               <div>
-                <span class="font-sans text-xs font-semibold text-[#f5f0e8]/50 uppercase tracking-wider block mb-2">Mở rộng</span>
+                <span class="font-sans text-xs font-semibold text-[oklch(0.7_0.03_240)]/60 uppercase tracking-wider block mb-2">Mở rộng</span>
                 <div class="flex flex-wrap gap-2">
-                  <span v-for="market in geographicData.exportMarkets.secondary" :key="market" class="market-item px-3 py-1 bg-[rgba(42,92,85,0.1)] border border-[rgba(42,92,85,0.2)] rounded-sm font-sans text-xs text-[#f5f0e8]/60">{{ market }}</span>
+                  <span v-for="market in geographicData.exportMarkets.secondary" :key="market" class="market-item px-3 py-1 bg-[oklch(0.68_0.22_350)]/10 border border-[oklch(0.68_0.22_350)]/25 rounded-sm font-sans text-xs text-[oklch(0.7_0.03_240)]/80">{{ market }}</span>
                 </div>
               </div>
             </div>
@@ -377,31 +378,31 @@ const geographicData = {
       </div>
 
       <div class="right-panel hidden lg:flex w-[38%] xl:w-[35%] relative">
-        <div id="singapore-card" ref="singaporeCardRef" class="singapore-card absolute top-[18%] right-8 xl:right-12 bg-[#12100c]/90 backdrop-blur-md border border-[rgba(212,162,76,0.4)] p-6 max-w-[280px]" tabindex="-1">
+        <div id="singapore-card" ref="singaporeCardRef" class="singapore-card absolute top-[18%] right-8 xl:right-12 bg-[oklch(0.12_0.025_280)]/65 backdrop-blur-md border border-[oklch(0.68_0.22_350)]/40 p-6 max-w-[280px]" tabindex="-1">
           <div class="flex items-center gap-3 mb-4">
-            <span class="w-10 h-10 rounded-full border border-[#d4a24c] flex items-center justify-center">
-              <span class="w-3 h-3 rounded-full bg-[#d4a24c] shadow-[0_0_15px_rgba(212,162,76,0.5)] singapore-glow"></span>
+            <span class="w-10 h-10 rounded-full border border-[oklch(0.68_0.22_350)] flex items-center justify-center">
+              <span class="w-3 h-3 rounded-full bg-[oklch(0.68_0.22_350)] shadow-[0_0_15px_oklch(0.68_0.22_350/0.6)] singapore-glow"></span>
             </span>
             <div>
-              <span class="font-sans text-xs font-semibold tracking-[0.25em] uppercase text-[#d4a24c]">Workspace</span>
+              <span class="font-sans text-xs font-semibold tracking-[0.25em] uppercase text-[oklch(0.68_0.22_350)]">Workspace</span>
             </div>
           </div>
           <h3 class="font-sans text-xl font-bold text-white mb-2">{{ geographicData.regionalOffice.city }}</h3>
-          <p class="font-sans text-sm text-[#f5f0e8]/65 leading-relaxed">{{ geographicData.regionalOffice.role }}</p>
+          <p class="font-sans text-sm text-[oklch(0.7_0.03_240)]/80 leading-relaxed">{{ geographicData.regionalOffice.role }}</p>
         </div>
       </div>
     </div>
 
     <div class="absolute bottom-10 left-10 lg:left-16 z-20 flex items-center gap-4">
-      <div class="w-10 h-10 rounded-full border border-[rgba(212,162,76,0.3)] flex items-center justify-center bg-[#2c2416]/50 backdrop-blur-sm">
-        <div class="w-2.5 h-2.5 rounded-full bg-[#d4a24c]"></div>
+      <div class="w-10 h-10 rounded-full border border-[oklch(0.78_0.18_195)]/30 flex items-center justify-center bg-[oklch(0.09_0.02_282)]/50 backdrop-blur-sm">
+        <div class="w-2.5 h-2.5 rounded-full bg-[oklch(0.78_0.18_195)]"></div>
       </div>
-      <span class="font-sans text-xs font-medium tracking-widest text-[#f5f0e8]/35 uppercase">Gamified Study Hub</span>
+      <span class="font-sans text-xs font-medium tracking-widest text-[oklch(0.7_0.03_240)]/40 uppercase">Gamified Study Hub</span>
     </div>
 
     <div class="absolute top-1/2 right-6 lg:right-8 z-20 hidden lg:flex flex-col items-center gap-3">
-      <span class="writing-vertical font-sans text-[10px] font-medium tracking-[0.25em] text-[#f5f0e8]/15 uppercase rotate-180">Đối tượng</span>
-      <div class="w-px h-14 bg-gradient-to-b from-[#d4a24c]/20 to-transparent"></div>
+      <span class="writing-vertical font-sans text-[10px] font-medium tracking-[0.25em] text-[oklch(0.7_0.03_240)]/15 uppercase rotate-180">Đối tượng</span>
+      <div class="w-px h-14 bg-gradient-to-b from-[oklch(0.78_0.18_195)]/20 to-transparent"></div>
     </div>
   </section>
 </template>
@@ -414,6 +415,27 @@ const geographicData = {
   --sea-inv: 0.3571429;
   --sea-tx: -24%;
   --sea-ty: -30%;
+}
+
+.cosmic-starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: oklch(0.06 0.02 282);
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, oklch(0.96 0.01 240 / 0.9) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 28% 62%, oklch(0.78 0.18 195 / 0.8) 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 30%, oklch(0.96 0.01 240 / 0.7) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 63% 75%, oklch(0.68 0.22 350 / 0.75) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 22%, oklch(0.96 0.01 240 / 0.65) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 58%, oklch(0.78 0.18 195 / 0.7) 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 88%, oklch(0.96 0.01 240 / 0.6) 50%, transparent 51%),
+    radial-gradient(1px 1px at 8% 82%, oklch(0.68 0.22 350 / 0.6) 50%, transparent 51%),
+    radial-gradient(900px 600px at 75% 30%, oklch(0.2 0.08 280 / 0.45) 0%, transparent 70%),
+    radial-gradient(700px 500px at 20% 80%, oklch(0.18 0.07 200 / 0.35) 0%, transparent 70%);
+  background-repeat: repeat;
+  background-size: 480px 480px, 480px 480px, 360px 360px, 520px 520px, 340px 340px, 500px 500px, 420px 420px, 300px 300px, 100% 100%, 100% 100%;
 }
 
 .map-container {
@@ -443,9 +465,9 @@ const geographicData = {
 }
 
 .land {
-  fill: transparent;
-  fill-opacity: 0;
-  stroke: rgba(245, 240, 232, 0.22);
+  fill: oklch(0.4 0.06 250 / 0.5);
+  fill-opacity: 1;
+  stroke: oklch(0.78 0.18 195 / 0.3);
   stroke-width: 0.9;
   transition: all 0.5s ease;
 }
@@ -459,8 +481,8 @@ const geographicData = {
 }
 
 .indonesian-land {
-  fill: rgba(42, 92, 85, 0.35);
-  stroke: rgba(212, 162, 76, 0.35);
+  fill: oklch(0.78 0.18 195 / 0.85);
+  stroke: oklch(0.72 0.22 330 / 0.5);
   stroke-width: 0.9;
   filter: url(#strongGlow);
 }
@@ -489,17 +511,17 @@ const geographicData = {
 }
 
 .marker-button:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 4px;
   border-radius: 4px;
 }
 
 .marker-button:focus-visible .marker-dot {
-  box-shadow: 0 0 0 2px #d4a24c, 0 0 20px rgba(196, 91, 40, 0.6), 0 0 40px rgba(196, 91, 40, 0.3);
+  box-shadow: 0 0 0 2px oklch(0.78 0.18 195), 0 0 20px oklch(0.78 0.18 195 / 0.6), 0 0 40px oklch(0.78 0.18 195 / 0.3);
 }
 
 .singapore-marker.marker-button:focus-visible .marker-dot {
-  box-shadow: 0 0 0 2px #d4a24c, 0 0 20px rgba(212, 162, 76, 0.6), 0 0 40px rgba(212, 162, 76, 0.3);
+  box-shadow: 0 0 0 2px oklch(0.68 0.22 350), 0 0 20px oklch(0.68 0.22 350 / 0.6), 0 0 40px oklch(0.68 0.22 350 / 0.3);
 }
 
 .jakarta-marker {
@@ -518,17 +540,17 @@ const geographicData = {
   border-radius: 50%;
   position: relative;
   z-index: 5;
-  border: 2px solid rgba(245, 240, 232, 0.9);
+  border: 2px solid oklch(0.96 0.01 240 / 0.9);
 }
 
 .hq-marker {
-  background: #c45b28;
-  box-shadow: 0 0 20px rgba(196, 91, 40, 0.6), 0 0 40px rgba(196, 91, 40, 0.3);
+  background: oklch(0.78 0.18 195);
+  box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.6), 0 0 40px oklch(0.78 0.18 195 / 0.3);
 }
 
 .office-marker {
-  background: #d4a24c;
-  box-shadow: 0 0 20px rgba(212, 162, 76, 0.6), 0 0 40px rgba(212, 162, 76, 0.3);
+  background: oklch(0.68 0.22 350);
+  box-shadow: 0 0 20px oklch(0.68 0.22 350 / 0.6), 0 0 40px oklch(0.68 0.22 350 / 0.3);
 }
 
 .marker-ring {
@@ -545,11 +567,11 @@ const geographicData = {
 }
 
 .hq-ring {
-  border-color: #c45b28;
+  border-color: oklch(0.78 0.18 195);
 }
 
 .office-ring {
-  border-color: #d4a24c;
+  border-color: oklch(0.68 0.22 350);
 }
 
 .marker-pulse {
@@ -565,11 +587,11 @@ const geographicData = {
 }
 
 .hq-marker ~ .marker-pulse {
-  background: radial-gradient(circle, rgba(196, 91, 40, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, oklch(0.78 0.18 195 / 0.3) 0%, transparent 70%);
 }
 
 .office-marker ~ .marker-pulse {
-  background: radial-gradient(circle, rgba(212, 162, 76, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, oklch(0.68 0.22 350 / 0.3) 0%, transparent 70%);
 }
 
 @keyframes ring-pulse {
@@ -614,21 +636,21 @@ const geographicData = {
 }
 
 .hq-marker ~ .marker-label {
-  background: rgba(196, 91, 40, 0.9);
-  color: white;
+  background: oklch(0.78 0.18 195 / 0.9);
+  color: oklch(0.12 0.025 280);
 }
 
 .office-marker ~ .marker-label {
-  background: rgba(212, 162, 76, 0.9);
-  color: #2c2416;
+  background: oklch(0.68 0.22 350 / 0.9);
+  color: oklch(0.96 0.01 240);
 }
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(212, 162, 76, 0.3);
+    box-shadow: 0 0 20px oklch(0.68 0.22 350 / 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(212, 162, 76, 0.5);
+    box-shadow: 0 0 40px oklch(0.68 0.22 350 / 0.6);
   }
 }
 
@@ -648,13 +670,18 @@ const geographicData = {
 
 .hq-card:focus-visible,
 .singapore-card:focus-visible {
-  outline: 3px solid #d4a24c;
+  outline: 3px solid oklch(0.78 0.18 195);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
 .hq-card {
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px oklch(0.78 0.18 195 / 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hq-card:hover {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45), 0 0 24px oklch(0.78 0.18 195 / 0.25);
 }
 
 .hq-card::before {
@@ -664,17 +691,25 @@ const geographicData = {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196, 91, 40, 0.5), transparent);
+  background: linear-gradient(90deg, transparent, oklch(0.78 0.18 195 / 0.6), transparent);
 }
 
 .plantations-card:hover,
 .processing-card:hover {
-  background: rgba(18, 16, 12, 0.8);
+  background: oklch(0.14 0.03 280 / 0.75);
   transform: translateY(-2px);
 }
 
+.plantations-card:hover {
+  box-shadow: 0 0 24px oklch(0.75 0.18 145 / 0.22);
+}
+
+.processing-card:hover {
+  box-shadow: 0 0 24px oklch(0.68 0.22 350 / 0.22);
+}
+
 .singapore-card {
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 28px oklch(0.68 0.22 350 / 0.2);
   animation: float 6s ease-in-out infinite;
 }
 
@@ -697,14 +732,14 @@ const geographicData = {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(212, 162, 76, 0.1) 0%, transparent 100%);
+  background: linear-gradient(135deg, oklch(0.78 0.18 195 / 0.12) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .market-item:hover {
-  background: rgba(212, 162, 76, 0.25);
-  border-color: rgba(212, 162, 76, 0.5);
+  background: oklch(0.78 0.18 195 / 0.25);
+  border-color: oklch(0.78 0.18 195 / 0.5);
   transform: translateY(-1px);
 }
 
@@ -738,11 +773,25 @@ const geographicData = {
 
 @media (max-width: 768px) {
   .geo-section {
-    min-height: 1200px;
+    min-height: auto;
+    padding: 4rem 0 5.5rem;
     --sea-scale: 3.35;
     --sea-inv: 0.2985075;
     --sea-tx: -30%;
     --sea-ty: -40%;
+  }
+
+  .left-panel {
+    justify-content: flex-start;
+    padding: 0 1.5rem;
+  }
+
+  .geo-description {
+    margin-bottom: 1.5rem;
+  }
+
+  .map-container {
+    opacity: 0.38;
   }
 
   .marker-label {
