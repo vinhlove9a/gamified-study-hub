@@ -1,0 +1,138 @@
+name: Build & Deploy to EC2
+
+# Builds the backend + frontend images on GitHub's runners (the 1GB EC2 box
+# OOMs when building the frontend), pushes them to GHCR, then SSHes into the
+# server to pull the new images and restart the stack via docker-compose.prod.yml.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-ec2
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ghcr.io/vinhlove9a/gsh-backend
+  FRONTEND_IMAGE: ghcr.io/vinhlove9a/gsh-frontend
+
+jobs:
+  build-and-push:
+    name: Build & push images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/backend
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:latest
+            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+
+      - name: Build & push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/frontend
+          push: true
+          build-args: |
+            VITE_API_BASE_URL=
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:latest
+            ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+
+  deploy:
+    name: Deploy to EC2
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Sync the prod compose file + nginx config to the server. Paths are kept
+      # relative to the repo root, so they land at ~/gamified-study-hub/...
+      - name: Copy deploy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.prod.yml,infra/nginx/nginx.conf"
+          target: "~/gamified-study-hub"
+
+      - name: Pull images & restart stack
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: IMAGE_TAG,GHCR_USER,GHCR_PAT
+          script: |
+            set -euo pipefail
+            cd ~/gamified-study-hub
+
+            # Authenticate to GHCR to pull the private images.
+            echo "$GHCR_PAT" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+
+            # Deploy the exact commit that triggered this run (immutable tag).
+            export IMAGE_TAG
+            echo "Deploying tag: $IMAGE_TAG"
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+
+            # Drop dangling images so the small disk doesn't fill up over time.
+            docker image prune -f
+
+            docker logout ghcr.io || true
+
+      - name: Smoke test
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            echo "Waiting for backend to become healthy..."
+            for i in $(seq 1 30); do
+              code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/health || true)
+              if [ "$code" = "200" ]; then
+                echo "Health check OK (HTTP 200) after ${i} attempt(s)."
+                curl -s http://localhost/api/health; echo
+                exit 0
+              fi
+              echo "  attempt ${i}: HTTP ${code} — retrying in 5s"
+              sleep 5
+            done
+            echo "Health check FAILED — dumping backend logs:" >&2
+            docker logs --tail 50 gsh-backend >&2
+            exit 1
