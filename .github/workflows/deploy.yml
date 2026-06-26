@@ -82,7 +82,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.prod.yml,infra/nginx/nginx.conf"
+          source: "docker-compose.prod.yml,infra/caddy/Caddyfile"
           target: "~/gamified-study-hub"
 
       - name: Pull images & restart stack
@@ -123,11 +123,14 @@ jobs:
           script: |
             set -e
             echo "Waiting for backend to become healthy..."
+            # Hit the backend directly (published on 127.0.0.1:8080). This is
+            # independent of Caddy's first-boot certificate issuance for the
+            # public hostname, so it is a reliable post-deploy health gate.
             for i in $(seq 1 30); do
-              code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/health || true)
+              code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/api/health || true)
               if [ "$code" = "200" ]; then
                 echo "Health check OK (HTTP 200) after ${i} attempt(s)."
-                curl -s http://localhost/api/health; echo
+                curl -s http://localhost:8080/api/health; echo
                 exit 0
               fi
               echo "  attempt ${i}: HTTP ${code} - retrying in 5s"

@@ -1,0 +1,20 @@
+# Public entrypoint for the production stack.
+# Caddy automatically obtains & renews Let's Encrypt certificates for these
+# hostnames (DNS must point at this host, ports 80 + 443 reachable) and
+# redirects HTTP -> HTTPS. To receive cert-expiry notices, add a global
+# block at the top:  { email you@example.com }
+
+aquvix.site, www.aquvix.site {
+	encode zstd gzip
+
+	# API calls keep their /api prefix (backend serves /api/v1/... and /api/health).
+	@api path /api/*
+	handle @api {
+		reverse_proxy backend:8080
+	}
+
+	# Everything else -> the SPA (its own nginx handles client-side routing).
+	handle {
+		reverse_proxy frontend:80
+	}
+}

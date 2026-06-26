@@ -104,23 +104,31 @@ services:
     networks:
       - gsh-network
 
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: gsh-nginx
+  # Public entrypoint: Caddy terminates TLS (auto Let's Encrypt) and reverse
+  # proxies to the SPA + backend. Replaces the plain nginx proxy.
+  caddy:
+    image: caddy:2-alpine
+    container_name: gsh-caddy
     restart: unless-stopped
     depends_on:
       - frontend
       - backend
     ports:
-      - "${NGINX_PORT:-80}:80"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3 (QUIC)
     volumes:
-      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # issued certificates + ACME account (persist!)
+      - caddy_config:/config
     networks:
       - gsh-network
 
 volumes:
   postgres_data:
   redis_data:
+  caddy_data:
+  caddy_config:
 
 networks:
   gsh-network:
