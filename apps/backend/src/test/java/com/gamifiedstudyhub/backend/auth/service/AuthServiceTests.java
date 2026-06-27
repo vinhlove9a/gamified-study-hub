@@ -59,6 +59,9 @@ class AuthServiceTests {
     @Mock
     private com.gamifiedstudyhub.backend.audit.service.AuthAuditService auditService;
 
+    @Mock
+    private com.gamifiedstudyhub.backend.email.EmailService emailService;
+
     private static final com.gamifiedstudyhub.backend.common.web.RequestMetadata META =
             new com.gamifiedstudyhub.backend.common.web.RequestMetadata("127.0.0.1", "JUnit");
 
@@ -82,7 +85,8 @@ class AuthServiceTests {
                 authTokenService,
                 authorityService,
                 loginRateLimiter,
-                auditService
+                auditService,
+                emailService
         );
     }
 
@@ -96,6 +100,8 @@ class AuthServiceTests {
             ReflectionTestUtils.setField(user, "id", UUID.fromString("6cc8282f-b66f-4fe4-bf7f-dd6f6f90420f"));
             return user;
         });
+        when(authTokenService.createEmailVerificationToken(any(User.class)))
+                .thenReturn(new AuthTokenIssueResult("raw-token", "hash", java.time.Instant.now()));
 
         AuthResponse response = authService.register(request);
 
@@ -176,6 +182,8 @@ class AuthServiceTests {
 
         when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
                 .thenReturn(Optional.of(user));
+        when(authTokenService.createPasswordResetToken(user))
+                .thenReturn(new AuthTokenIssueResult("raw-token", "hash", java.time.Instant.now()));
 
         AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest(" test@example.com "));
 
@@ -209,6 +217,8 @@ class AuthServiceTests {
 
         when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
                 .thenReturn(Optional.of(user));
+        when(authTokenService.createEmailVerificationToken(user))
+                .thenReturn(new AuthTokenIssueResult("raw-token", "hash", java.time.Instant.now()));
 
         AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"));
 

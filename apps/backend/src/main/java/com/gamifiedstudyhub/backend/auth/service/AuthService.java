@@ -16,6 +16,7 @@ import com.gamifiedstudyhub.backend.audit.AuthEventType;
 import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
 import com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter;
 import com.gamifiedstudyhub.backend.authz.service.AuthorityService;
+import com.gamifiedstudyhub.backend.email.EmailService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
 import com.gamifiedstudyhub.backend.common.exception.UnauthorizedException;
@@ -48,6 +49,7 @@ public class AuthService {
     private final AuthorityService authorityService;
     private final LoginRateLimiter loginRateLimiter;
     private final AuthAuditService auditService;
+    private final EmailService emailService;
 
     public AuthService(
             UserRepository userRepository,
@@ -58,7 +60,8 @@ public class AuthService {
             AuthTokenService authTokenService,
             AuthorityService authorityService,
             LoginRateLimiter loginRateLimiter,
-            AuthAuditService auditService
+            AuthAuditService auditService,
+            EmailService emailService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -69,6 +72,7 @@ public class AuthService {
         this.authorityService = authorityService;
         this.loginRateLimiter = loginRateLimiter;
         this.auditService = auditService;
+        this.emailService = emailService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -92,6 +96,11 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
         authorityService.assignDefaultRole(savedUser.getId());
+
+        // Send the email-verification link (best-effort, async).
+        AuthTokenIssueResult verification = authTokenService.createEmailVerificationToken(savedUser);
+        emailService.sendVerificationEmail(savedUser, verification.rawToken());
+        auditService.record(AuthEventType.REGISTERED, savedUser.getId(), null);
 
         String accessToken = jwtService.generateAccessToken(savedUser);
         List<String> authorities = authorityService.resolveAuthorityCodes(savedUser.getId());
@@ -170,7 +179,11 @@ public class AuthService {
 
         userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
                 .filter(user -> !UserStatus.DISABLED.equals(user.getStatus()))
-                .ifPresent(authTokenService::createPasswordResetToken);
+                .ifPresent(user -> {
+                    AuthTokenIssueResult reset = authTokenService.createPasswordResetToken(user);
+                    emailService.sendPasswordResetEmail(user, reset.rawToken());
+                    auditService.record(AuthEventType.PASSWORD_RESET_REQUESTED, user.getId(), null);
+                });
 
         return new AuthMessageResponse(
                 "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn."
@@ -183,6 +196,7 @@ public class AuthService {
         User user = authTokenService.consumePasswordResetToken(request.token()).getUser();
         user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
+        auditService.record(AuthEventType.PASSWORD_RESET_COMPLETED, user.getId(), null);
 
         return new AuthMessageResponse("Mật khẩu đã được cập nhật. Bạn có thể đăng nhập bằng mật khẩu mới.");
     }
@@ -192,6 +206,7 @@ public class AuthService {
         user.setEmailVerified(true);
         user.setEmailVerifiedAt(DateTimeUtils.nowUtc());
         userRepository.save(user);
+        auditService.record(AuthEventType.EMAIL_VERIFIED, user.getId(), null);
 
         return new AuthMessageResponse("Email đã được xác thực thành công.");
     }
@@ -202,7 +217,10 @@ public class AuthService {
         userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
                 .filter(user -> !user.isEmailVerified())
                 .filter(user -> !UserStatus.DISABLED.equals(user.getStatus()))
-                .ifPresent(authTokenService::createEmailVerificationToken);
+                .ifPresent(user -> {
+                    AuthTokenIssueResult verification = authTokenService.createEmailVerificationToken(user);
+                    emailService.sendVerificationEmail(user, verification.rawToken());
+                });
 
         return new AuthMessageResponse(
                 "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn."
