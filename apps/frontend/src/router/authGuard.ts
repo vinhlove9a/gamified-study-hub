@@ -1,5 +1,4 @@
 import type { NavigationGuardWithThis } from 'vue-router';
-import { getAccessToken } from '@/features/auth/authTokenStorage';
 import { useAuthSession } from '@/features/auth/authSession';
 
 /** Where an authenticated user lands by default: admins get the Dashboard. */
@@ -10,8 +9,9 @@ export function defaultRouteForRole(isAdmin: boolean): string {
 export const authGuard: NavigationGuardWithThis<undefined> = async (to) => {
   const { isAuthenticated, isAdmin, currentUser, bootstrapSession } = useAuthSession();
 
-  // Resolve the session from a stored token before any auth/role decision.
-  if ((to.meta.requiresAuth || to.meta.guestOnly) && !isAuthenticated.value && getAccessToken() && !currentUser.value) {
+  // Resolve the session via the httpOnly cookie (/me) before any auth decision.
+  // A failed /me is treated as "guest" (no throw), so there is no redirect loop.
+  if ((to.meta.requiresAuth || to.meta.guestOnly) && !currentUser.value) {
     await bootstrapSession();
   }
 

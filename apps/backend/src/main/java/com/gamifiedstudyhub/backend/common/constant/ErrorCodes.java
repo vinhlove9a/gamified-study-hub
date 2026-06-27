@@ -26,6 +26,7 @@ public final class ErrorCodes {
     public static final String AUTH_EMAIL_VERIFICATION_TOKEN_INVALID = "AUTH_EMAIL_VERIFICATION_TOKEN_INVALID";
     public static final String AUTH_RATE_LIMITED = "AUTH_RATE_LIMITED";
     public static final String AUTH_ACCOUNT_LOCKED = "AUTH_ACCOUNT_LOCKED";
+    public static final String AUTH_REFRESH_INVALID = "AUTH_REFRESH_INVALID";
     public static final String DOCUMENT_NOT_FOUND = "DOCUMENT_NOT_FOUND";
     public static final String DOCUMENT_CATEGORY_NOT_FOUND = "DOCUMENT_CATEGORY_NOT_FOUND";
     public static final String DOCUMENT_VALIDATION_ERROR = "DOCUMENT_VALIDATION_ERROR";

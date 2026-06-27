@@ -21,7 +21,7 @@ const form = reactive<FormState>({
 });
 const router = useRouter();
 const route = useRoute();
-const { setSessionFromAuthResponse, logout, isAdmin } = useAuthSession();
+const { setSessionFromAuthResponse, clearSession, isAdmin } = useAuthSession();
 
 const showPassword = ref(false);
 const loading = ref(false);
@@ -96,7 +96,7 @@ const handleSubmit = async () => {
     formMessage.value = 'Đăng nhập thành công.';
     await router.push(getSafeRedirectPath());
   } catch (error) {
-    logout();
+    clearSession();
     if (error instanceof ApiError) {
       applyFieldErrors(error.fieldErrors);
       formMessage.value = error.message;

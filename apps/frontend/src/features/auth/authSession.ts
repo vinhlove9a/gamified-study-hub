@@ -1,6 +1,5 @@
 import { computed, ref } from 'vue';
 import { authApi, type AuthResponse, type UserSummary } from './authApi';
-import { clearAccessToken, getAccessToken, setAccessToken } from './authTokenStorage';
 import { ApiError } from '@/lib/api/apiError';
 
 const currentUser = ref<UserSummary | null>(null);
@@ -8,7 +7,9 @@ const isBootstrapping = ref(false);
 const sessionError = ref<ApiError | null>(null);
 let bootstrapPromise: Promise<void> | null = null;
 
-const isAuthenticated = computed(() => Boolean(currentUser.value && getAccessToken()));
+// Auth lives in httpOnly cookies (not readable by JS), so the only signal is
+// whether /me succeeds.
+const isAuthenticated = computed(() => Boolean(currentUser.value));
 const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
 function clearSession(): void {
@@ -24,30 +25,17 @@ async function bootstrapSession(): Promise<void> {
     return;
   }
 
-  const token = getAccessToken();
-  if (!token) {
-    clearSession();
-    return;
-  }
-
   isBootstrapping.value = true;
   bootstrapPromise = (async () => {
     try {
-      const user = await authApi.me();
-      currentUser.value = user;
+      // httpClient transparently refreshes on 401 if a valid refresh cookie
+      // exists; only a genuine "not logged in" lands in the catch.
+      currentUser.value = await authApi.me();
       sessionError.value = null;
     } catch (error) {
-      clearAccessToken();
       currentUser.value = null;
-      if (error instanceof ApiError) {
-        sessionError.value = error;
-      } else {
-        sessionError.value = new ApiError({
-          code: 'SESSION_BOOTSTRAP_FAILED',
-          message: 'Failed to bootstrap session',
-          status: 0
-        });
-      }
+      // A plain 401 is the normal anonymous state — don't treat it as an error.
+      sessionError.value = error instanceof ApiError && error.status !== 401 ? error : null;
     } finally {
       isBootstrapping.value = false;
       bootstrapPromise = null;
@@ -58,14 +46,19 @@ async function bootstrapSession(): Promise<void> {
 }
 
 function setSessionFromAuthResponse(authResponse: AuthResponse): void {
-  setAccessToken(authResponse.accessToken);
+  // Cookies are set by the server (Set-Cookie); we only hold the user in memory.
   currentUser.value = authResponse.user;
   sessionError.value = null;
 }
 
-function logout(): void {
-  clearAccessToken();
-  clearSession();
+async function logout(): Promise<void> {
+  try {
+    await authApi.logout();
+  } catch {
+    // Drop local state even if the server call fails.
+  } finally {
+    clearSession();
+  }
 }
 
 export function useAuthSession() {

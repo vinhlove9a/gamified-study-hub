@@ -16,6 +16,9 @@ spring:
 
 server:
   port: ${BACKEND_PORT:8080}
+  # Honour X-Forwarded-* from the trusted Caddy proxy (so HTTPS-only headers
+  # like HSTS and Secure-cookie detection work behind TLS termination).
+  forward-headers-strategy: framework
 
 management:
   endpoints:
@@ -32,6 +35,11 @@ app:
   jwt:
     secret: ${JWT_SECRET}
     access-token-expiration-minutes: ${JWT_ACCESS_TOKEN_EXPIRATION_MINUTES:60}
+    refresh-token-expiration-days: ${JWT_REFRESH_TOKEN_EXPIRATION_DAYS:30}
+  cookie:
+    domain: ${COOKIE_DOMAIN:}
+    secure: ${COOKIE_SECURE:true}
+    same-site: ${COOKIE_SAMESITE:Lax}
   security:
     ratelimit:
       ip-per-minute: ${AUTH_RL_IP_PER_MIN:30}

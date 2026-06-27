@@ -21,6 +21,7 @@ import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationFilter;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
+import com.gamifiedstudyhub.backend.auth.service.AuthSessionService;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ class AuthControllerTests {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private AuthSessionService authSessionService;
 
     @MockBean
     private JwtService jwtService;

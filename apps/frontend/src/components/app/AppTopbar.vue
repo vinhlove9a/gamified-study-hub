@@ -109,7 +109,7 @@ async function handleLogout() {
   loggingOut.value = true;
   try {
     closeMenus();
-    logout();
+    await logout();
     await router.push('/auth/login');
   } finally {
     loggingOut.value = false;

@@ -56,42 +56,46 @@ export interface ResendVerificationRequest {
 
 export const authApi = {
   login(payload: LoginRequest) {
+    // skipRefresh: a 401 here means bad credentials, not an expired session.
     return request<AuthResponse>('/api/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   },
   register(payload: RegisterRequest) {
     return request<AuthResponse>('/api/v1/auth/register', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   },
   me() {
     return request<UserSummary>('/api/v1/auth/me');
+  },
+  logout() {
+    return request<null>('/api/v1/auth/logout', { method: 'POST' }, { skipRefresh: true });
   },
   forgotPassword(payload: ForgotPasswordRequest) {
     return request<AuthMessageResponse>('/api/v1/auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   },
   resetPassword(payload: ResetPasswordRequest) {
     return request<AuthMessageResponse>('/api/v1/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   },
   verifyEmail(payload: VerifyEmailRequest) {
     return request<AuthMessageResponse>('/api/v1/auth/verify-email', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   },
   resendVerification(payload: ResendVerificationRequest) {
     return request<AuthMessageResponse>('/api/v1/auth/resend-verification', {
       method: 'POST',
       body: JSON.stringify(payload)
-    });
+    }, { skipRefresh: true });
   }
 };

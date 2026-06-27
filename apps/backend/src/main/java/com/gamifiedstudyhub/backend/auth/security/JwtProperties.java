@@ -17,6 +17,9 @@ public class JwtProperties {
     @Min(1)
     private long accessTokenExpirationMinutes;
 
+    @Min(1)
+    private long refreshTokenExpirationDays = 30;
+
     public String getSecret() {
         return secret;
     }
@@ -31,5 +34,13 @@ public class JwtProperties {
 
     public void setAccessTokenExpirationMinutes(long accessTokenExpirationMinutes) {
         this.accessTokenExpirationMinutes = accessTokenExpirationMinutes;
+    }
+
+    public long getRefreshTokenExpirationDays() {
+        return refreshTokenExpirationDays;
+    }
+
+    public void setRefreshTokenExpirationDays(long refreshTokenExpirationDays) {
+        this.refreshTokenExpirationDays = refreshTokenExpirationDays;
     }
 }
