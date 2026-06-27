@@ -13,6 +13,10 @@ spring:
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
       timeout: 2s
+      # We use Redis only via StringRedisTemplate, not Spring Data repositories —
+      # disable repo scanning so it doesn't try to adopt the JPA repositories.
+      repositories:
+        enabled: false
   mail:
     host: ${MAIL_HOST:}
     port: ${MAIL_PORT:587}
