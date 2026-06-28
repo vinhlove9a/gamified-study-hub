@@ -9,12 +9,15 @@ import '@/styles/dashboard.css';
 import '@/styles/app-effects.css';
 import '@/styles/auth.css';
 
-// When a transparent refresh fails, drop the session and bounce to login
-// (unless already on an auth page) — keeps the http layer framework-agnostic.
-const { clearSession } = useAuthSession();
+// When a transparent refresh fails, drop the session and bounce to login —
+// but ONLY if a session was actually active. A failed refresh during the
+// initial /me probe just means "anonymous visitor", and guests must be able to
+// browse public pages (landing, auth screens) without being kicked to login.
+const { clearSession, isAuthenticated } = useAuthSession();
 setSessionLostHandler(() => {
+  const lostActiveSession = isAuthenticated.value;
   clearSession();
-  if (!window.location.pathname.startsWith('/auth/')) {
+  if (lostActiveSession && !window.location.pathname.startsWith('/auth/')) {
     window.location.assign('/auth/login');
   }
 });
