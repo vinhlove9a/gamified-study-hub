@@ -7,6 +7,7 @@ import { useAuthSession } from '@/features/auth/authSession';
 import '../styles/main.css';
 import '@/styles/dashboard.css';
 import '@/styles/app-effects.css';
+import '@/styles/auth.css';
 
 // When a transparent refresh fails, drop the session and bounce to login
 // (unless already on an auth page) — keeps the http layer framework-agnostic.

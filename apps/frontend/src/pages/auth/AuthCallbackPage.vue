@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthSession } from '@/features/auth/authSession';
 import { defaultRouteForRole } from '@/router/authGuard';
+import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,44 +27,24 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="callback-page">
-    <div class="callback-card">
-      <span class="spinner" aria-hidden="true"></span>
-      <p>{{ message }}</p>
-    </div>
+  <div class="callback-page cosmic-page auth-cosmic">
+    <StarfieldCanvas />
+
+    <main class="auth-main">
+      <div class="auth-shell auth-shell--narrow">
+        <section class="auth-card animate-slide-up">
+          <div class="callback-card">
+            <span class="spinner" aria-hidden="true"></span>
+            <p class="hint">{{ message }}</p>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 </template>
 
 <style scoped>
-.callback-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at 30% 20%, #1e1b4b 0%, #0b1020 55%, #050816 100%);
-  color: #e6e9f5;
-}
-.callback-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2rem 2.5rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-}
-.spinner {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 9999px;
-  border: 3px solid rgba(139, 92, 246, 0.25);
-  border-top-color: #8b5cf6;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.auth-shell--narrow {
+  max-width: 26rem;
 }
 </style>
