@@ -49,7 +49,15 @@ import AppDownloadsPage from '@/pages/app/AppDownloadsPage.vue';
 import AppHistoryPage from '@/pages/app/AppHistoryPage.vue';
 import AppHelpPage from '@/pages/app/AppHelpPage.vue';
 import AppFeedbackPage from '@/pages/app/AppFeedbackPage.vue';
-import AdminDashboardPage from '@/pages/admin/AdminDashboardPage.vue';
+import AdminShellLayout from '@/layouts/AdminShellLayout.vue';
+import AdminOverviewPage from '@/pages/admin/AdminOverviewPage.vue';
+import AdminUsersPage from '@/pages/admin/AdminUsersPage.vue';
+import AdminContentPage from '@/pages/admin/AdminContentPage.vue';
+import AdminGamificationPage from '@/pages/admin/AdminGamificationPage.vue';
+import AdminAnalyticsPage from '@/pages/admin/AdminAnalyticsPage.vue';
+import AdminFinancePage from '@/pages/admin/AdminFinancePage.vue';
+import AdminReportsPage from '@/pages/admin/AdminReportsPage.vue';
+import AdminSystemPage from '@/pages/admin/AdminSystemPage.vue';
 import { comingSoonRoutes } from '@/features/app-shell/navigation';
 import { authGuard } from './authGuard';
 
@@ -130,12 +138,21 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      name: 'admin-dashboard',
-      component: AdminDashboardPage,
+      component: AdminShellLayout,
       meta: {
         requiresAuth: true,
         requiresAdmin: true
-      }
+      },
+      children: [
+        { path: '', name: 'admin-overview', component: AdminOverviewPage, meta: { title: 'Tổng quan' } },
+        { path: 'users', name: 'admin-users', component: AdminUsersPage, meta: { title: 'Người dùng' } },
+        { path: 'content', name: 'admin-content', component: AdminContentPage, meta: { title: 'Nội dung' } },
+        { path: 'gamification', name: 'admin-gamification', component: AdminGamificationPage, meta: { title: 'Gamification' } },
+        { path: 'analytics', name: 'admin-analytics', component: AdminAnalyticsPage, meta: { title: 'Phân tích' } },
+        { path: 'finance', name: 'admin-finance', component: AdminFinancePage, meta: { title: 'Tài chính' } },
+        { path: 'reports', name: 'admin-reports', component: AdminReportsPage, meta: { title: 'Kiểm duyệt' } },
+        { path: 'system', name: 'admin-system', component: AdminSystemPage, meta: { title: 'Hệ thống' } }
+      ]
     },
     {
       path: '/auth/login',
