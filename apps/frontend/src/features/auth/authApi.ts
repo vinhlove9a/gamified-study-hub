@@ -54,10 +54,27 @@ export interface ResendVerificationRequest {
   email: string;
 }
 
+/** Login returns either a full session (AuthResponse) or an MFA challenge. */
+export interface MfaChallenge {
+  mfaRequired: true;
+  mfaToken: string;
+}
+export type LoginResult = AuthResponse | MfaChallenge;
+
+export function isMfaChallenge(result: LoginResult): result is MfaChallenge {
+  return (result as MfaChallenge).mfaRequired === true;
+}
+
+export interface MfaEnrollResponse {
+  secret: string;
+  otpauthUri: string;
+  qrDataUri: string;
+}
+
 export const authApi = {
   login(payload: LoginRequest) {
     // skipRefresh: a 401 here means bad credentials, not an expired session.
-    return request<AuthResponse>('/api/v1/auth/login', {
+    return request<LoginResult>('/api/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload)
     }, { skipRefresh: true });
@@ -73,6 +90,31 @@ export const authApi = {
   },
   logout() {
     return request<null>('/api/v1/auth/logout', { method: 'POST' }, { skipRefresh: true });
+  },
+  // --- MFA (TOTP) ---
+  mfaVerify(payload: { mfaToken: string; code: string }) {
+    return request<AuthResponse>('/api/v1/auth/mfa/verify', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }, { skipRefresh: true });
+  },
+  mfaStatus() {
+    return request<{ enabled: boolean }>('/api/v1/auth/mfa/status');
+  },
+  mfaEnroll() {
+    return request<MfaEnrollResponse>('/api/v1/auth/mfa/enroll', { method: 'POST' });
+  },
+  mfaVerifyEnroll(payload: { code: string }) {
+    return request<{ recoveryCodes: string[] }>('/api/v1/auth/mfa/verify-enroll', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
+  mfaDisable(payload: { code: string }) {
+    return request<null>('/api/v1/auth/mfa', {
+      method: 'DELETE',
+      body: JSON.stringify(payload)
+    });
   },
   forgotPassword(payload: ForgotPasswordRequest) {
     return request<AuthMessageResponse>('/api/v1/auth/forgot-password', {

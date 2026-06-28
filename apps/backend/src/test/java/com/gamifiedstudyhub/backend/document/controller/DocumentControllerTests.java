@@ -16,6 +16,9 @@ import com.gamifiedstudyhub.backend.auth.security.JwtAuthenticationFilter;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
+import com.gamifiedstudyhub.backend.identity.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginFailureHandler;
+import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginSuccessHandler;
 import com.gamifiedstudyhub.backend.document.dto.DocumentDetailResponse;
 import com.gamifiedstudyhub.backend.document.dto.DocumentSummaryResponse;
 import com.gamifiedstudyhub.backend.document.service.DocumentService;
@@ -48,6 +51,15 @@ class DocumentControllerTests {
 
     @MockBean
     private CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    @MockBean
+    private OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+
+    @MockBean
+    private HttpCookieOAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
     private static final String ACCESS_TOKEN = "valid-access-token";
 

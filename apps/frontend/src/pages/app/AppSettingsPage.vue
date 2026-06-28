@@ -5,6 +5,7 @@ import GlassPanel from '@/components/app/GlassPanel.vue';
 import SectionPanel from '@/components/app/SectionPanel.vue';
 import Toggle from '@/components/app/Toggle.vue';
 import Avatar from '@/components/app/Avatar.vue';
+import MfaEnrollPanel from '@/components/app/MfaEnrollPanel.vue';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -486,6 +487,18 @@ function handleSave(): void {
                 <Toggle v-model="privacy[row.key]" />
               </div>
             </div>
+          </SectionPanel>
+        </div>
+
+        <!-- ──────────────── 5b. BẢO MẬT (2FA) ──────────────── -->
+        <div id="section-mfa">
+          <SectionPanel
+            title="Xác thực hai lớp (2FA)"
+            subtitle="Thêm một lớp bảo vệ bằng mã một lần từ ứng dụng xác thực"
+            icon="shield"
+            accent="violet"
+          >
+            <MfaEnrollPanel />
           </SectionPanel>
         </div>
 

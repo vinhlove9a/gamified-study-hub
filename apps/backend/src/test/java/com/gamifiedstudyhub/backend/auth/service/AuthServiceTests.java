@@ -62,6 +62,9 @@ class AuthServiceTests {
     @Mock
     private com.gamifiedstudyhub.backend.email.EmailService emailService;
 
+    @Mock
+    private com.gamifiedstudyhub.backend.mfa.MfaService mfaService;
+
     private static final com.gamifiedstudyhub.backend.common.web.RequestMetadata META =
             new com.gamifiedstudyhub.backend.common.web.RequestMetadata("127.0.0.1", "JUnit");
 
@@ -86,7 +89,8 @@ class AuthServiceTests {
                 authorityService,
                 loginRateLimiter,
                 auditService,
-                emailService
+                emailService,
+                mfaService
         );
     }
 
@@ -149,7 +153,8 @@ class AuthServiceTests {
                 .thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        AuthResponse response = authService.login(new LoginRequest(" Test@example.com ", "password123"), META);
+        AuthLoginResult result = authService.login(new LoginRequest(" Test@example.com ", "password123"), META);
+        AuthResponse response = ((AuthLoginResult.Success) result).response();
 
         assertNotNull(response.accessToken());
         assertTrue(jwtService.isAccessTokenValid(response.accessToken()));

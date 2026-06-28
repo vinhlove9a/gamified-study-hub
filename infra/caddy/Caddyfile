@@ -7,9 +7,10 @@
 aquvix.site, www.aquvix.site {
 	encode zstd gzip
 
-	# API calls keep their /api prefix (backend serves /api/v1/... and /api/health).
-	@api path /api/*
-	handle @api {
+	# API + Spring's OAuth2 endpoints (/oauth2/authorization/*, /login/oauth2/code/*)
+	# go to the backend; the backend redirects back to the SPA on completion.
+	@backend path /api/* /oauth2/* /login/oauth2/*
+	handle @backend {
 		reverse_proxy backend:8080
 	}
 

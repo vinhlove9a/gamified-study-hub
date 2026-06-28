@@ -17,6 +17,7 @@ import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
 import com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter;
 import com.gamifiedstudyhub.backend.authz.service.AuthorityService;
 import com.gamifiedstudyhub.backend.email.EmailService;
+import com.gamifiedstudyhub.backend.mfa.MfaService;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
 import com.gamifiedstudyhub.backend.common.exception.UnauthorizedException;
@@ -50,6 +51,7 @@ public class AuthService {
     private final LoginRateLimiter loginRateLimiter;
     private final AuthAuditService auditService;
     private final EmailService emailService;
+    private final MfaService mfaService;
 
     public AuthService(
             UserRepository userRepository,
@@ -61,7 +63,8 @@ public class AuthService {
             AuthorityService authorityService,
             LoginRateLimiter loginRateLimiter,
             AuthAuditService auditService,
-            EmailService emailService
+            EmailService emailService,
+            MfaService mfaService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -73,6 +76,7 @@ public class AuthService {
         this.loginRateLimiter = loginRateLimiter;
         this.auditService = auditService;
         this.emailService = emailService;
+        this.mfaService = mfaService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -109,7 +113,7 @@ public class AuthService {
                 accessToken, jwtService.getAccessTokenExpirationSeconds(), savedUser, authorities);
     }
 
-    public AuthResponse login(LoginRequest request, RequestMetadata meta) {
+    public AuthLoginResult login(LoginRequest request, RequestMetadata meta) {
         String email = normalizeEmail(request.email());
 
         // Throttle / lockout BEFORE doing any password work (throws 429 if blocked).
@@ -145,9 +149,28 @@ public class AuthService {
             );
         }
 
+        // Password is correct → clear failure counters.
+        loginRateLimiter.recordSuccess(email);
+
+        // Second factor required? Defer session issuance until MFA is verified.
+        if (mfaService.isEnabled(user.getId())) {
+            return new AuthLoginResult.MfaRequired(user.getId());
+        }
+
+        return new AuthLoginResult.Success(finalizeLogin(user, meta));
+    }
+
+    /** Completes a login (after password and any MFA step): stamps last-login, audits, mints token. */
+    @Transactional
+    public AuthResponse completeLogin(UUID userId, RequestMetadata meta) {
+        User user = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(this::invalidCredentialsException);
+        return finalizeLogin(user, meta);
+    }
+
+    private AuthResponse finalizeLogin(User user, RequestMetadata meta) {
         user.setLastLoginAt(DateTimeUtils.nowUtc());
         userRepository.save(user);
-        loginRateLimiter.recordSuccess(email);
         auditService.record(AuthEventType.LOGIN_SUCCESS, user.getId(), meta);
 
         String accessToken = jwtService.generateAccessToken(user);

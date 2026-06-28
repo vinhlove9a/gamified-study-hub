@@ -59,6 +59,10 @@ app:
     from: ${MAIL_FROM:no-reply@aquvix.site}
     # Base URL used to build verify/reset links in emails (the public site).
     base-url: ${MAIL_BASE_URL:${FRONTEND_ORIGIN:http://localhost:5173}}
+  mfa:
+    # Base64-encoded 32-byte key (openssl rand -base64 32) to encrypt TOTP secrets.
+    encryption-key: ${MFA_ENCRYPTION_KEY:}
+    issuer: ${MFA_ISSUER:Gamified Study Hub}
   security:
     ratelimit:
       ip-per-minute: ${AUTH_RL_IP_PER_MIN:30}

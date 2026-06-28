@@ -9,6 +9,9 @@ import com.gamifiedstudyhub.backend.document.repository.DocumentCategoryReposito
 import com.gamifiedstudyhub.backend.document.repository.DocumentRepository;
 import com.gamifiedstudyhub.backend.document.repository.DocumentTagRelationRepository;
 import com.gamifiedstudyhub.backend.document.repository.TagRepository;
+import com.gamifiedstudyhub.backend.identity.repository.AuthIdentityRepository;
+import com.gamifiedstudyhub.backend.mfa.repository.UserMfaRecoveryCodeRepository;
+import com.gamifiedstudyhub.backend.mfa.repository.UserMfaRepository;
 import com.gamifiedstudyhub.backend.user.repository.UserRepository;
 import com.gamifiedstudyhub.backend.workspace.repository.WorkspaceMemberRepository;
 import org.junit.jupiter.api.Test;
@@ -61,6 +64,15 @@ class GamifiedStudyHubBackendApplicationTests {
 
     @MockBean
     private AuthAuditEventRepository authAuditEventRepository;
+
+    @MockBean
+    private AuthIdentityRepository authIdentityRepository;
+
+    @MockBean
+    private UserMfaRepository userMfaRepository;
+
+    @MockBean
+    private UserMfaRecoveryCodeRepository userMfaRecoveryCodeRepository;
 
     @Test
     void contextLoads() {

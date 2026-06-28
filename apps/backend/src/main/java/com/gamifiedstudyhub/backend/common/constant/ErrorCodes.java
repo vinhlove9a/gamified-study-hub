@@ -27,6 +27,10 @@ public final class ErrorCodes {
     public static final String AUTH_RATE_LIMITED = "AUTH_RATE_LIMITED";
     public static final String AUTH_ACCOUNT_LOCKED = "AUTH_ACCOUNT_LOCKED";
     public static final String AUTH_REFRESH_INVALID = "AUTH_REFRESH_INVALID";
+    public static final String AUTH_MFA_INVALID_CODE = "AUTH_MFA_INVALID_CODE";
+    public static final String AUTH_MFA_ALREADY_ENROLLED = "AUTH_MFA_ALREADY_ENROLLED";
+    public static final String AUTH_MFA_NOT_ENROLLED = "AUTH_MFA_NOT_ENROLLED";
+    public static final String AUTH_MFA_CHALLENGE_INVALID = "AUTH_MFA_CHALLENGE_INVALID";
     public static final String DOCUMENT_NOT_FOUND = "DOCUMENT_NOT_FOUND";
     public static final String DOCUMENT_CATEGORY_NOT_FOUND = "DOCUMENT_CATEGORY_NOT_FOUND";
     public static final String DOCUMENT_VALIDATION_ERROR = "DOCUMENT_VALIDATION_ERROR";

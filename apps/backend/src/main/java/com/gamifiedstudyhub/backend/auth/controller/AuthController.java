@@ -10,11 +10,14 @@ import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
 import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
+import com.gamifiedstudyhub.backend.auth.service.AuthLoginResult;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.auth.service.AuthSessionService;
 import com.gamifiedstudyhub.backend.common.constant.AppConstants;
 import com.gamifiedstudyhub.backend.common.response.ApiResponse;
 import com.gamifiedstudyhub.backend.common.web.RequestMetadata;
+import com.gamifiedstudyhub.backend.mfa.MfaChallengeService;
+import com.gamifiedstudyhub.backend.mfa.dto.MfaDtos;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,10 +38,16 @@ public class AuthController {
 
     private final AuthService authService;
     private final AuthSessionService authSessionService;
+    private final MfaChallengeService mfaChallengeService;
 
-    public AuthController(AuthService authService, AuthSessionService authSessionService) {
+    public AuthController(
+            AuthService authService,
+            AuthSessionService authSessionService,
+            MfaChallengeService mfaChallengeService
+    ) {
         this.authService = authService;
         this.authSessionService = authSessionService;
+        this.mfaChallengeService = mfaChallengeService;
     }
 
     @PostMapping("/register")
@@ -54,12 +63,18 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login with email and password", security = {})
-    public ApiResponse<AuthResponse> login(
+    public ApiResponse<Object> login(
             @Valid @RequestBody LoginRequest request,
             HttpServletRequest httpRequest,
             HttpServletResponse httpResponse
     ) {
-        AuthResponse response = authService.login(request, RequestMetadata.from(httpRequest));
+        RequestMetadata meta = RequestMetadata.from(httpRequest);
+        AuthLoginResult result = authService.login(request, meta);
+        if (result instanceof AuthLoginResult.MfaRequired mfaRequired) {
+            String mfaToken = mfaChallengeService.issue(mfaRequired.userId());
+            return ApiResponse.success("MFA required", new MfaDtos.MfaChallengeResponse(true, mfaToken));
+        }
+        AuthResponse response = ((AuthLoginResult.Success) result).response();
         authSessionService.issueSession(httpResponse, response.user().id(), response.accessToken());
         return ApiResponse.success("Login successful", response);
     }

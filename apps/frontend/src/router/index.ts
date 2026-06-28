@@ -7,6 +7,8 @@ import ResetPasswordPage from '@/pages/auth/ResetPasswordPage.vue';
 import VerifyEmailPage from '@/pages/auth/VerifyEmailPage.vue';
 import AuthNoticePage from '@/pages/auth/AuthNoticePage.vue';
 import AuthErrorPage from '@/pages/auth/AuthErrorPage.vue';
+import AuthCallbackPage from '@/pages/auth/AuthCallbackPage.vue';
+import MfaChallengePage from '@/pages/auth/MfaChallengePage.vue';
 import AppShellLayout from '@/layouts/AppShellLayout.vue';
 import AppHomePage from '@/pages/app/AppHomePage.vue';
 import AppDocumentsPage from '@/pages/app/AppDocumentsPage.vue';
@@ -175,6 +177,16 @@ const router = createRouter({
       path: '/auth/error',
       name: 'auth-error',
       component: AuthErrorPage
+    },
+    {
+      path: '/auth/callback',
+      name: 'auth-callback',
+      component: AuthCallbackPage
+    },
+    {
+      path: '/auth/mfa',
+      name: 'auth-mfa',
+      component: MfaChallengePage
     }
   ]
 });

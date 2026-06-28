@@ -23,6 +23,10 @@ import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.auth.service.AuthSessionService;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
+import com.gamifiedstudyhub.backend.identity.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginFailureHandler;
+import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginSuccessHandler;
+import com.gamifiedstudyhub.backend.mfa.MfaChallengeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -49,6 +53,18 @@ class AuthControllerTests {
 
     @MockBean
     private CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private MfaChallengeService mfaChallengeService;
+
+    @MockBean
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    @MockBean
+    private OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+
+    @MockBean
+    private HttpCookieOAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
     @Test
     void forgotPassword_shouldReturnSuccessForValidEmail() throws Exception {

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
-import { authApi } from '@/features/auth/authApi';
+import { authApi, isMfaChallenge } from '@/features/auth/authApi';
 import { useAuthSession } from '@/features/auth/authSession';
+import { useMfaChallenge } from '@/features/auth/mfaChallenge';
+import { startGoogleLogin } from '@/features/auth/oauth';
 import { defaultRouteForRole } from '@/router/authGuard';
 import { ApiError } from '@/lib/api/apiError';
 import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
@@ -22,6 +24,7 @@ const form = reactive<FormState>({
 const router = useRouter();
 const route = useRoute();
 const { setSessionFromAuthResponse, clearSession, isAdmin } = useAuthSession();
+const { setChallenge } = useMfaChallenge();
 
 const showPassword = ref(false);
 const loading = ref(false);
@@ -92,6 +95,11 @@ const handleSubmit = async () => {
       email: form.email.trim(),
       password: form.password
     });
+    if (isMfaChallenge(response)) {
+      setChallenge(response.mfaToken, getSafeRedirectPath());
+      await router.push('/auth/mfa');
+      return;
+    }
     setSessionFromAuthResponse(response);
     formMessage.value = 'Đăng nhập thành công.';
     await router.push(getSafeRedirectPath());
@@ -212,7 +220,7 @@ onUnmounted(() => {
 
         <section class="auth-card cosmic-glass cosmic-glass-hover animate-slide-up delay-200" aria-label="Form đăng nhập">
           <div class="social-grid animate-fade-in delay-400" aria-hidden="false">
-            <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với Google">
+            <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với Google" @click="startGoogleLogin">
               <span>Tiếp tục với Google</span>
             </button>
             <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với GitHub">
