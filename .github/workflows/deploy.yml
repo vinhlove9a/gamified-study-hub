@@ -109,6 +109,11 @@ jobs:
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
+            # The Caddyfile is a single bind-mounted file; scp replaces it with a
+            # new inode, so the running container keeps the OLD config. Recreate
+            # Caddy so it re-mounts the current Caddyfile.
+            docker compose -f docker-compose.prod.yml up -d --force-recreate caddy
+
             # Drop dangling images so the small disk doesn't fill up over time.
             docker image prune -f
 
