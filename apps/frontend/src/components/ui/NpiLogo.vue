@@ -2,121 +2,78 @@
 interface Props {
   variant?: 'light' | 'dark';
   size?: 'sm' | 'md' | 'lg';
+  /** Show the "Gamified Study Hub" wordmark next to the mark. */
+  showWordmark?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   variant: 'light',
-  size: 'md'
+  size: 'md',
+  showWordmark: true
 });
 
-const sizeMap = {
-  sm: 80,
-  md: 120,
-  lg: 200
+const markSize = {
+  sm: 28,
+  md: 36,
+  lg: 48
 };
 </script>
 
 <template>
-  <svg
-    :viewBox="`0 0 ${sizeMap[size] * 3} ${sizeMap[size]}`"
-    :class="['gsh-logo', `gsh-logo--${variant}`, `gsh-logo--${size}`]"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    :aria-label="`Gamified Study Hub`"
-  >
-    <g class="gsh-logo__mark">
-      <circle
-        cx="28"
-        cy="28"
-        r="7"
-        :fill="variant === 'light' ? '#22e0d6' : '#0d9488'"
-      />
-      <circle
-        cx="28"
-        cy="28"
-        r="16"
-        :stroke="variant === 'light' ? '#22e0d6' : '#0d9488'"
-        stroke-width="2"
-        stroke-opacity="0.55"
-      />
-      <path
-        d="M9 31C17 16 38 13 49 24"
-        :stroke="variant === 'light' ? '#f8d66d' : '#b7791f'"
-        stroke-width="3"
-        stroke-linecap="round"
-      />
-      <path
-        d="M8 35C21 46 41 42 50 29"
-        :stroke="variant === 'light' ? '#9b5cff' : '#6d28d9'"
-        stroke-width="3"
-        stroke-linecap="round"
-      />
-      <circle cx="9" cy="31" r="3" :fill="variant === 'light' ? '#f8d66d' : '#b7791f'" />
-      <circle cx="50" cy="29" r="3" :fill="variant === 'light' ? '#9b5cff' : '#6d28d9'" />
-    </g>
-
-    <g class="gsh-logo__text">
-      <text
-        x="54"
-        y="34"
-        :fill="variant === 'light' ? '#ffffff' : '#0f172a'"
-        font-family="'Plus Jakarta Sans', sans-serif"
-        font-size="32"
-        font-weight="800"
-        letter-spacing="2"
-      >
-        GSH
-      </text>
-    </g>
-
-    <g v-if="size === 'lg'" class="gsh-logo__fullname">
-      <text
-        x="145"
-        y="28"
-        :fill="variant === 'light' ? '#ffffff' : '#0f172a'"
-        font-family="'Plus Jakarta Sans', sans-serif"
-        font-size="12"
-        font-weight="500"
-        letter-spacing="0.5"
-      >
-        GAMIFIED STUDY HUB
-      </text>
-    </g>
-  </svg>
+  <span :class="['gsh-logo', `gsh-logo--${variant}`, `gsh-logo--${size}`]" aria-label="Gamified Study Hub">
+    <img
+      class="gsh-logo__mark"
+      src="/images/gmf-logo.png"
+      alt="Gamified Study Hub"
+      :width="markSize[size]"
+      :height="markSize[size]"
+    />
+    <span v-if="showWordmark" class="gsh-logo__text">Gamified Study Hub</span>
+  </span>
 </template>
 
 <style scoped>
 .gsh-logo {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   vertical-align: middle;
 }
 
-.gsh-logo--light .gsh-logo__text,
-.gsh-logo--light .gsh-logo__mark {
-  transition: opacity 0.3s ease;
-}
-
-.gsh-logo--sm {
-  width: 80px;
-  height: 28px;
-}
-
-.gsh-logo--md {
-  width: 120px;
-  height: 40px;
-}
-
-.gsh-logo--lg {
-  width: 300px;
-  height: 50px;
+.gsh-logo__mark {
+  border-radius: 0.6rem;
+  object-fit: cover;
+  box-shadow: 0 0 18px oklch(0.78 0.18 195 / 35%);
+  transition: transform 0.3s ease;
 }
 
 .gsh-logo:hover .gsh-logo__mark {
   transform: translateY(-1px) scale(1.03);
 }
 
-.gsh-logo__mark {
-  transition: transform 0.3s ease;
-  transform-origin: center;
+.gsh-logo__text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.gsh-logo--light .gsh-logo__text {
+  color: #ffffff;
+}
+
+.gsh-logo--dark .gsh-logo__text {
+  color: #0f172a;
+}
+
+.gsh-logo--sm .gsh-logo__text {
+  font-size: 0.9rem;
+}
+
+.gsh-logo--md .gsh-logo__text {
+  font-size: 1.05rem;
+}
+
+.gsh-logo--lg .gsh-logo__text {
+  font-size: 1.3rem;
 }
 </style>

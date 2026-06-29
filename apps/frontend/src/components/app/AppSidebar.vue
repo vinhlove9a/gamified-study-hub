@@ -58,11 +58,11 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
       class="flex h-16 items-center gap-2.5 border-b border-white/[0.06] px-4"
       :class="props.collapsed ? 'justify-center px-0' : ''"
     >
-      <span
-        class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-fuchsia-500 text-white shadow-[0_0_18px_oklch(0.78_0.18_195/45%)]"
-      >
-        <AppIcon name="rocket" class="h-5 w-5" />
-      </span>
+      <img
+        src="/images/gmf-logo.png"
+        alt="Gamified Study Hub"
+        class="h-9 w-9 shrink-0 rounded-xl object-cover shadow-[0_0_18px_oklch(0.78_0.18_195/45%)]"
+      />
       <div v-if="!props.collapsed" class="min-w-0 leading-tight">
         <p class="cosmic-gradient-text truncate text-sm font-bold">Study Hub</p>
         <p class="truncate text-[0.7rem] text-muted-foreground">{{ totalFunctions }} tính năng · vũ trụ tri thức</p>

@@ -47,11 +47,11 @@ function isActive(to: string): boolean {
   <nav class="glass-panel flex h-full flex-col border-r border-white/[0.06] bg-background/40">
     <!-- Brand -->
     <div class="flex items-center gap-3 px-4 py-4" :class="props.collapsed ? 'justify-center' : ''">
-      <span
-        class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-fuchsia-500 text-white shadow-[0_0_18px_oklch(0.78_0.18_195/45%)]"
-      >
-        <AppIcon name="shield" class="h-5 w-5" />
-      </span>
+      <img
+        src="/images/gmf-logo.png"
+        alt="Gamified Study Hub"
+        class="h-9 w-9 shrink-0 rounded-xl object-cover shadow-[0_0_18px_oklch(0.78_0.18_195/45%)]"
+      />
       <div v-if="!props.collapsed" class="min-w-0 leading-tight">
         <p class="truncate text-sm font-bold">
           <span class="glow-cyan text-cyan-100">DEEP</span><span class="text-fuchsia-200">WORKSPACE</span>
