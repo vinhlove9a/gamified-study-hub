@@ -396,7 +396,7 @@ const rarityText: Record<Rarity, string> = {
           class="flex items-center gap-3"
         >
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="rarityRing[b.rarity]"
           >
             <AppIcon :name="b.icon" class="h-5 w-5" />

@@ -240,13 +240,6 @@ const accentText: Record<Accent, string> = {
   violet: 'text-violet-300',
   amber: 'text-amber-300'
 };
-const barFill: Record<Accent, string> = {
-  cyan: 'from-cyan-400 to-cyan-500',
-  magenta: 'from-fuchsia-400 to-fuchsia-500',
-  green: 'from-emerald-400 to-emerald-500',
-  violet: 'from-violet-400 to-violet-500',
-  amber: 'from-amber-300 to-amber-400'
-};
 </script>
 
 <template>
@@ -428,8 +421,7 @@ const barFill: Record<Accent, string> = {
               </div>
               <div class="mt-1.5 h-2 w-full overflow-hidden rounded-sm bg-white/[0.06]">
                 <div
-                  class="h-full rounded-sm
-                  :class="barFill[t.accent]"
+                  class="h-full rounded-sm bg-primary"
                   :style="{ width: `${t.heat}%` }"
                 />
               </div>

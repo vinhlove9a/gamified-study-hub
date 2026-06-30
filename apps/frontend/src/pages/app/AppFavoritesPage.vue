@@ -357,7 +357,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
           class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-3"
         >
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="cover[doc.tone]"
           >
             <AppIcon name="file-text" class="h-5 w-5 text-white/90" />
