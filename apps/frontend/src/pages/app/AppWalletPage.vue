@@ -208,10 +208,10 @@ onUnmounted(() => {
               v-for="qa in quickActions"
               :key="qa.id"
               type="button"
-              class="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+              class="inline-flex items-center gap-2 rounded-sm border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
               @click="onAction(qa.id, qa.label)"
             >
-              <span class="flex h-6 w-6 items-center justify-center rounded-lg" :class="accentChip[qa.accent]">
+              <span class="flex h-6 w-6 items-center justify-center rounded-sm" :class="accentChip[qa.accent]">
                 <AppIcon :name="qa.icon" class="h-3.5 w-3.5" />
               </span>
               {{ qa.label }}
@@ -220,20 +220,20 @@ onUnmounted(() => {
         </div>
 
         <!-- Trend + month summary -->
-        <div class="w-full max-w-sm shrink-0 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="w-full max-w-sm shrink-0 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
           <div class="mb-1 flex items-center justify-between text-xs text-muted-foreground">
             <span>Xu hướng số dư · 12 tuần</span>
             <span class="font-semibold text-emerald-300">+{{ netThisMonth.toLocaleString('vi-VN') }} ròng</span>
           </div>
           <Sparkline :data="balanceTrend" accent="amber" :height="56" />
           <div class="mt-3 grid grid-cols-2 gap-3">
-            <div class="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.07] p-3">
+            <div class="rounded-sm border border-emerald-400/20 bg-emerald-500/[0.07] p-3">
               <p class="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
                 <AppIcon name="trending-up" class="h-3.5 w-3.5 text-emerald-300" /> Nhận tháng này
               </p>
               <p class="mt-1 text-lg font-bold tabular-nums text-emerald-200">+{{ earnedThisMonth.toLocaleString('vi-VN') }}</p>
             </div>
-            <div class="rounded-xl border border-rose-400/20 bg-rose-500/[0.07] p-3">
+            <div class="rounded-sm border border-rose-400/20 bg-rose-500/[0.07] p-3">
               <p class="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
                 <AppIcon name="trending-down" class="h-3.5 w-3.5 text-rose-300" /> Tiêu tháng này
               </p>
@@ -253,7 +253,7 @@ onUnmounted(() => {
           </template>
           <ul class="divide-y divide-white/[0.05]">
             <li v-for="txn in filteredTxns" :key="txn.id" class="flex items-center gap-3 px-5 py-3">
-              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" :class="accentChip[txn.accent]">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm" :class="accentChip[txn.accent]">
                 <AppIcon :name="txn.icon" class="h-4 w-4" />
               </span>
               <div class="min-w-0 flex-1">
@@ -278,15 +278,15 @@ onUnmounted(() => {
       <div class="space-y-6">
         <SectionPanel title="Nguồn thu coin" subtitle="Theo hoạt động" icon="chart" accent="green">
           <div class="flex items-center gap-5">
-            <div class="relative h-28 w-28 shrink-0 rounded-full" :style="{ background: donutGradient }">
-              <div class="absolute inset-[18%] flex flex-col items-center justify-center rounded-full bg-background/80">
+            <div class="relative h-28 w-28 shrink-0 rounded-sm" :style="{ background: donutGradient }">
+              <div class="absolute inset-[18%] flex flex-col items-center justify-center rounded-sm bg-background/80">
                 <span class="text-lg font-bold tabular-nums text-foreground">{{ sourcesTotal.toLocaleString('vi-VN') }}</span>
                 <span class="text-[0.6rem] text-muted-foreground">tổng coin</span>
               </div>
             </div>
             <ul class="min-w-0 flex-1 space-y-2.5">
               <li v-for="s in sources" :key="s.label" class="flex items-center gap-2 text-sm">
-                <span class="h-2.5 w-2.5 shrink-0 rounded-full" :class="accentBar[s.accent]" />
+                <span class="h-2.5 w-2.5 shrink-0 rounded-sm" :class="accentBar[s.accent]" />
                 <span class="flex-1 truncate text-muted-foreground">{{ s.label }}</span>
                 <span class="font-semibold tabular-nums text-foreground">{{ Math.round((s.value / sourcesTotal) * 100) }}%</span>
               </li>
@@ -319,14 +319,14 @@ onUnmounted(() => {
         <div
           v-for="p in packages"
           :key="p.id"
-          class="package-card relative flex flex-col rounded-2xl border p-4 transition-all hover:-translate-y-1"
+          class="package-card relative flex flex-col rounded-sm border p-4 transition-all hover:-translate-y-1"
           :class="p.popular ? 'border-amber-400/40 bg-amber-500/[0.06]' : 'border-white/[0.06] bg-white/[0.02] hover:border-white/[0.14]'"
         >
           <span
             v-if="p.popular"
-            class="absolute -top-2.5 right-4 rounded-full bg-amber-400 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-black"
+            class="absolute -top-2.5 right-4 rounded-sm bg-amber-400 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-black"
           >Phổ biến</span>
-          <span class="flex h-12 w-12 items-center justify-center rounded-xl" :class="accentChip[p.accent]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-sm" :class="accentChip[p.accent]">
             <AppIcon name="coin" class="h-6 w-6" />
           </span>
           <p class="mt-3 text-2xl font-bold tabular-nums text-foreground">{{ p.coins.toLocaleString('vi-VN') }}</p>
@@ -335,7 +335,7 @@ onUnmounted(() => {
           <p v-else class="mt-1 text-xs text-muted-foreground">Không bonus</p>
           <button
             type="button"
-            class="cosmic-btn mt-4 w-full rounded-xl px-3 py-2 text-sm"
+            class="cosmic-btn mt-4 w-full rounded-sm px-3 py-2 text-sm"
             @click="buyPackage(p)"
           >
             {{ p.price }}
@@ -352,7 +352,7 @@ onUnmounted(() => {
     <Transition name="toast-fade">
       <div
         v-if="toast"
-        class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-cyan-400/30 bg-background/90 px-5 py-3 text-sm font-medium text-cyan-100 shadow-[0_0_24px_oklch(0.78_0.18_195/30%)] backdrop-blur"
+        class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-sm border border-cyan-400/30 bg-background/90 px-5 py-3 text-sm font-medium text-cyan-100 backdrop-blur"
         role="status"
       >
         {{ toast }}

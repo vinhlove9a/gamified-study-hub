@@ -1,412 +1,356 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import AppIcon from '@/components/app/icons/AppIcon.vue';
-import GlassPanel from '@/components/app/GlassPanel.vue';
-import SectionPanel from '@/components/app/SectionPanel.vue';
-import RingProgress from '@/components/app/RingProgress.vue';
-import Tabs from '@/components/app/Tabs.vue';
 
-type Accent = 'cyan' | 'magenta' | 'green' | 'violet' | 'amber';
-type NodeStatus = 'completed' | 'current' | 'locked';
+type ModuleStatus = 'completed' | 'current' | 'locked';
 
-interface LessonNode {
+interface LessonItem {
+  id: string;
+  title: string;
+  duration: string;
+  status: ModuleStatus;
+}
+
+interface LessonModule {
   id: string;
   title: string;
   desc: string;
   xp: number;
-  lessons: number;
   reward: number;
-  status: NodeStatus;
-  icon: string;
+  status: ModuleStatus;
+  lessons: LessonItem[];
 }
 
 interface LearningPath {
   id: string;
   name: string;
   tagline: string;
-  icon: string;
-  accent: Accent;
-  nodes: LessonNode[];
+  code: string;
+  modules: LessonModule[];
 }
 
 const paths: LearningPath[] = [
   {
     id: 'math',
+    code: 'MATH',
     name: 'Nền tảng Toán',
     tagline: 'Từ số học đến giải tích',
-    icon: 'graduation',
-    accent: 'cyan',
-    nodes: [
-      { id: 'm1', title: 'Số học cơ bản', desc: 'Phép tính, phân số và số thập phân — củng cố nền móng vững chắc.', xp: 120, lessons: 6, reward: 30, status: 'completed', icon: 'check' },
-      { id: 'm2', title: 'Đại số nhập môn', desc: 'Biến số, biểu thức và phương trình bậc nhất.', xp: 180, lessons: 8, reward: 45, status: 'completed', icon: 'check' },
-      { id: 'm3', title: 'Hàm số & Đồ thị', desc: 'Hàm bậc nhất, bậc hai và cách đọc đồ thị.', xp: 220, lessons: 10, reward: 60, status: 'current', icon: 'route' },
-      { id: 'm4', title: 'Lượng giác', desc: 'Sin, cos, tan và các công thức biến đổi.', xp: 260, lessons: 9, reward: 70, status: 'locked', icon: 'lock' },
-      { id: 'm5', title: 'Giới hạn & Đạo hàm', desc: 'Khái niệm giới hạn và đạo hàm của hàm số.', xp: 300, lessons: 11, reward: 90, status: 'locked', icon: 'lock' },
-      { id: 'm6', title: 'Tích phân', desc: 'Nguyên hàm, tích phân xác định và ứng dụng.', xp: 360, lessons: 12, reward: 120, status: 'locked', icon: 'lock' }
+    modules: [
+      {
+        id: 'm1',
+        title: 'Số học cơ bản',
+        desc: 'Phép tính, phân số và số thập phân.',
+        xp: 120,
+        reward: 30,
+        status: 'completed',
+        lessons: [
+          { id: 'm1-1', title: 'Thứ tự phép tính', duration: '08:00', status: 'completed' },
+          { id: 'm1-2', title: 'Phân số và tỉ lệ', duration: '12:00', status: 'completed' },
+          { id: 'm1-3', title: 'Số thập phân', duration: '10:00', status: 'completed' }
+        ]
+      },
+      {
+        id: 'm2',
+        title: 'Đại số nhập môn',
+        desc: 'Biến số, biểu thức và phương trình bậc nhất.',
+        xp: 180,
+        reward: 45,
+        status: 'completed',
+        lessons: [
+          { id: 'm2-1', title: 'Biểu thức đại số', duration: '14:00', status: 'completed' },
+          { id: 'm2-2', title: 'Rút gọn biểu thức', duration: '16:00', status: 'completed' },
+          { id: 'm2-3', title: 'Phương trình bậc nhất', duration: '18:00', status: 'completed' }
+        ]
+      },
+      {
+        id: 'm3',
+        title: 'Hàm số & Đồ thị',
+        desc: 'Hàm bậc nhất, bậc hai và cách đọc đồ thị.',
+        xp: 220,
+        reward: 60,
+        status: 'current',
+        lessons: [
+          { id: 'm3-1', title: 'Khái niệm hàm số', duration: '15:00', status: 'completed' },
+          { id: 'm3-2', title: 'Đồ thị hàm bậc nhất', duration: '20:00', status: 'current' },
+          { id: 'm3-3', title: 'Đồ thị hàm bậc hai', duration: '22:00', status: 'locked' }
+        ]
+      },
+      {
+        id: 'm4',
+        title: 'Lượng giác',
+        desc: 'Sin, cos, tan và công thức biến đổi.',
+        xp: 260,
+        reward: 70,
+        status: 'locked',
+        lessons: [
+          { id: 'm4-1', title: 'Tỉ số lượng giác', duration: '18:00', status: 'locked' },
+          { id: 'm4-2', title: 'Công thức cơ bản', duration: '24:00', status: 'locked' }
+        ]
+      }
     ]
   },
   {
     id: 'eng',
+    code: 'ENG',
     name: 'Tiếng Anh giao tiếp',
     tagline: 'Tự tin nói chuyện mỗi ngày',
-    icon: 'message',
-    accent: 'green',
-    nodes: [
-      { id: 'e1', title: 'Phát âm nền tảng', desc: 'Bảng IPA, trọng âm và ngữ điệu cơ bản.', xp: 100, lessons: 5, reward: 25, status: 'completed', icon: 'check' },
-      { id: 'e2', title: 'Chào hỏi & Giới thiệu', desc: 'Mẫu câu giao tiếp hằng ngày phổ biến nhất.', xp: 150, lessons: 7, reward: 40, status: 'completed', icon: 'check' },
-      { id: 'e3', title: 'Hội thoại mua sắm', desc: 'Hỏi giá, mặc cả và thanh toán bằng tiếng Anh.', xp: 190, lessons: 8, reward: 50, status: 'current', icon: 'store' },
-      { id: 'e4', title: 'Du lịch & Đặt phòng', desc: 'Giao tiếp tại sân bay, khách sạn và nhà hàng.', xp: 230, lessons: 9, reward: 60, status: 'locked', icon: 'lock' },
-      { id: 'e5', title: 'Phỏng vấn xin việc', desc: 'Trả lời câu hỏi phỏng vấn một cách chuyên nghiệp.', xp: 280, lessons: 10, reward: 80, status: 'locked', icon: 'lock' }
+    modules: [
+      {
+        id: 'e1',
+        title: 'Phát âm nền tảng',
+        desc: 'IPA, trọng âm và ngữ điệu.',
+        xp: 100,
+        reward: 25,
+        status: 'completed',
+        lessons: [
+          { id: 'e1-1', title: 'Âm nguyên âm', duration: '11:00', status: 'completed' },
+          { id: 'e1-2', title: 'Trọng âm từ', duration: '13:00', status: 'completed' }
+        ]
+      },
+      {
+        id: 'e2',
+        title: 'Chào hỏi & Giới thiệu',
+        desc: 'Mẫu câu giao tiếp hằng ngày.',
+        xp: 150,
+        reward: 40,
+        status: 'completed',
+        lessons: [
+          { id: 'e2-1', title: 'Tự giới thiệu', duration: '09:00', status: 'completed' },
+          { id: 'e2-2', title: 'Hỏi thông tin cá nhân', duration: '14:00', status: 'completed' }
+        ]
+      },
+      {
+        id: 'e3',
+        title: 'Hội thoại mua sắm',
+        desc: 'Hỏi giá, thương lượng và thanh toán.',
+        xp: 190,
+        reward: 50,
+        status: 'current',
+        lessons: [
+          { id: 'e3-1', title: 'Hỏi giá', duration: '10:00', status: 'current' },
+          { id: 'e3-2', title: 'Thanh toán', duration: '12:00', status: 'locked' }
+        ]
+      }
     ]
   },
   {
     id: 'web',
+    code: 'WEB',
     name: 'Lập trình Web',
     tagline: 'Xây dựng ứng dụng từ đầu',
-    icon: 'zap',
-    accent: 'violet',
-    nodes: [
-      { id: 'w1', title: 'HTML & CSS', desc: 'Cấu trúc trang và tạo kiểu giao diện cơ bản.', xp: 140, lessons: 8, reward: 35, status: 'completed', icon: 'check' },
-      { id: 'w2', title: 'JavaScript nền tảng', desc: 'Biến, hàm, vòng lặp và thao tác DOM.', xp: 200, lessons: 12, reward: 55, status: 'current', icon: 'command' },
-      { id: 'w3', title: 'Vue 3 cơ bản', desc: 'Component, reactivity và quản lý trạng thái.', xp: 260, lessons: 10, reward: 75, status: 'locked', icon: 'lock' },
-      { id: 'w4', title: 'API & Fetch', desc: 'Gọi REST API, xử lý bất đồng bộ với async/await.', xp: 300, lessons: 9, reward: 90, status: 'locked', icon: 'lock' },
-      { id: 'w5', title: 'Triển khai dự án', desc: 'Build, tối ưu và đưa ứng dụng lên môi trường thật.', xp: 360, lessons: 7, reward: 130, status: 'locked', icon: 'lock' }
+    modules: [
+      {
+        id: 'w1',
+        title: 'HTML & CSS',
+        desc: 'Cấu trúc trang và tạo kiểu cơ bản.',
+        xp: 140,
+        reward: 35,
+        status: 'completed',
+        lessons: [
+          { id: 'w1-1', title: 'Semantic HTML', duration: '16:00', status: 'completed' },
+          { id: 'w1-2', title: 'Layout với CSS', duration: '20:00', status: 'completed' }
+        ]
+      },
+      {
+        id: 'w2',
+        title: 'JavaScript nền tảng',
+        desc: 'Biến, hàm, vòng lặp và DOM.',
+        xp: 200,
+        reward: 55,
+        status: 'current',
+        lessons: [
+          { id: 'w2-1', title: 'Biến và kiểu dữ liệu', duration: '18:00', status: 'completed' },
+          { id: 'w2-2', title: 'Hàm và phạm vi', duration: '22:00', status: 'current' },
+          { id: 'w2-3', title: 'DOM events', duration: '24:00', status: 'locked' }
+        ]
+      }
     ]
   }
 ];
 
-const activePathId = ref<string>(paths[0].id);
-const activePath = computed<LearningPath>(() => paths.find((p) => p.id === activePathId.value) ?? paths[0]);
+const activePathId = ref(paths[0].id);
+const openModuleId = ref('m3');
+const activePath = computed(() => paths.find((path) => path.id === activePathId.value) ?? paths[0]);
+const completedModules = computed(() => activePath.value.modules.filter((module) => module.status === 'completed').length);
+const progressPct = computed(() => Math.round((completedModules.value / activePath.value.modules.length) * 100));
+const earnedXp = computed(() => activePath.value.modules.filter((module) => module.status === 'completed').reduce((sum, module) => sum + module.xp, 0));
+const totalXp = computed(() => activePath.value.modules.reduce((sum, module) => sum + module.xp, 0));
+const activeModule = computed(() => activePath.value.modules.find((module) => module.id === openModuleId.value) ?? activePath.value.modules[0]);
 
-const pathTabs = computed(() =>
-  paths.map((p) => ({
-    id: p.id,
-    label: p.name,
-    badge: `${p.nodes.filter((n) => n.status === 'completed').length}/${p.nodes.length}`
-  }))
-);
-
-// progress
-const completedCount = computed<number>(() => activePath.value.nodes.filter((n) => n.status === 'completed').length);
-const progressPct = computed<number>(() => Math.round((completedCount.value / activePath.value.nodes.length) * 100));
-const earnedXp = computed<number>(() =>
-  activePath.value.nodes.filter((n) => n.status === 'completed').reduce((sum, n) => sum + n.xp, 0)
-);
-const totalXp = computed<number>(() => activePath.value.nodes.reduce((sum, n) => sum + n.xp, 0));
-
-// selected node detail (default = current node)
-const selectedId = ref<string | null>(null);
-const selectedNode = computed<LessonNode | null>(() => {
-  const id = selectedId.value ?? activePath.value.nodes.find((n) => n.status === 'current')?.id ?? null;
-  return activePath.value.nodes.find((n) => n.id === id) ?? null;
-});
-
-function selectNode(node: LessonNode): void {
-  if (node.status === 'locked') return;
-  selectedId.value = node.id;
-}
-
-function onTabChange(id: string): void {
+function selectPath(id: string): void {
   activePathId.value = id;
-  selectedId.value = null;
+  openModuleId.value = activePath.value.modules.find((module) => module.status === 'current')?.id ?? activePath.value.modules[0].id;
 }
 
-const accentText: Record<Accent, string> = {
-  cyan: 'text-cyan-300',
-  magenta: 'text-fuchsia-300',
-  green: 'text-emerald-300',
-  violet: 'text-violet-300',
-  amber: 'text-amber-300'
-};
-const accentChip: Record<Accent, string> = {
-  cyan: 'bg-cyan-500/10 text-cyan-300',
-  magenta: 'bg-fuchsia-500/10 text-fuchsia-300',
-  green: 'bg-emerald-500/10 text-emerald-300',
-  violet: 'bg-violet-500/10 text-violet-300',
-  amber: 'bg-amber-500/10 text-amber-300'
-};
-const pulseClass: Record<Accent, string> = {
-  cyan: 'pulse-glow-cyan',
-  magenta: 'pulse-glow-magenta',
-  green: 'pulse-glow-green',
-  violet: 'pulse-glow-cyan',
-  amber: 'pulse-glow-magenta'
-};
-
-// node visual state classes
-function nodeOuter(node: LessonNode): string {
-  if (node.status === 'completed') {
-    return 'border-emerald-400/50 bg-emerald-500/15 text-emerald-200 shadow-[0_0_22px_oklch(0.75_0.18_145/45%)]';
-  }
-  if (node.status === 'current') {
-    return `border-cyan-400/70 bg-cyan-500/15 text-cyan-100 ${pulseClass[activePath.value.accent]}`;
-  }
-  return 'border-white/[0.08] bg-white/[0.02] text-muted-foreground';
+function toggleModule(module: LessonModule): void {
+  if (module.status === 'locked') return;
+  openModuleId.value = openModuleId.value === module.id ? '' : module.id;
 }
 
-// zigzag: even index left, odd index right
-function isLeft(index: number): boolean {
-  return index % 2 === 0;
+function statusLabel(status: ModuleStatus): string {
+  if (status === 'completed') return 'Hoàn thành';
+  if (status === 'current') return 'Đang học';
+  return 'Khóa';
 }
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- Hero -->
-    <GlassPanel glow="violet" class="relative overflow-hidden p-5 sm:p-6">
-      <div class="orbit-ring float-slow pointer-events-none absolute -right-16 -top-16 h-48 w-48 opacity-40" aria-hidden="true" />
-      <div class="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div class="min-w-0">
-          <p class="cosmic-badge">Bản đồ kỹ năng</p>
-          <h1 class="mt-3 text-2xl font-bold text-foreground sm:text-3xl">
-            <span class="cosmic-gradient-text">Lộ trình học</span> 🚀
-          </h1>
-          <p class="mt-1.5 max-w-xl text-sm text-muted-foreground">
-            Chinh phục từng cột mốc theo lộ trình được thiết kế sẵn. Mở khoá bài học mới và tích luỹ XP để thăng cấp.
-          </p>
+  <div class="space-y-4 text-zinc-100">
+    <section class="border border-border bg-zinc-950">
+      <div class="grid gap-4 border-b border-border px-4 py-3 lg:grid-cols-[1fr_360px] lg:items-center">
+        <div>
+          <p class="text-xs font-semibold uppercase text-zinc-500">Track detail</p>
+          <h1 class="mt-1 text-xl font-semibold text-zinc-100">{{ activePath.name }}</h1>
+          <p class="mt-1 text-sm text-zinc-500">{{ activePath.tagline }}</p>
         </div>
-        <div class="flex shrink-0 items-center gap-4">
-          <RingProgress :value="progressPct" :size="108" :accent="activePath.accent">
-            <span class="text-[0.6rem] uppercase tracking-wider text-muted-foreground">Tiến độ</span>
-            <span class="text-2xl font-bold text-foreground">{{ progressPct }}%</span>
-            <span class="text-[0.65rem] text-muted-foreground">{{ completedCount }}/{{ activePath.nodes.length }}</span>
-          </RingProgress>
-        </div>
-      </div>
-    </GlassPanel>
-
-    <!-- Path selector -->
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <Tabs :tabs="pathTabs" :model-value="activePathId" @update:model-value="onTabChange" />
-      <div class="flex items-center gap-2 text-sm text-muted-foreground">
-        <AppIcon name="zap" class="h-4 w-4 text-amber-300" />
-        <span class="font-semibold text-foreground">{{ earnedXp.toLocaleString('vi-VN') }}</span>
-        / {{ totalXp.toLocaleString('vi-VN') }} XP
-      </div>
-    </div>
-
-    <!-- Path cards -->
-    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <button
-        v-for="p in paths"
-        :key="p.id"
-        type="button"
-        class="rounded-2xl border p-4 text-left transition-all"
-        :class="
-          p.id === activePathId
-            ? 'border-white/[0.18] bg-white/[0.05] shadow-[0_0_20px_oklch(0.6_0.2_290/25%)]'
-            : 'border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12]'
-        "
-        @click="onTabChange(p.id)"
-      >
-        <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[p.accent]">
-            <AppIcon :name="p.icon" class="h-5 w-5" />
-          </span>
-          <div class="min-w-0">
-            <p class="truncate text-sm font-semibold text-foreground">{{ p.name }}</p>
-            <p class="truncate text-xs text-muted-foreground">{{ p.tagline }}</p>
+        <div>
+          <div class="mb-2 flex items-center justify-between text-xs">
+            <span class="font-semibold uppercase text-zinc-500">Tiến độ lộ trình</span>
+            <span class="font-mono text-zinc-300">{{ progressPct }}%</span>
+          </div>
+          <div class="h-2 border border-zinc-800 bg-zinc-950">
+            <div class="h-full bg-primary" :style="{ width: `${progressPct}%` }" />
+          </div>
+          <div class="mt-2 flex justify-between text-xs text-zinc-500">
+            <span>{{ completedModules }}/{{ activePath.modules.length }} module</span>
+            <span>{{ earnedXp.toLocaleString('vi-VN') }}/{{ totalXp.toLocaleString('vi-VN') }} XP</span>
           </div>
         </div>
-        <div class="mt-3 flex items-center justify-between text-xs">
-          <span class="text-muted-foreground">
-            {{ p.nodes.filter((n) => n.status === 'completed').length }}/{{ p.nodes.length }} cột mốc
-          </span>
-          <span class="inline-flex items-center gap-1 font-semibold" :class="accentText[p.accent]">
-            <AppIcon name="trophy" class="h-3.5 w-3.5" />
-            {{ Math.round((p.nodes.filter((n) => n.status === 'completed').length / p.nodes.length) * 100) }}%
-          </span>
-        </div>
-      </button>
+      </div>
+
+      <div class="flex overflow-x-auto border-b border-border">
+        <button
+          v-for="path in paths"
+          :key="path.id"
+          type="button"
+          class="min-w-52 border-r border-border px-4 py-3 text-left text-sm hover:bg-zinc-900"
+          :class="path.id === activePathId ? 'bg-zinc-900 text-primary' : 'text-zinc-400'"
+          @click="selectPath(path.id)"
+        >
+          <span class="block font-mono text-[0.7rem] text-zinc-500">{{ path.code }}</span>
+          <span class="block font-semibold">{{ path.name }}</span>
+        </button>
+      </div>
     </section>
 
-    <!-- Roadmap + detail -->
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Roadmap -->
-      <div class="lg:col-span-2">
-        <SectionPanel :title="`Lộ trình · ${activePath.name}`" :subtitle="activePath.tagline" :icon="activePath.icon" :accent="activePath.accent">
-          <div class="relative py-2">
-            <!-- vertical guide line -->
-            <span class="pointer-events-none absolute bottom-4 left-1/2 top-4 hidden w-px -translate-x-1/2 bg-gradient-to-b from-white/[0.04] via-white/[0.12] to-white/[0.04] sm:block" aria-hidden="true" />
+    <div class="grid gap-4 xl:grid-cols-[1fr_360px]">
+      <section class="border border-border bg-zinc-950">
+        <div class="border-b border-border px-4 py-3">
+          <h2 class="text-sm font-semibold uppercase text-zinc-200">Modules & lessons</h2>
+          <p class="text-xs text-zinc-500">Accordion không che khuất nội dung học</p>
+        </div>
 
-            <ul class="space-y-3">
-              <li
-                v-for="(node, i) in activePath.nodes"
-                :key="node.id"
-                class="relative flex flex-col gap-3 sm:flex-row sm:items-center"
-                :class="isLeft(i) ? 'sm:flex-row' : 'sm:flex-row-reverse'"
-              >
-                <!-- connector chevron on the spine -->
-                <span
-                  class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 text-muted-foreground/40 sm:block"
-                  aria-hidden="true"
-                >
-                  <AppIcon name="dot" class="h-3 w-3" />
-                </span>
-
-                <!-- node button (half row) -->
-                <div class="sm:w-1/2" :class="isLeft(i) ? 'sm:pr-8' : 'sm:pl-8'">
-                  <button
-                    type="button"
-                    :disabled="node.status === 'locked'"
-                    :aria-label="node.title"
-                    class="group flex w-full items-center gap-3 rounded-2xl border p-3.5 text-left transition-all"
-                    :class="[
-                      nodeOuter(node),
-                      node.status === 'locked' ? 'cursor-not-allowed opacity-60' : 'hover:scale-[1.02]',
-                      selectedNode && selectedNode.id === node.id ? 'ring-2 ring-white/30' : ''
-                    ]"
-                    @click="selectNode(node)"
-                  >
-                    <span
-                      class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2"
-                      :class="
-                        node.status === 'completed'
-                          ? 'border-emerald-300/70 bg-emerald-500/25'
-                          : node.status === 'current'
-                            ? 'border-cyan-300/80 bg-cyan-500/25'
-                            : 'border-white/10 bg-white/[0.04]'
-                      "
-                    >
-                      <AppIcon :name="node.icon" class="h-5 w-5" />
-                    </span>
-                    <div class="min-w-0 flex-1">
-                      <p class="truncate text-sm font-semibold text-foreground">{{ node.title }}</p>
-                      <p class="flex items-center gap-2 text-xs">
-                        <span class="inline-flex items-center gap-1 text-amber-300">
-                          <AppIcon name="zap" class="h-3 w-3" /> {{ node.xp }} XP
-                        </span>
-                        <span class="text-muted-foreground">· {{ node.lessons }} bài</span>
-                      </p>
-                    </div>
-                    <span
-                      v-if="node.status === 'completed'"
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/30 text-emerald-200"
-                    >
-                      <AppIcon name="check" class="h-3.5 w-3.5" />
-                    </span>
-                    <span
-                      v-else-if="node.status === 'locked'"
-                      class="shrink-0 text-muted-foreground"
-                    >
-                      <AppIcon name="lock" class="h-4 w-4" />
-                    </span>
-                    <span v-else class="shrink-0 text-cyan-300">
-                      <AppIcon name="play" class="h-4 w-4" />
-                    </span>
-                  </button>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </SectionPanel>
-      </div>
-
-      <!-- Detail card -->
-      <div>
-        <SectionPanel title="Chi tiết cột mốc" subtitle="Nhấp vào một node để xem" icon="book-open" :accent="activePath.accent">
-          <div v-if="selectedNode" class="space-y-4">
-            <div class="flex items-center gap-3">
-              <span
-                class="flex h-12 w-12 items-center justify-center rounded-2xl"
-                :class="accentChip[activePath.accent]"
-              >
-                <AppIcon :name="selectedNode.status === 'completed' ? 'check-circle' : selectedNode.icon" class="h-6 w-6" />
-              </span>
-              <div class="min-w-0">
-                <p class="text-base font-semibold text-foreground">{{ selectedNode.title }}</p>
-                <span
-                  class="mt-0.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.7rem] font-medium"
-                  :class="
-                    selectedNode.status === 'completed'
-                      ? 'bg-emerald-500/15 text-emerald-300'
-                      : selectedNode.status === 'current'
-                        ? 'bg-cyan-500/15 text-cyan-300'
-                        : 'bg-white/[0.06] text-muted-foreground'
-                  "
-                >
-                  {{ selectedNode.status === 'completed' ? 'Đã hoàn thành' : selectedNode.status === 'current' ? 'Đang học' : 'Đã khoá' }}
-                </span>
-              </div>
-            </div>
-
-            <p class="text-sm leading-relaxed text-muted-foreground">{{ selectedNode.desc }}</p>
-
-            <div class="grid grid-cols-3 gap-2.5">
-              <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <p class="text-lg font-bold tabular-nums text-foreground">{{ selectedNode.lessons }}</p>
-                <p class="text-[0.65rem] uppercase tracking-wider text-muted-foreground">bài học</p>
-              </div>
-              <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <p class="text-lg font-bold tabular-nums text-amber-300">{{ selectedNode.xp }}</p>
-                <p class="text-[0.65rem] uppercase tracking-wider text-muted-foreground">XP</p>
-              </div>
-              <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <p class="inline-flex items-center justify-center gap-1 text-lg font-bold tabular-nums text-amber-300">
-                  <AppIcon name="coin" class="h-4 w-4" />{{ selectedNode.reward }}
-                </p>
-                <p class="text-[0.65rem] uppercase tracking-wider text-muted-foreground">thưởng</p>
-              </div>
-            </div>
-
+        <div class="divide-y divide-border">
+          <article v-for="(module, index) in activePath.modules" :key="module.id" class="bg-zinc-950">
             <button
               type="button"
-              :disabled="selectedNode.status === 'completed'"
-              class="cosmic-btn flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-              :class="selectedNode.status === 'completed' ? 'cursor-default opacity-60' : ''"
+              class="grid w-full gap-3 px-4 py-3 text-left hover:bg-zinc-900/70 md:grid-cols-[44px_1fr_120px_120px_32px] md:items-center"
+              :class="module.status === 'locked' ? 'cursor-not-allowed text-zinc-600' : 'text-zinc-200'"
+              :disabled="module.status === 'locked'"
+              @click="toggleModule(module)"
             >
-              <AppIcon :name="selectedNode.status === 'completed' ? 'check' : 'play'" class="h-4 w-4" />
-              {{ selectedNode.status === 'completed' ? 'Đã hoàn thành' : 'Tiếp tục học' }}
+              <span class="font-mono text-xs text-zinc-500">M{{ index + 1 }}</span>
+              <span>
+                <span class="block font-semibold">{{ module.title }}</span>
+                <span class="block text-xs text-zinc-500">{{ module.desc }}</span>
+              </span>
+              <span class="font-mono text-xs text-zinc-500">{{ module.lessons.length }} lessons</span>
+              <span class="border border-zinc-800 px-2 py-1 text-center text-xs" :class="module.status === 'current' ? 'text-primary' : 'text-zinc-400'">
+                {{ statusLabel(module.status) }}
+              </span>
+              <AppIcon :name="openModuleId === module.id ? 'chevron-down' : 'chevron-right'" class="h-4 w-4 justify-self-end text-zinc-500" />
             </button>
-          </div>
 
-          <div v-else class="flex flex-col items-center justify-center py-10 text-center">
-            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.04] text-muted-foreground">
-              <AppIcon name="compass" class="h-6 w-6" />
-            </span>
-            <p class="mt-2 text-sm font-medium text-foreground">Chọn một cột mốc</p>
-            <p class="mt-0.5 text-xs text-muted-foreground">Nhấp vào node đã mở khoá để xem chi tiết.</p>
-          </div>
-        </SectionPanel>
+            <div v-if="openModuleId === module.id" class="border-t border-border bg-zinc-900/40">
+              <div class="grid gap-4 px-4 py-4 lg:grid-cols-[1fr_220px]">
+                <ol class="divide-y divide-zinc-800 border border-zinc-800 bg-zinc-950">
+                  <li v-for="lesson in module.lessons" :key="lesson.id" class="grid gap-3 px-3 py-2.5 text-sm sm:grid-cols-[1fr_90px_96px] sm:items-center">
+                    <span class="font-medium" :class="lesson.status === 'locked' ? 'text-zinc-600' : 'text-zinc-200'">{{ lesson.title }}</span>
+                    <span class="font-mono text-xs text-zinc-500">{{ lesson.duration }}</span>
+                    <span class="border border-zinc-800 px-2 py-1 text-center text-xs" :class="lesson.status === 'current' ? 'text-primary' : 'text-zinc-400'">
+                      {{ statusLabel(lesson.status) }}
+                    </span>
+                  </li>
+                </ol>
 
-        <!-- Milestone markers -->
-        <SectionPanel title="Cột mốc thưởng" subtitle="Phần thưởng theo tiến độ" icon="gift" accent="amber" class="mt-6">
-          <ul class="space-y-3">
+                <div class="border border-zinc-800 bg-zinc-950 p-3">
+                  <p class="text-xs font-semibold uppercase text-zinc-500">Module summary</p>
+                  <dl class="mt-3 space-y-2 text-sm">
+                    <div class="flex justify-between gap-4">
+                      <dt class="text-zinc-500">XP</dt>
+                      <dd class="font-mono text-zinc-200">{{ module.xp }}</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                      <dt class="text-zinc-500">Reward</dt>
+                      <dd class="font-mono text-zinc-200">{{ module.reward }}</dd>
+                    </div>
+                    <div class="flex justify-between gap-4">
+                      <dt class="text-zinc-500">Status</dt>
+                      <dd class="text-zinc-200">{{ statusLabel(module.status) }}</dd>
+                    </div>
+                  </dl>
+                  <button
+                    type="button"
+                    class="mt-4 inline-flex w-full items-center justify-center gap-2 border border-primary bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground disabled:border-zinc-800 disabled:bg-zinc-900 disabled:text-zinc-600"
+                    :disabled="module.status === 'completed'"
+                  >
+                    <AppIcon :name="module.status === 'completed' ? 'check' : 'play'" class="h-4 w-4" />
+                    {{ module.status === 'completed' ? 'Đã hoàn thành' : 'Tiếp tục' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="space-y-4">
+        <section class="border border-border bg-zinc-950">
+          <div class="border-b border-border px-4 py-3">
+            <h2 class="text-sm font-semibold uppercase text-zinc-200">Module đang mở</h2>
+          </div>
+          <div class="space-y-3 px-4 py-3">
+            <p class="text-base font-semibold text-zinc-100">{{ activeModule.title }}</p>
+            <p class="text-sm text-zinc-500">{{ activeModule.desc }}</p>
+            <div class="grid grid-cols-3 border border-zinc-800 text-center text-xs">
+              <div class="border-r border-zinc-800 p-2">
+                <p class="font-mono text-zinc-200">{{ activeModule.lessons.length }}</p>
+                <p class="text-zinc-500">Bài</p>
+              </div>
+              <div class="border-r border-zinc-800 p-2">
+                <p class="font-mono text-zinc-200">{{ activeModule.xp }}</p>
+                <p class="text-zinc-500">XP</p>
+              </div>
+              <div class="p-2">
+                <p class="font-mono text-zinc-200">{{ activeModule.reward }}</p>
+                <p class="text-zinc-500">Thưởng</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="border border-border bg-zinc-950">
+          <div class="border-b border-border px-4 py-3">
+            <h2 class="text-sm font-semibold uppercase text-zinc-200">Mốc thưởng</h2>
+          </div>
+          <ul class="divide-y divide-border">
             <li
-              v-for="(milestone, mi) in [
+              v-for="milestone in [
                 { at: 25, label: 'Huy hiệu Đồng', reward: 100 },
                 { at: 50, label: 'Huy hiệu Bạc', reward: 250 },
                 { at: 75, label: 'Huy hiệu Vàng', reward: 500 },
                 { at: 100, label: 'Hoàn thành lộ trình', reward: 1000 }
               ]"
-              :key="mi"
-              class="flex items-center gap-3"
+              :key="milestone.at"
+              class="grid grid-cols-[64px_1fr_72px] gap-3 px-4 py-3 text-sm"
             >
-              <span
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2"
-                :class="
-                  progressPct >= milestone.at
-                    ? 'border-amber-300/70 bg-amber-500/20 text-amber-200'
-                    : 'border-white/10 bg-white/[0.03] text-muted-foreground'
-                "
-              >
-                <AppIcon :name="progressPct >= milestone.at ? 'check' : 'lock'" class="h-4 w-4" />
-              </span>
-              <div class="min-w-0 flex-1">
-                <p class="truncate text-sm font-medium text-foreground">{{ milestone.label }}</p>
-                <p class="text-xs text-muted-foreground">Đạt {{ milestone.at }}% tiến độ</p>
-              </div>
-              <span class="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-amber-300">
-                <AppIcon name="coin" class="h-3.5 w-3.5" /> {{ milestone.reward }}
-              </span>
+              <span class="font-mono text-xs text-zinc-500">{{ milestone.at }}%</span>
+              <span :class="progressPct >= milestone.at ? 'text-zinc-100' : 'text-zinc-600'">{{ milestone.label }}</span>
+              <span class="text-right font-mono text-xs text-zinc-500">+{{ milestone.reward }}</span>
             </li>
           </ul>
-        </SectionPanel>
-      </div>
+        </section>
+      </aside>
     </div>
-
-    <p class="pt-2 text-center text-xs text-muted-foreground/70">
-      Giao diện demo · dữ liệu hiển thị là mẫu, chưa kết nối hệ thống thực.
-    </p>
   </div>
 </template>

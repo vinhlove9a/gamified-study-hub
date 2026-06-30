@@ -572,7 +572,7 @@ function optionClasses(i: number): string {
         <button
           v-if="view !== 'catalog'"
           type="button"
-          class="inline-flex shrink-0 items-center gap-2 self-start rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
+          class="inline-flex shrink-0 items-center gap-2 self-start rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
           @click="backToCatalog"
         >
           <AppIcon name="chevron-left" class="h-4 w-4" />
@@ -593,17 +593,17 @@ function optionClasses(i: number): string {
         <div
           v-for="quiz in quizzes"
           :key="quiz.id"
-          class="group flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all hover:-translate-y-1 hover:border-white/[0.14]"
+          class="group flex flex-col gap-4 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-all hover:-translate-y-1 hover:border-white/[0.14]"
         >
           <div class="flex items-start justify-between gap-3">
             <span
-              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm transition-transform group-hover:scale-110"
               :class="quizIconClasses[quiz.accent]"
             >
               <AppIcon :name="quiz.icon" class="h-6 w-6" />
             </span>
             <span
-              class="rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold"
+              class="rounded-sm border px-2.5 py-1 text-[0.65rem] font-semibold"
               :class="difficultyMeta[quiz.difficulty].classes"
             >
               {{ difficultyMeta[quiz.difficulty].label }}
@@ -616,13 +616,13 @@ function optionClasses(i: number): string {
           </div>
 
           <div class="flex flex-wrap gap-2 text-xs">
-            <span class="inline-flex items-center gap-1 rounded-lg bg-white/[0.04] px-2 py-1 text-muted-foreground">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-white/[0.04] px-2 py-1 text-muted-foreground">
               <AppIcon name="list" class="h-3.5 w-3.5" />{{ quiz.questions.length }} câu
             </span>
-            <span class="inline-flex items-center gap-1 rounded-lg bg-white/[0.04] px-2 py-1 text-muted-foreground">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-white/[0.04] px-2 py-1 text-muted-foreground">
               <AppIcon name="clock" class="h-3.5 w-3.5" />~{{ quiz.estMinutes }} phút
             </span>
-            <span class="inline-flex items-center gap-1 rounded-lg bg-amber-500/10 px-2 py-1 text-amber-300">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-amber-300">
               <AppIcon name="coin" class="h-3.5 w-3.5" />{{ quiz.coinReward }}
             </span>
           </div>
@@ -636,7 +636,7 @@ function optionClasses(i: number): string {
             </span>
             <button
               type="button"
-              class="cosmic-btn rounded-xl px-3.5 py-1.5 text-xs font-semibold"
+              class="cosmic-btn rounded-sm px-3.5 py-1.5 text-xs font-semibold"
               @click="startQuiz(quiz)"
             >
               <AppIcon name="play" class="mr-1 inline h-3.5 w-3.5" />Bắt đầu
@@ -662,7 +662,7 @@ function optionClasses(i: number): string {
             <div class="mb-1.5 flex items-center justify-between text-sm">
               <span class="font-semibold text-foreground">Câu {{ qIndex + 1 }}/{{ totalQuestions }}</span>
               <span
-                class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors"
+                class="inline-flex items-center gap-1 rounded-sm px-2.5 py-1 text-xs font-semibold transition-colors"
                 :class="streak >= 2 ? 'bg-fuchsia-500/15 text-fuchsia-300 combo-glow' : 'bg-white/[0.06] text-muted-foreground'"
               >
                 <AppIcon name="flame" class="h-3.5 w-3.5" />
@@ -675,7 +675,7 @@ function optionClasses(i: number): string {
         </div>
 
         <!-- question -->
-        <div class="mt-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+        <div class="mt-6 rounded-sm border border-white/[0.06] bg-white/[0.02] p-5">
           <p class="text-lg font-semibold leading-relaxed text-foreground">{{ currentQuestion.text }}</p>
         </div>
 
@@ -685,13 +685,13 @@ function optionClasses(i: number): string {
             v-for="(opt, i) in currentQuestion.options"
             :key="i"
             type="button"
-            class="flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all"
+            class="flex items-center gap-3 rounded-sm border px-4 py-3.5 text-left text-sm font-medium transition-all"
             :class="optionClasses(i)"
             :disabled="checked"
             @click="selectOption(i)"
           >
             <span
-              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-xs font-bold"
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-white/10 bg-white/[0.04] text-xs font-bold"
             >
               {{ ['A', 'B', 'C', 'D'][i] }}
             </span>
@@ -713,7 +713,7 @@ function optionClasses(i: number): string {
         <transition name="fade-up">
           <div
             v-if="checked"
-            class="mt-4 flex items-start gap-2.5 rounded-xl border p-3.5 text-sm"
+            class="mt-4 flex items-start gap-2.5 rounded-sm border p-3.5 text-sm"
             :class="picked === currentQuestion.correct
               ? 'border-emerald-400/30 bg-emerald-500/[0.07] text-emerald-100'
               : 'border-amber-400/30 bg-amber-500/[0.07] text-amber-100'"
@@ -736,7 +736,7 @@ function optionClasses(i: number): string {
           <button
             v-if="!checked"
             type="button"
-            class="cosmic-btn rounded-xl px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
+            class="cosmic-btn rounded-sm px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40"
             :disabled="picked === null"
             @click="checkAnswer"
           >
@@ -745,7 +745,7 @@ function optionClasses(i: number): string {
           <button
             v-else
             type="button"
-            class="cosmic-btn rounded-xl px-5 py-2.5 text-sm font-semibold"
+            class="cosmic-btn rounded-sm px-5 py-2.5 text-sm font-semibold"
             @click="nextQuestion"
           >
             {{ qIndex === totalQuestions - 1 ? 'Xem kết quả' : 'Câu tiếp' }}
@@ -783,35 +783,35 @@ function optionClasses(i: number): string {
           <h2 class="text-xl font-bold text-foreground">{{ activeQuiz.title }}</h2>
 
           <div class="grid w-full max-w-xl grid-cols-2 gap-3 sm:grid-cols-4">
-            <div class="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.07] p-3">
+            <div class="rounded-sm border border-emerald-400/20 bg-emerald-500/[0.07] p-3">
               <p class="text-lg font-bold tabular-nums text-emerald-200">{{ correctCount }}</p>
               <p class="text-[0.65rem] text-muted-foreground">Câu đúng</p>
             </div>
-            <div class="rounded-xl border border-rose-400/20 bg-rose-500/[0.07] p-3">
+            <div class="rounded-sm border border-rose-400/20 bg-rose-500/[0.07] p-3">
               <p class="text-lg font-bold tabular-nums text-rose-200">{{ wrongCount }}</p>
               <p class="text-[0.65rem] text-muted-foreground">Câu sai</p>
             </div>
-            <div class="rounded-xl border border-violet-400/20 bg-violet-500/[0.07] p-3">
+            <div class="rounded-sm border border-violet-400/20 bg-violet-500/[0.07] p-3">
               <p class="text-lg font-bold tabular-nums text-violet-200">+{{ earnedXp }}</p>
               <p class="text-[0.65rem] text-muted-foreground">XP nhận</p>
             </div>
-            <div class="rounded-xl border border-amber-400/20 bg-amber-500/[0.07] p-3">
+            <div class="rounded-sm border border-amber-400/20 bg-amber-500/[0.07] p-3">
               <p class="text-lg font-bold tabular-nums text-amber-200">+{{ earnedCoin }}</p>
               <p class="text-[0.65rem] text-muted-foreground">Coin nhận</p>
             </div>
           </div>
 
-          <span class="rounded-full bg-fuchsia-500/15 px-3 py-1 text-xs font-semibold text-fuchsia-300">
+          <span class="rounded-sm bg-fuchsia-500/15 px-3 py-1 text-xs font-semibold text-fuchsia-300">
             <AppIcon name="flame" class="mr-1 inline h-3.5 w-3.5" />Chuỗi đúng dài nhất: {{ bestStreak }}
           </span>
 
           <div class="flex flex-wrap items-center justify-center gap-3">
-            <button type="button" class="cosmic-btn rounded-xl px-4 py-2 text-sm" @click="retryQuiz">
+            <button type="button" class="cosmic-btn rounded-sm px-4 py-2 text-sm" @click="retryQuiz">
               <AppIcon name="refresh" class="mr-1.5 inline h-4 w-4" />Làm lại
             </button>
             <button
               type="button"
-              class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
+              class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
               @click="backToCatalog"
             >
               <AppIcon name="list" class="h-4 w-4" />Về danh sách
@@ -831,14 +831,14 @@ function optionClasses(i: number): string {
           <div
             v-for="row in reviewRows"
             :key="row.index"
-            class="rounded-xl border p-4"
+            class="rounded-sm border p-4"
             :class="row.isCorrect
               ? 'border-emerald-400/20 bg-emerald-500/[0.04]'
               : 'border-rose-400/20 bg-rose-500/[0.04]'"
           >
             <div class="flex items-start gap-3">
               <span
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm text-xs font-bold"
                 :class="row.isCorrect ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/15 text-rose-300'"
               >
                 {{ row.index + 1 }}

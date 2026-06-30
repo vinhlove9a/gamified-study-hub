@@ -279,7 +279,7 @@ const accentDot: Record<Accent, string> = {
       <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p class="cosmic-badge">
-            <span class="fx-glow-pulse inline-block h-2 w-2 rounded-full bg-emerald-400" /> Cập nhật
+            <span class="fx-glow-pulse inline-block h-2 w-2 rounded-sm bg-emerald-400" /> Cập nhật
             trực tiếp
           </p>
           <h1 class="mt-2 text-2xl font-bold text-foreground sm:text-3xl">
@@ -292,7 +292,7 @@ const accentDot: Record<Accent, string> = {
         </div>
         <button
           type="button"
-          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-4 py-2.5 text-sm"
           @click="refresh"
         >
           <AppIcon name="refresh" class="h-4 w-4" /> Làm mới
@@ -307,10 +307,10 @@ const accentDot: Record<Accent, string> = {
           v-for="cat in categories"
           :key="cat.id"
           type="button"
-          class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
           :class="
             activeCategory === cat.id
-              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
               : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
           "
           @click="activeCategory = cat.id"
@@ -319,7 +319,7 @@ const accentDot: Record<Accent, string> = {
         </button>
       </div>
       <label
-        class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-xs text-muted-foreground"
+        class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-sm border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-xs text-muted-foreground"
       >
         <AppIcon name="bell" class="h-4 w-4" /> Thông báo khi có tài liệu mới
         <Toggle
@@ -341,20 +341,20 @@ const accentDot: Record<Accent, string> = {
     <div v-for="bucket in buckets" :key="bucket.id" class="space-y-3">
       <div class="flex items-center gap-3">
         <h2 class="text-sm font-semibold text-foreground">{{ bucket.label }}</h2>
-        <span class="rounded-full bg-white/[0.06] px-2 py-0.5 text-xs text-muted-foreground">{{
+        <span class="rounded-sm bg-white/[0.06] px-2 py-0.5 text-xs text-muted-foreground">{{
           bucket.items.length
         }}</span>
-        <div class="h-px flex-1 bg-gradient-to-r from-white/[0.1] to-transparent" />
+        <div class="h-px flex-1 from-white/[0.1] to-transparent" />
       </div>
       <transition-group name="new-row" tag="ul" class="space-y-2.5">
         <li
           v-for="doc in bucket.items"
           :key="doc.id"
-          class="fx-lift fx-sheen group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02] py-3 pl-4 pr-3"
+          class="fx-lift fx-sheen group relative flex items-center gap-3 overflow-hidden rounded-sm border border-white/[0.06] bg-white/[0.02] py-3 pl-4 pr-3"
         >
           <span class="absolute inset-y-0 left-0 w-1" :class="accentDot[doc.accent]" />
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[doc.accent]"
           >
             <AppIcon :name="doc.icon" class="h-5 w-5" />
@@ -363,7 +363,7 @@ const accentDot: Record<Accent, string> = {
             <div class="flex items-center gap-2">
               <span
                 v-if="doc.minutesAgo < 30"
-                class="fx-glow-pulse rounded-full bg-emerald-500/20 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-emerald-300"
+                class="fx-glow-pulse rounded-sm bg-emerald-500/20 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-emerald-300"
                 >Mới</span
               >
               <span class="text-[0.7rem] font-semibold uppercase tracking-wide text-cyan-300">{{
@@ -381,13 +381,13 @@ const accentDot: Record<Accent, string> = {
               ><AppIcon name="clock" class="h-3.5 w-3.5" /> {{ doc.readMinutes }}p</span
             >
             <span
-              class="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
+              class="inline-flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
               ><AppIcon name="coin" class="h-3.5 w-3.5" /> {{ doc.coins }}</span
             >
           </div>
           <button
             type="button"
-            class="shrink-0 rounded-lg p-2 transition-colors"
+            class="shrink-0 rounded-sm p-2 transition-colors"
             :class="doc.bookmarked ? 'text-cyan-300' : 'text-muted-foreground hover:text-cyan-300'"
             :aria-label="doc.bookmarked ? 'Bỏ lưu' : 'Lưu tài liệu'"
             @click="toggleBookmark(doc)"
@@ -405,7 +405,7 @@ const accentDot: Record<Accent, string> = {
     <div v-if="hasMore" class="flex justify-center">
       <button
         type="button"
-        class="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+        class="inline-flex items-center gap-2 rounded-sm border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
         @click="visibleCount += 4"
       >
         <AppIcon name="chevron-down" class="h-4 w-4" /> Tải thêm tài liệu

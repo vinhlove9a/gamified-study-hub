@@ -92,9 +92,9 @@ function rankMovement(e: RankEntry): 'up' | 'down' | 'steady' { return e.prevRan
 function movementIcon(m: 'up' | 'down' | 'steady') { return m === 'up' ? 'trending-up' : m === 'down' ? 'trending-down' : 'minus'; }
 function movementColor(m: 'up' | 'down' | 'steady') { return m === 'up' ? 'text-emerald-300' : m === 'down' ? 'text-rose-300' : 'text-muted-foreground'; }
 function rankBadgeClass(rank: number) {
-  if (rank === 1) return 'bg-gradient-to-br from-amber-300 to-amber-500 text-slate-900';
-  if (rank === 2) return 'bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900';
-  if (rank === 3) return 'bg-gradient-to-br from-orange-300 to-orange-500 text-slate-900';
+  if (rank === 1) return ' from-amber-300 to-amber-500 text-slate-900';
+  if (rank === 2) return ' from-slate-200 to-slate-400 text-slate-900';
+  if (rank === 3) return ' from-orange-300 to-orange-500 text-slate-900';
   return 'bg-white/[0.06] text-muted-foreground';
 }
 
@@ -112,11 +112,11 @@ const restEntries = computed(() => entries.value.slice(3));
           <p class="mt-1 text-sm text-muted-foreground">Cạnh tranh với bạn bè và cộng đồng. Leo rank để nhận phần thưởng!</p>
         </div>
         <div v-if="myEntry" class="flex items-center gap-3">
-          <div class="rounded-xl border border-cyan-400/20 bg-cyan-500/10 px-4 py-2.5 text-center">
+          <div class="rounded-sm border border-cyan-400/20 bg-cyan-500/10 px-4 py-2.5 text-center">
             <p class="text-lg font-bold leading-none text-cyan-200">#{{ myRank }}</p>
             <p class="mt-0.5 text-[0.65rem] text-muted-foreground">Xếp hạng của bạn</p>
           </div>
-          <div v-if="nextEntry" class="rounded-xl border border-violet-400/20 bg-violet-500/10 px-4 py-2.5 text-center">
+          <div v-if="nextEntry" class="rounded-sm border border-violet-400/20 bg-violet-500/10 px-4 py-2.5 text-center">
             <p class="text-lg font-bold leading-none text-violet-200">{{ xpToNext.toLocaleString('vi-VN') }}</p>
             <p class="mt-0.5 text-[0.65rem] text-muted-foreground">XP đến #{{ nextEntry.rank }}</p>
           </div>
@@ -128,15 +128,15 @@ const restEntries = computed(() => entries.value.slice(3));
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <Tabs :tabs="[...windowTabs]" :model-value="activeWindow" @update:model-value="(v) => (activeWindow = v as WindowId)" />
       <div class="flex gap-2">
-        <button v-for="s in scopeTabs" :key="s.id" type="button" class="rounded-xl border px-3.5 py-1.5 text-xs font-medium transition-all" :class="activeScope === s.id ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300' : 'border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground'" @click="activeScope = s.id">{{ s.label }}</button>
+        <button v-for="s in scopeTabs" :key="s.id" type="button" class="rounded-sm border px-3.5 py-1.5 text-xs font-medium transition-all" :class="activeScope === s.id ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300' : 'border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground'" @click="activeScope = s.id">{{ s.label }}</button>
       </div>
     </div>
 
     <!-- Top 3 podium -->
     <div class="grid grid-cols-3 gap-3 sm:gap-4">
-      <div v-for="entry in [...top3].sort((a, b) => b.rank - a.rank)" :key="entry.name" class="flex flex-col items-center gap-2 rounded-2xl border p-4 text-center" :class="entry.isMe ? 'border-cyan-400/30 bg-cyan-500/[0.06]' : 'border-white/[0.06] bg-white/[0.02]'">
+      <div v-for="entry in [...top3].sort((a, b) => b.rank - a.rank)" :key="entry.name" class="flex flex-col items-center gap-2 rounded-sm border p-4 text-center" :class="entry.isMe ? 'border-cyan-400/30 bg-cyan-500/[0.06]' : 'border-white/[0.06] bg-white/[0.02]'">
         <div class="relative">
-          <span class="flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold" :class="rankBadgeClass(entry.rank)">{{ entry.rank }}</span>
+          <span class="flex h-12 w-12 items-center justify-center rounded-sm text-lg font-bold" :class="rankBadgeClass(entry.rank)">{{ entry.rank }}</span>
           <span v-if="entry.rank === 1" class="absolute -top-3 left-1/2 -translate-x-1/2 text-lg">👑</span>
         </div>
         <Avatar :name="entry.name" :size="40" :accent="entry.accent" />
@@ -153,14 +153,14 @@ const restEntries = computed(() => entries.value.slice(3));
     <SectionPanel title="Bảng xếp hạng đầy đủ" icon="trophy" accent="amber" :flush="true">
       <div class="cosmic-scroll max-h-[480px] overflow-y-auto">
         <div v-for="entry in restEntries" :key="entry.name" class="flex items-center gap-3 border-b border-white/[0.03] px-5 py-3 last:border-0" :class="entry.isMe ? 'bg-cyan-500/[0.06]' : ''">
-          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold" :class="rankBadgeClass(entry.rank)">{{ entry.rank }}</span>
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm text-xs font-bold" :class="rankBadgeClass(entry.rank)">{{ entry.rank }}</span>
           <Avatar :name="entry.name" :size="36" :accent="entry.accent" />
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-medium" :class="entry.isMe ? 'text-cyan-200' : 'text-foreground'">{{ entry.name }}<span v-if="entry.isMe" class="text-muted-foreground"> (bạn)</span></p>
             <div class="flex items-center gap-3 text-xs text-muted-foreground">
               <span class="inline-flex items-center gap-0.5"><AppIcon name="flame" class="h-3 w-3 text-orange-300" />{{ entry.streak }}</span>
               <span class="inline-flex items-center gap-0.5"><AppIcon name="coin" class="h-3 w-3 text-amber-300" />{{ entry.coins.toLocaleString('vi-VN') }}</span>
-              <span class="rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[0.6rem] font-medium" :style="{ color: getTier(entry.rank).color }">{{ entry.tier }}</span>
+              <span class="rounded-sm bg-white/[0.06] px-1.5 py-0.5 text-[0.6rem] font-medium" :style="{ color: getTier(entry.rank).color }">{{ entry.tier }}</span>
             </div>
           </div>
           <div class="shrink-0 text-right">
@@ -176,20 +176,20 @@ const restEntries = computed(() => entries.value.slice(3));
     <!-- Reward tiers -->
     <SectionPanel title="Phần thưởng theo hạng" subtitle="Phần thưởng được chốt cuối mỗi kỳ" icon="gift" accent="violet">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <div v-for="tier in tierThresholds" :key="tier.tier" class="rounded-2xl border p-4" :class="myRank >= tier.minRank && myRank <= tier.maxRank ? 'border-cyan-400/30 bg-cyan-500/[0.06]' : 'border-white/[0.06] bg-white/[0.02]'">
+        <div v-for="tier in tierThresholds" :key="tier.tier" class="rounded-sm border p-4" :class="myRank >= tier.minRank && myRank <= tier.maxRank ? 'border-cyan-400/30 bg-cyan-500/[0.06]' : 'border-white/[0.06] bg-white/[0.02]'">
           <div class="flex items-center gap-2">
-            <span class="h-3 w-3 rounded-full" :style="{ backgroundColor: tier.color, boxShadow: `0 0 8px ${tier.color}80` }" />
+            <span class="h-3 w-3 rounded-sm" :style="{ backgroundColor: tier.color, boxShadow: `0 0 8px ${tier.color}80` }" />
             <span class="text-sm font-bold" :style="{ color: tier.color }">{{ tier.tier }}</span>
           </div>
           <p class="mt-2 text-xs text-muted-foreground">Hạng {{ tier.minRank === tier.maxRank ? tier.minRank : `${tier.minRank}–${tier.maxRank === 99 ? '∞' : tier.maxRank}` }}</p>
           <p class="mt-1.5 text-sm font-medium text-foreground">{{ tier.reward }}</p>
-          <div v-if="myRank >= tier.minRank && myRank <= tier.maxRank" class="mt-2 inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-300"><AppIcon name="check-circle" class="h-3 w-3" />Hạng hiện tại</div>
+          <div v-if="myRank >= tier.minRank && myRank <= tier.maxRank" class="mt-2 inline-flex items-center gap-1 rounded-sm bg-emerald-500/10 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-300"><AppIcon name="check-circle" class="h-3 w-3" />Hạng hiện tại</div>
         </div>
       </div>
     </SectionPanel>
 
     <!-- My progress to next rank -->
-    <div v-if="nextEntry && myEntry" class="rounded-2xl border border-violet-400/20 bg-violet-500/[0.06] p-5">
+    <div v-if="nextEntry && myEntry" class="rounded-sm border border-violet-400/20 bg-violet-500/[0.06] p-5">
       <div class="flex items-center justify-between gap-4">
         <div>
           <p class="text-sm font-semibold text-foreground">Tiến tới hạng #{{ nextEntry.rank }}</p>

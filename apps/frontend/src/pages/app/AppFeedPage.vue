@@ -299,7 +299,7 @@ const stats = [
       <GlassPanel v-for="s in stats" :key="s.label" :glow="s.accent" hover padded>
         <div class="flex items-center gap-3">
           <span
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[s.accent]"
           >
             <AppIcon :name="s.icon" class="h-5 w-5" />
@@ -334,7 +334,7 @@ const stats = [
                     v-for="m in composerMoods"
                     :key="m.id"
                     type="button"
-                    class="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                    class="inline-flex items-center gap-1.5 rounded-sm border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                     @click="applyMood(m.label)"
                   >
                     <AppIcon :name="m.icon" class="h-3.5 w-3.5" /> {{ m.label }}
@@ -342,7 +342,7 @@ const stats = [
                 </div>
                 <button
                   type="button"
-                  class="cosmic-btn inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm disabled:opacity-50"
+                  class="cosmic-btn inline-flex items-center gap-1.5 rounded-sm px-4 py-2 text-sm disabled:opacity-50"
                   :disabled="!draft.trim()"
                   @click="postDraft"
                 >
@@ -359,10 +359,10 @@ const stats = [
             v-for="f in filters"
             :key="f.id"
             type="button"
-            class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+            class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
             :class="
               activeFilter === f.id
-                ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+                ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
                 : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
             "
             @click="activeFilter = f.id"
@@ -388,7 +388,7 @@ const stats = [
                   <span class="text-xs text-muted-foreground">· {{ item.time }}</span>
                 </div>
                 <span
-                  class="mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.65rem] font-medium"
+                  class="mt-1 inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[0.65rem] font-medium"
                   :class="accentChip[kindMeta[item.kind].accent]"
                 >
                   <AppIcon :name="kindMeta[item.kind].icon" class="h-3 w-3" />
@@ -397,7 +397,7 @@ const stats = [
               </div>
               <button
                 type="button"
-                class="shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+                class="shrink-0 rounded-sm p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
                 aria-label="Tuỳ chọn"
               >
                 <AppIcon name="more" class="h-4 w-4" />
@@ -409,10 +409,10 @@ const stats = [
             <!-- Embed -->
             <div
               v-if="item.embed"
-              class="mt-3 flex items-center gap-3 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3"
+              class="mt-3 flex items-center gap-3 rounded-sm border border-white/[0.07] bg-white/[0.02] p-3"
             >
               <span
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
                 :class="accentChip[item.embed.accent]"
               >
                 <AppIcon :name="item.embed.icon" class="h-5 w-5" />
@@ -423,7 +423,7 @@ const stats = [
               </div>
               <span
                 v-if="item.embed.meta"
-                class="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
+                class="inline-flex shrink-0 items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
               >
                 <AppIcon name="coin" class="h-3.5 w-3.5" /> {{ item.embed.meta }}
               </span>
@@ -433,7 +433,7 @@ const stats = [
             <div class="mt-3 flex items-center gap-1 border-t border-white/[0.06] pt-3">
               <button
                 type="button"
-                class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors"
+                class="inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors"
                 :class="item.liked ? 'text-rose-300' : 'text-muted-foreground hover:text-rose-300'"
                 @click="toggleLike(item)"
               >
@@ -442,13 +442,13 @@ const stats = [
               </button>
               <button
                 type="button"
-                class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-cyan-300"
+                class="inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-cyan-300"
               >
                 <AppIcon name="message" class="h-4 w-4" /> {{ item.comments }}
               </button>
               <button
                 type="button"
-                class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors"
+                class="inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors"
                 :class="
                   item.reposted
                     ? 'text-emerald-300'
@@ -460,7 +460,7 @@ const stats = [
               </button>
               <button
                 type="button"
-                class="ml-auto inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-violet-300"
+                class="ml-auto inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-violet-300"
                 @click="share"
               >
                 <AppIcon name="share" class="h-4 w-4" /> Chia sẻ
@@ -471,7 +471,7 @@ const stats = [
 
         <p
           v-if="filteredItems.length === 0"
-          class="rounded-2xl border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
+          class="rounded-sm border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
         >
           Chưa có hoạt động nào trong mục này.
         </p>
@@ -490,7 +490,7 @@ const stats = [
               <span class="relative">
                 <Avatar :name="f.name" :accent="f.accent" :size="38" />
                 <span
-                  class="fx-glow-pulse absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[oklch(0.13_0.025_280)] bg-emerald-400"
+                  class="fx-glow-pulse absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-sm border-2 border-[oklch(0.13_0.025_280)] bg-emerald-400"
                 />
               </span>
               <div class="min-w-0 flex-1">
@@ -511,7 +511,7 @@ const stats = [
               </div>
               <button
                 type="button"
-                class="shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
+                class="shrink-0 rounded-sm border px-3 py-1.5 text-xs font-semibold transition-colors"
                 :class="
                   s.followed
                     ? 'border-white/[0.12] bg-white/[0.04] text-muted-foreground'
@@ -531,7 +531,7 @@ const stats = [
               v-for="tag in trendingTags"
               :key="tag"
               to="/app/trending"
-              class="rounded-full border border-white/[0.07] bg-white/[0.02] px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-amber-400/40 hover:text-amber-200"
+              class="rounded-sm border border-white/[0.07] bg-white/[0.02] px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-amber-400/40 hover:text-amber-200"
             >
               {{ tag }}
             </RouterLink>

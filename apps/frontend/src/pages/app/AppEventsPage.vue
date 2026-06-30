@@ -326,7 +326,7 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
     <GlassPanel glow="magenta" class="event-hero relative p-6 sm:p-8">
       <div class="relative z-10 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-center">
         <div>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-fuchsia-500/15 px-3 py-1 text-xs font-semibold text-fuchsia-200">
+          <span class="inline-flex items-center gap-1.5 rounded-sm bg-fuchsia-500/15 px-3 py-1 text-xs font-semibold text-fuchsia-200">
             <AppIcon name="star" class="h-3.5 w-3.5" /> Sự kiện nổi bật
           </span>
           <h2 class="mt-3 text-xl font-bold text-foreground sm:text-2xl">
@@ -348,7 +348,7 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
 
           <button
             type="button"
-            class="mt-5 inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all"
+            class="mt-5 inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold transition-all"
             :class="featuredRegistered
               ? 'border border-emerald-400/40 bg-emerald-500/15 text-emerald-200'
               : 'cosmic-btn'"
@@ -360,13 +360,13 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
         </div>
 
         <!-- Countdown -->
-        <div class="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5">
+        <div class="rounded-sm border border-white/[0.08] bg-white/[0.03] p-5">
           <p class="text-center text-xs uppercase tracking-wider text-muted-foreground">Bắt đầu sau</p>
           <div class="mt-3 grid grid-cols-4 gap-2 sm:gap-3">
             <div
               v-for="unit in countdownUnits"
               :key="unit.label"
-              class="rounded-xl border border-white/[0.06] bg-white/[0.03] py-3 text-center"
+              class="rounded-sm border border-white/[0.06] bg-white/[0.03] py-3 text-center"
             >
               <p class="text-2xl font-bold tabular-nums text-foreground sm:text-3xl">{{ unit.value }}</p>
               <p class="mt-0.5 text-[0.65rem] uppercase text-muted-foreground">{{ unit.label }}</p>
@@ -383,7 +383,7 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
     <section class="grid grid-cols-2 gap-4 lg:grid-cols-4">
       <GlassPanel v-for="kpi in kpis" :key="kpi.label" :glow="kpi.accent" hover padded>
         <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[kpi.accent]">
+          <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="accentChip[kpi.accent]">
             <AppIcon :name="kpi.icon" class="h-5 w-5" />
           </span>
           <div>
@@ -408,10 +408,10 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
           <article
             v-for="ev in group.items"
             :key="ev.id"
-            class="flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12] sm:flex-row sm:items-center"
+            class="flex flex-col gap-4 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12] sm:flex-row sm:items-center"
           >
             <!-- date badge -->
-            <div class="flex w-14 shrink-0 flex-col items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] py-2">
+            <div class="flex w-14 shrink-0 flex-col items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] py-2">
               <span class="text-lg font-bold tabular-nums text-foreground">{{ ev.day }}</span>
               <span class="text-[0.6rem] uppercase tracking-wide text-muted-foreground">{{ ev.month }}</span>
             </div>
@@ -420,14 +420,14 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
             <div class="min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-2">
                 <span
-                  class="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[0.65rem] font-semibold"
+                  class="inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 text-[0.65rem] font-semibold"
                   :class="typeBadge[typeMeta[ev.type].accent]"
                 >
                   <AppIcon :name="typeMeta[ev.type].icon" class="h-3 w-3" />
                   {{ typeMeta[ev.type].label }}
                 </span>
                 <span
-                  class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[0.65rem] font-semibold"
+                  class="inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[0.65rem] font-semibold"
                   :class="ev.status === 'live'
                     ? 'bg-fuchsia-500/15 text-fuchsia-200 pulse-glow-magenta'
                     : ev.status === 'upcoming'
@@ -436,7 +436,7 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
                 >
                   <span
                     v-if="ev.status === 'live'"
-                    class="h-1.5 w-1.5 animate-pulse rounded-full bg-fuchsia-300"
+                    class="h-1.5 w-1.5 animate-pulse rounded-sm bg-fuchsia-300"
                   />
                   {{ statusMeta[ev.status].label }}
                 </span>
@@ -462,7 +462,7 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
             <button
               v-if="ev.status !== 'past'"
               type="button"
-              class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition-colors"
+              class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-sm border px-4 py-2 text-sm font-semibold transition-colors"
               :class="ev.registered
                 ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-200'
                 : 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200 hover:bg-cyan-500/25'"
@@ -473,14 +473,14 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
             </button>
             <span
               v-else
-              class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-white/[0.08] px-4 py-2 text-sm text-muted-foreground"
+              class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border border-white/[0.08] px-4 py-2 text-sm text-muted-foreground"
             >
               <AppIcon name="play" class="h-4 w-4" /> Xem lại
             </span>
           </article>
         </div>
 
-        <p v-if="filteredEvents.length === 0" class="rounded-2xl border border-white/[0.06] bg-white/[0.02] py-10 text-center text-sm text-muted-foreground">
+        <p v-if="filteredEvents.length === 0" class="rounded-sm border border-white/[0.06] bg-white/[0.02] py-10 text-center text-sm text-muted-foreground">
           Hiện chưa có sự kiện nào trong mục này.
         </p>
       </div>
@@ -497,10 +497,10 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
             <li
               v-for="ev in myCalendar"
               :key="ev.id"
-              class="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5"
+              class="flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-2.5"
             >
               <span
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm"
                 :class="accentChip[typeMeta[ev.type].accent]"
               >
                 <AppIcon :name="typeMeta[ev.type].icon" class="h-4 w-4" />
@@ -511,14 +511,14 @@ const countdownUnits = computed<{ label: string; value: string }[]>(() => [
               </div>
               <span
                 v-if="ev.status === 'live'"
-                class="inline-flex items-center gap-1 rounded-md bg-fuchsia-500/15 px-1.5 py-0.5 text-[0.6rem] font-semibold text-fuchsia-200 pulse-glow-magenta"
+                class="inline-flex items-center gap-1 rounded-sm bg-fuchsia-500/15 px-1.5 py-0.5 text-[0.6rem] font-semibold text-fuchsia-200 pulse-glow-magenta"
               >
                 LIVE
               </span>
             </li>
           </ul>
           <div v-else class="py-6 text-center">
-            <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.04] text-muted-foreground">
+            <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-sm bg-white/[0.04] text-muted-foreground">
               <AppIcon name="calendar" class="h-6 w-6" />
             </span>
             <p class="mt-3 text-sm text-muted-foreground">Bạn chưa đăng ký sự kiện nào.</p>

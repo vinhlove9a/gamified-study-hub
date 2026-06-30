@@ -270,14 +270,14 @@ onUnmounted(() => {
       </div>
       <div class="flex shrink-0 items-center gap-2">
         <span
-          class="inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-violet-200"
+          class="inline-flex items-center gap-1.5 rounded-sm border border-violet-400/30 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-violet-200"
         >
           <AppIcon name="sparkles" class="h-3.5 w-3.5" />
           Study AI · v2
         </span>
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-muted-foreground hover:border-rose-400/40 hover:text-rose-200"
+          class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-muted-foreground hover:border-rose-400/40 hover:text-rose-200"
           @click="clearConversation"
         >
           <AppIcon name="trash" class="h-4 w-4" />
@@ -292,7 +292,7 @@ onUnmounted(() => {
       <aside class="space-y-4">
         <button
           type="button"
-          class="cosmic-btn flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+          class="cosmic-btn flex w-full items-center justify-center gap-2 rounded-sm px-4 py-2.5 text-sm"
           @click="startNewConversation"
         >
           <AppIcon name="plus" class="h-4 w-4" />
@@ -300,7 +300,7 @@ onUnmounted(() => {
         </button>
 
         <!-- Recent chats -->
-        <div class="glass-panel overflow-hidden rounded-2xl">
+        <div class="glass-panel overflow-hidden rounded-sm">
           <p class="px-4 pb-2 pt-3.5 text-[0.7rem] font-semibold uppercase tracking-wider text-muted-foreground">
             Gần đây
           </p>
@@ -309,7 +309,7 @@ onUnmounted(() => {
               v-for="conv in conversations"
               :key="conv.id"
               type="button"
-              class="group flex w-full flex-col gap-0.5 rounded-xl border px-3 py-2.5 text-left transition-colors"
+              class="group flex w-full flex-col gap-0.5 rounded-sm border px-3 py-2.5 text-left transition-colors"
               :class="
                 conv.id === activeConversationId
                   ? 'border-cyan-400/30 bg-cyan-500/10'
@@ -326,7 +326,7 @@ onUnmounted(() => {
                 </span>
                 <span
                   v-if="conv.unread"
-                  class="h-2 w-2 shrink-0 rounded-full bg-cyan-400 shadow-[0_0_8px_oklch(0.78_0.18_195/70%)]"
+                  class="h-2 w-2 shrink-0 rounded-sm bg-cyan-400"
                 />
               </div>
               <span class="truncate text-xs text-muted-foreground">{{ conv.preview }}</span>
@@ -336,7 +336,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Suggested prompts -->
-        <div class="glass-panel overflow-hidden rounded-2xl p-3">
+        <div class="glass-panel overflow-hidden rounded-sm p-3">
           <p class="px-1 pb-2 text-[0.7rem] font-semibold uppercase tracking-wider text-muted-foreground">
             Gợi ý nhanh
           </p>
@@ -345,10 +345,10 @@ onUnmounted(() => {
               v-for="prompt in suggestedPrompts"
               :key="prompt.id"
               type="button"
-              class="flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:border-violet-400/30 hover:bg-violet-500/10 hover:text-violet-100"
+              class="flex items-center gap-2.5 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:border-violet-400/30 hover:bg-violet-500/10 hover:text-violet-100"
               @click="usePrompt(prompt)"
             >
-              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm bg-violet-500/10 text-violet-300">
                 <AppIcon :name="prompt.icon" class="h-4 w-4" />
               </span>
               {{ prompt.label }}
@@ -358,11 +358,11 @@ onUnmounted(() => {
       </aside>
 
       <!-- ── Chat panel ───────────────────────────────────────────────────── -->
-      <section class="glass-panel flex h-[600px] flex-col overflow-hidden rounded-2xl">
+      <section class="glass-panel flex h-[600px] flex-col overflow-hidden rounded-sm">
         <!-- Chat header -->
         <header class="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
           <div class="flex min-w-0 items-center gap-3">
-            <span class="orb-avatar flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white">
+            <span class="orb-avatar flex h-9 w-9 shrink-0 items-center justify-center rounded-sm text-white">
               <AppIcon name="bot" class="h-5 w-5" />
             </span>
             <div class="min-w-0">
@@ -370,11 +370,11 @@ onUnmounted(() => {
                 {{ activeConversation?.title ?? 'Study AI' }}
               </p>
               <p class="flex items-center gap-1.5 text-xs text-emerald-300">
-                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Đang hoạt động
+                <span class="h-1.5 w-1.5 rounded-sm bg-emerald-400" /> Đang hoạt động
               </p>
             </div>
           </div>
-          <span class="inline-flex items-center gap-1.5 rounded-lg bg-white/[0.04] px-2.5 py-1 text-xs text-muted-foreground">
+          <span class="inline-flex items-center gap-1.5 rounded-sm bg-white/[0.04] px-2.5 py-1 text-xs text-muted-foreground">
             <AppIcon name="zap" class="h-3.5 w-3.5 text-amber-300" />
             Study AI · v2
           </span>
@@ -387,7 +387,7 @@ onUnmounted(() => {
             v-if="messages.length === 0"
             class="flex h-full flex-col items-center justify-center text-center"
           >
-            <span class="orb-avatar flex h-16 w-16 items-center justify-center rounded-full text-white">
+            <span class="orb-avatar flex h-16 w-16 items-center justify-center rounded-sm text-white">
               <AppIcon name="bot" class="h-8 w-8" />
             </span>
             <p class="mt-4 text-base font-semibold text-foreground">Bắt đầu cuộc trò chuyện</p>
@@ -405,16 +405,16 @@ onUnmounted(() => {
           >
             <span
               v-if="msg.role === 'ai'"
-              class="orb-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
+              class="orb-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-sm text-white"
             >
               <AppIcon name="bot" class="h-4 w-4" />
             </span>
             <div
-              class="max-w-[78%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed"
+              class="max-w-[78%] rounded-sm px-4 py-2.5 text-sm leading-relaxed"
               :class="
                 msg.role === 'user'
-                  ? 'rounded-br-md bg-gradient-to-br from-cyan-500/25 to-blue-600/20 text-cyan-50 shadow-[0_0_18px_oklch(0.78_0.18_195/15%)]'
-                  : 'rounded-bl-md border border-white/[0.06] bg-white/[0.03] text-foreground'
+                  ? 'rounded-sm from-cyan-500/25 to-blue-600/20 text-cyan-50'
+                  : 'rounded-sm border border-white/[0.06] bg-white/[0.03] text-foreground'
               "
             >
               {{ msg.text }}<span v-if="msg.streaming" class="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse rounded-sm bg-cyan-300 align-middle" />
@@ -423,13 +423,13 @@ onUnmounted(() => {
 
           <!-- Typing indicator -->
           <div v-if="isTyping" class="flex items-end gap-2.5">
-            <span class="orb-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white">
+            <span class="orb-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-sm text-white">
               <AppIcon name="bot" class="h-4 w-4" />
             </span>
-            <div class="flex items-center gap-1.5 rounded-2xl rounded-bl-md border border-white/[0.06] bg-white/[0.03] px-4 py-3">
-              <span class="typing-dot h-2 w-2 rounded-full bg-muted-foreground" style="animation-delay: 0ms" />
-              <span class="typing-dot h-2 w-2 rounded-full bg-muted-foreground" style="animation-delay: 160ms" />
-              <span class="typing-dot h-2 w-2 rounded-full bg-muted-foreground" style="animation-delay: 320ms" />
+            <div class="flex items-center gap-1.5 rounded-sm rounded-sm border border-white/[0.06] bg-white/[0.03] px-4 py-3">
+              <span class="typing-dot h-2 w-2 rounded-sm bg-muted-foreground" style="animation-delay: 0ms" />
+              <span class="typing-dot h-2 w-2 rounded-sm bg-muted-foreground" style="animation-delay: 160ms" />
+              <span class="typing-dot h-2 w-2 rounded-sm bg-muted-foreground" style="animation-delay: 320ms" />
             </div>
           </div>
         </div>
@@ -446,7 +446,7 @@ onUnmounted(() => {
             />
             <button
               type="button"
-              class="cosmic-btn flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl"
+              class="cosmic-btn flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-sm"
               :disabled="!canSend"
               aria-label="Gửi tin nhắn"
               @click="sendMessage"

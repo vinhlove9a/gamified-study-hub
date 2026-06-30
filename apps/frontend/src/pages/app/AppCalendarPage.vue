@@ -275,7 +275,7 @@ const heatLevelClass: Record<number, string> = {
   1: 'bg-emerald-500/25',
   2: 'bg-emerald-500/45',
   3: 'bg-emerald-400/70',
-  4: 'bg-emerald-300 shadow-[0_0_8px_oklch(0.75_0.18_145/60%)]'
+  4: 'bg-emerald-300'
 };
 
 // Upcoming sessions (next 7 days from today, sorted)
@@ -342,7 +342,7 @@ const kpis = computed<KpiTile[]>(() => {
           </p>
         </div>
         <div class="flex shrink-0 items-center gap-2">
-          <button type="button" class="cosmic-btn inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm" @click="goToday">
+          <button type="button" class="cosmic-btn inline-flex items-center gap-1.5 rounded-sm px-4 py-2 text-sm" @click="goToday">
             <AppIcon name="calendar" class="h-4 w-4" /> Hôm nay
           </button>
         </div>
@@ -375,7 +375,7 @@ const kpis = computed<KpiTile[]>(() => {
               <button
                 type="button"
                 aria-label="Tháng trước"
-                class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="flex h-8 w-8 items-center justify-center rounded-sm border border-white/[0.08] text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                 @click="goPrev"
               >
                 <AppIcon name="chevron-left" class="h-4 w-4" />
@@ -383,7 +383,7 @@ const kpis = computed<KpiTile[]>(() => {
               <button
                 type="button"
                 aria-label="Tháng sau"
-                class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="flex h-8 w-8 items-center justify-center rounded-sm border border-white/[0.08] text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                 @click="goNext"
               >
                 <AppIcon name="chevron-right" class="h-4 w-4" />
@@ -410,23 +410,23 @@ const kpis = computed<KpiTile[]>(() => {
                 type="button"
                 :disabled="!cell.inMonth"
                 :aria-label="`Ngày ${cell.date}`"
-                class="group relative flex aspect-square flex-col items-center justify-start rounded-xl border p-1.5 text-left transition-all"
+                class="group relative flex aspect-square flex-col items-center justify-start rounded-sm border p-1.5 text-left transition-all"
                 :class="[
                   cell.inMonth
                     ? 'border-white/[0.06] bg-white/[0.02] hover:border-cyan-400/40 hover:bg-white/[0.05]'
                     : 'cursor-default border-transparent bg-transparent opacity-40',
                   cell.inMonth ? intensityRing[cell.intensity] : '',
                   selectedKey === cell.key && cell.inMonth
-                    ? 'border-cyan-400/60 bg-cyan-500/[0.08] shadow-[0_0_18px_oklch(0.78_0.18_195/35%)]'
+                    ? 'border-cyan-400/60 bg-cyan-500/[0.08]'
                     : ''
                 ]"
                 @click="selectDay(cell)"
               >
                 <span
-                  class="flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold tabular-nums"
+                  class="flex h-6 w-6 items-center justify-center rounded-sm text-xs font-semibold tabular-nums"
                   :class="
                     cell.isToday
-                      ? 'bg-cyan-400 text-slate-900 shadow-[0_0_12px_oklch(0.78_0.18_195/60%)]'
+                      ? 'bg-cyan-400 text-slate-900'
                       : cell.inMonth
                         ? 'text-foreground'
                         : 'text-muted-foreground'
@@ -438,7 +438,7 @@ const kpis = computed<KpiTile[]>(() => {
                   <span
                     v-for="s in cell.sessions.slice(0, 3)"
                     :key="s.id"
-                    class="h-1.5 w-1.5 rounded-full"
+                    class="h-1.5 w-1.5 rounded-sm"
                     :class="sessionTypeMeta[s.type].dot"
                   />
                   <span v-if="cell.sessions.length > 3" class="text-[0.55rem] font-semibold text-muted-foreground">
@@ -456,7 +456,7 @@ const kpis = computed<KpiTile[]>(() => {
               :key="key"
               class="inline-flex items-center gap-1.5"
             >
-              <span class="h-2 w-2 rounded-full" :class="meta.dot" /> {{ meta.label }}
+              <span class="h-2 w-2 rounded-sm" :class="meta.dot" /> {{ meta.label }}
             </span>
           </div>
         </SectionPanel>
@@ -469,9 +469,9 @@ const kpis = computed<KpiTile[]>(() => {
             <div
               v-for="s in selectedSessions"
               :key="s.id"
-              class="group flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-colors hover:border-white/[0.12]"
+              class="group flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3 transition-colors hover:border-white/[0.12]"
             >
-              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" :class="sessionTypeMeta[s.type].chip">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm" :class="sessionTypeMeta[s.type].chip">
                 <AppIcon :name="sessionTypeMeta[s.type].icon" class="h-4 w-4" />
               </span>
               <div class="min-w-0 flex-1">
@@ -482,15 +482,15 @@ const kpis = computed<KpiTile[]>(() => {
               <button
                 type="button"
                 aria-label="Xoá phiên học"
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-muted-foreground opacity-0 transition-all hover:bg-rose-500/10 hover:text-rose-300 group-hover:opacity-100"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground opacity-0 transition-all hover:bg-rose-500/10 hover:text-rose-300 group-hover:opacity-100"
                 @click="removeSession(s.id)"
               >
                 <AppIcon name="trash" class="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
-          <div v-else class="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.1] py-8 text-center">
-            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.04] text-muted-foreground">
+          <div v-else class="flex flex-col items-center justify-center rounded-sm border border-dashed border-white/[0.1] py-8 text-center">
+            <span class="flex h-12 w-12 items-center justify-center rounded-sm bg-white/[0.04] text-muted-foreground">
               <AppIcon name="inbox" class="h-6 w-6" />
             </span>
             <p class="mt-2 text-sm font-medium text-foreground">Chưa có phiên học</p>
@@ -498,7 +498,7 @@ const kpis = computed<KpiTile[]>(() => {
           </div>
 
           <!-- mini form -->
-          <form class="mt-4 space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5" @submit.prevent="addSession">
+          <form class="mt-4 space-y-3 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3.5" @submit.prevent="addSession">
             <p class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <AppIcon name="plus" class="h-3.5 w-3.5" /> Thêm phiên học
             </p>
@@ -524,7 +524,7 @@ const kpis = computed<KpiTile[]>(() => {
                 <option v-for="(meta, key) in sessionTypeMeta" :key="key" :value="key">{{ meta.label }}</option>
               </select>
             </div>
-            <button type="submit" class="cosmic-btn w-full rounded-xl px-4 py-2 text-sm">Thêm vào lịch</button>
+            <button type="submit" class="cosmic-btn w-full rounded-sm px-4 py-2 text-sm">Thêm vào lịch</button>
           </form>
         </SectionPanel>
       </div>
@@ -559,7 +559,7 @@ const kpis = computed<KpiTile[]>(() => {
         <SectionPanel title="Sắp tới" subtitle="Phiên học đã lên lịch" icon="calendar" accent="amber" flush>
           <ul v-if="upcoming.length" class="divide-y divide-white/[0.05]">
             <li v-for="u in upcoming" :key="u.key" class="flex items-center gap-3 px-5 py-2.5">
-              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" :class="sessionTypeMeta[u.session.type].chip">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm" :class="sessionTypeMeta[u.session.type].chip">
                 <AppIcon :name="sessionTypeMeta[u.session.type].icon" class="h-4 w-4" />
               </span>
               <div class="min-w-0 flex-1">

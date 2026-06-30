@@ -249,7 +249,7 @@ const btnAccent: Record<Accent, string> = {
       <GlassPanel v-for="s in stats" :key="s.label" :glow="s.accent" hover padded>
         <div class="flex items-center gap-3">
           <span
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[s.accent]"
           >
             <AppIcon :name="s.icon" class="h-5 w-5" />
@@ -270,7 +270,7 @@ const btnAccent: Record<Accent, string> = {
         <div class="relative shrink-0">
           <Avatar :name="featured.name" :accent="featured.accent" :size="96" />
           <span
-            class="absolute -right-1 bottom-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-[oklch(0.13_0.025_280)] bg-amber-400 text-amber-950"
+            class="absolute -right-1 bottom-1 flex h-6 w-6 items-center justify-center rounded-sm border-2 border-[oklch(0.13_0.025_280)] bg-amber-400 text-amber-950"
           >
             <AppIcon name="crown" class="h-3.5 w-3.5" />
           </span>
@@ -297,14 +297,14 @@ const btnAccent: Record<Accent, string> = {
         <div class="flex shrink-0 gap-2 sm:flex-col">
           <button
             type="button"
-            class="cosmic-btn inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm"
+            class="cosmic-btn inline-flex flex-1 items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm"
             @click="openBooking(featured)"
           >
             <AppIcon name="calendar" class="h-4 w-4" /> Đặt lịch
           </button>
           <button
             type="button"
-            class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+            class="inline-flex flex-1 items-center justify-center gap-2 rounded-sm border border-white/10 px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
             @click="message(featured)"
           >
             <AppIcon name="message" class="h-4 w-4" /> Nhắn tin
@@ -320,10 +320,10 @@ const btnAccent: Record<Accent, string> = {
           v-for="f in fields"
           :key="f.id"
           type="button"
-          class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
           :class="
             activeField === f.id
-              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
               : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
           "
           @click="activeField = f.id"
@@ -356,7 +356,7 @@ const btnAccent: Record<Accent, string> = {
           <div class="relative shrink-0">
             <Avatar :name="m.name" :accent="m.accent" :size="52" />
             <span
-              class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-[oklch(0.13_0.025_280)]"
+              class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-sm border-2 border-[oklch(0.13_0.025_280)]"
               :class="m.online ? 'fx-glow-pulse bg-emerald-400' : 'bg-slate-500'"
             />
           </div>
@@ -376,7 +376,7 @@ const btnAccent: Record<Accent, string> = {
           <span
             v-for="tag in m.tags"
             :key="tag"
-            class="rounded-full border border-white/[0.07] bg-white/[0.02] px-2 py-0.5 text-[0.7rem] text-muted-foreground"
+            class="rounded-sm border border-white/[0.07] bg-white/[0.02] px-2 py-0.5 text-[0.7rem] text-muted-foreground"
             >{{ tag }}</span
           >
         </div>
@@ -395,7 +395,7 @@ const btnAccent: Record<Accent, string> = {
         <div class="mt-3 flex gap-2">
           <button
             type="button"
-            class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors"
+            class="inline-flex flex-1 items-center justify-center gap-1.5 rounded-sm border px-3 py-2 text-xs font-semibold transition-colors"
             :class="btnAccent[m.accent]"
             @click="openBooking(m)"
           >
@@ -403,7 +403,7 @@ const btnAccent: Record<Accent, string> = {
           </button>
           <button
             type="button"
-            class="inline-flex shrink-0 items-center justify-center rounded-xl border border-white/10 px-3 py-2 text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+            class="inline-flex shrink-0 items-center justify-center rounded-sm border border-white/10 px-3 py-2 text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
             aria-label="Nhắn tin"
             @click="message(m)"
           >
@@ -415,7 +415,7 @@ const btnAccent: Record<Accent, string> = {
 
     <p
       v-if="filtered.length === 0"
-      class="rounded-2xl border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
+      class="rounded-sm border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
     >
       Không tìm thấy cố vấn phù hợp. Thử bỏ bớt bộ lọc nhé!
     </p>
@@ -431,11 +431,11 @@ const btnAccent: Record<Accent, string> = {
         <div
           v-for="(s, i) in steps"
           :key="s.title"
-          class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"
+          class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4"
         >
           <div class="flex items-center justify-between">
             <span
-              class="flex h-10 w-10 items-center justify-center rounded-xl"
+              class="flex h-10 w-10 items-center justify-center rounded-sm"
               :class="accentChip[s.accent]"
               ><AppIcon :name="s.icon" class="h-5 w-5"
             /></span>
@@ -458,7 +458,7 @@ const btnAccent: Record<Accent, string> = {
         <GlassPanel glow="cyan" class="relative z-10 w-full max-w-md p-6">
           <button
             type="button"
-            class="absolute right-4 top-4 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+            class="absolute right-4 top-4 rounded-sm p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
             aria-label="Đóng"
             @click="closeBooking"
           >
@@ -480,7 +480,7 @@ const btnAccent: Record<Accent, string> = {
               v-for="d in days"
               :key="d.id"
               type="button"
-              class="flex flex-col items-center rounded-xl border py-2 text-center transition-all"
+              class="flex flex-col items-center rounded-sm border py-2 text-center transition-all"
               :class="
                 selectedDay === d.id
                   ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
@@ -501,7 +501,7 @@ const btnAccent: Record<Accent, string> = {
               v-for="slot in slots"
               :key="slot"
               type="button"
-              class="rounded-xl border py-2 text-sm font-medium transition-all"
+              class="rounded-sm border py-2 text-sm font-medium transition-all"
               :class="
                 selectedSlot === slot
                   ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
@@ -514,7 +514,7 @@ const btnAccent: Record<Accent, string> = {
           </div>
 
           <div
-            class="mt-5 flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3"
+            class="mt-5 flex items-center justify-between rounded-sm border border-white/[0.06] bg-white/[0.02] px-4 py-3"
           >
             <span class="text-sm text-muted-foreground">Chi phí buổi học</span>
             <span class="inline-flex items-center gap-1 text-base font-bold text-amber-300"
@@ -524,7 +524,7 @@ const btnAccent: Record<Accent, string> = {
 
           <button
             type="button"
-            class="cosmic-btn mt-4 w-full rounded-xl px-4 py-2.5 text-sm disabled:opacity-50"
+            class="cosmic-btn mt-4 w-full rounded-sm px-4 py-2.5 text-sm disabled:opacity-50"
             :disabled="!selectedSlot"
             @click="confirmBooking"
           >

@@ -58,7 +58,7 @@ function onLeave(): void {
 <template>
   <div
     ref="el"
-    class="tilt-card glass-panel relative overflow-hidden rounded-2xl"
+    class="tilt-card glass-panel relative overflow-hidden rounded-sm"
     @pointerenter="onEnter"
     @pointermove="onMove"
     @pointerleave="onLeave"

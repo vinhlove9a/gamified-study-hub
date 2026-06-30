@@ -100,7 +100,7 @@ const hourly = [2, 1, 0, 0, 0, 1, 4, 9, 14, 18, 16, 12, 10, 13, 17, 15, 12, 18, 
 const hourlyMax = Math.max(...hourly);
 const peakHour = computed(() => hourly.indexOf(hourlyMax));
 function hourBarClass(v: number): string {
-  if (v === hourlyMax) return 'bg-gradient-to-t from-amber-500/80 to-amber-300';
+  if (v === hourlyMax) return ' from-amber-500/80 to-amber-300';
   if (v >= hourlyMax * 0.6) return 'bg-cyan-400/70';
   if (v >= hourlyMax * 0.3) return 'bg-cyan-500/40';
   return 'bg-white/[0.08]';
@@ -219,10 +219,10 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
     <section class="grid grid-cols-2 gap-4 xl:grid-cols-4">
       <GlassPanel v-for="def in kpiDefs" :key="def.key" :glow="def.accent" hover padded>
         <div class="mb-3 flex items-start justify-between">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="{ 'bg-cyan-500/10 text-cyan-300': def.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': def.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': def.accent === 'green', 'bg-violet-500/10 text-violet-300': def.accent === 'violet', 'bg-amber-500/10 text-amber-300': def.accent === 'amber' }">
+          <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="{ 'bg-cyan-500/10 text-cyan-300': def.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': def.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': def.accent === 'green', 'bg-violet-500/10 text-violet-300': def.accent === 'violet', 'bg-amber-500/10 text-amber-300': def.accent === 'amber' }">
             <AppIcon :name="def.icon" class="h-5 w-5" />
           </span>
-          <span class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium" :class="trendOf(def.key) >= 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300'">
+          <span class="inline-flex items-center gap-1 rounded-sm px-2 py-1 text-xs font-medium" :class="trendOf(def.key) >= 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300'">
             <AppIcon :name="trendOf(def.key) >= 0 ? 'trending-up' : 'trending-down'" class="h-3 w-3" /> {{ Math.abs(trendOf(def.key)) }}%
           </span>
         </div>
@@ -274,7 +274,7 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
             </svg>
           </div>
           <div class="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-            <span>Bắt đầu kỳ</span><span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-cyan-400" /> Phút học / ngày</span><span>Hôm nay</span>
+            <span>Bắt đầu kỳ</span><span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-sm bg-cyan-400" /> Phút học / ngày</span><span>Hôm nay</span>
           </div>
         </SectionPanel>
       </div>
@@ -319,7 +319,7 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
             <div v-for="s in skills" :key="s.label" class="flex items-center justify-between gap-3">
               <span class="text-sm text-muted-foreground">{{ s.label }}</span>
               <div class="flex items-center gap-2">
-                <div class="h-1.5 w-20 overflow-hidden rounded-full bg-white/[0.06]"><div class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500" :style="{ width: `${s.value}%` }" /></div>
+                <div class="h-1.5 w-20 overflow-hidden rounded-sm bg-white/[0.06]"><div class="h-full rounded-sm from-cyan-400 to-violet-500" :style="{ width: `${s.value}%` }" /></div>
                 <span class="w-8 text-right text-xs font-semibold tabular-nums text-foreground">{{ s.value }}</span>
               </div>
             </div>
@@ -329,8 +329,8 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
 
       <SectionPanel title="So sánh tuần này vs tuần trước" subtitle="Chỉ số thay đổi theo tuần" icon="trending-up" accent="green">
         <div class="space-y-3">
-          <div v-for="w in weekComparisons" :key="w.metric" class="flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.01] px-3.5 py-2.5">
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" :class="{ 'bg-cyan-500/10 text-cyan-300': w.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': w.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': w.accent === 'green', 'bg-violet-500/10 text-violet-300': w.accent === 'violet', 'bg-amber-500/10 text-amber-300': w.accent === 'amber' }">
+          <div v-for="w in weekComparisons" :key="w.metric" class="flex items-center gap-3 rounded-sm border border-white/[0.04] bg-white/[0.01] px-3.5 py-2.5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm" :class="{ 'bg-cyan-500/10 text-cyan-300': w.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': w.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': w.accent === 'green', 'bg-violet-500/10 text-violet-300': w.accent === 'violet', 'bg-amber-500/10 text-amber-300': w.accent === 'amber' }">
               <AppIcon name="chart" class="h-4 w-4" />
             </span>
             <div class="min-w-0 flex-1">
@@ -341,7 +341,7 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
                 <span class="text-xs text-muted-foreground">Tuần này: <span class="font-semibold tabular-nums text-foreground">{{ w.thisWeek }} {{ w.unit }}</span></span>
               </div>
             </div>
-            <span class="shrink-0 inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold" :class="wowPct(w) >= 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300'">
+            <span class="shrink-0 inline-flex items-center gap-1 rounded-sm px-2 py-1 text-xs font-semibold" :class="wowPct(w) >= 0 ? 'bg-emerald-500/10 text-emerald-300' : 'bg-rose-500/10 text-rose-300'">
               <AppIcon :name="wowPct(w) >= 0 ? 'trending-up' : 'trending-down'" class="h-3 w-3" />{{ Math.abs(wowPct(w)) }}%
             </span>
           </div>
@@ -375,8 +375,8 @@ onUnmounted(() => { if (rafId !== null) cancelAnimationFrame(rafId); });
     <!-- Insights -->
     <SectionPanel title="Nhận định" subtitle="Tổng hợp từ dữ liệu học tập của bạn" icon="lightbulb" accent="violet">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div v-for="card in insights" :key="card.title" class="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
-          <span class="flex h-10 w-10 items-center justify-center rounded-xl" :class="{ 'bg-cyan-500/10 text-cyan-300': card.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': card.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': card.accent === 'green', 'bg-violet-500/10 text-violet-300': card.accent === 'violet', 'bg-amber-500/10 text-amber-300': card.accent === 'amber' }"><AppIcon :name="card.icon" class="h-5 w-5" /></span>
+        <div v-for="card in insights" :key="card.title" class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
+          <span class="flex h-10 w-10 items-center justify-center rounded-sm" :class="{ 'bg-cyan-500/10 text-cyan-300': card.accent === 'cyan', 'bg-fuchsia-500/10 text-fuchsia-300': card.accent === 'magenta', 'bg-emerald-500/10 text-emerald-300': card.accent === 'green', 'bg-violet-500/10 text-violet-300': card.accent === 'violet', 'bg-amber-500/10 text-amber-300': card.accent === 'amber' }"><AppIcon :name="card.icon" class="h-5 w-5" /></span>
           <p class="mt-3 text-sm font-semibold text-foreground">{{ card.title }}</p>
           <p class="mt-1 text-xs leading-relaxed text-muted-foreground">{{ card.body }}</p>
         </div>

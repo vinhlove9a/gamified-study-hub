@@ -299,14 +299,14 @@ const milestoneIconClasses: Record<string, string> = {
           </p>
         </div>
         <div class="flex shrink-0 items-center gap-3">
-          <div class="flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
+          <div class="flex items-center gap-2 rounded-sm border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
             <AppIcon name="coin" class="h-5 w-5 text-amber-300" />
             <div>
               <p class="text-sm font-bold leading-none text-amber-200">1.250</p>
               <p class="mt-0.5 text-[0.65rem] text-muted-foreground">Số dư coin</p>
             </div>
           </div>
-          <div class="flex items-center gap-2 rounded-xl border border-fuchsia-400/20 bg-fuchsia-500/10 px-4 py-2.5">
+          <div class="flex items-center gap-2 rounded-sm border border-fuchsia-400/20 bg-fuchsia-500/10 px-4 py-2.5">
             <AppIcon name="flame" class="h-5 w-5 text-fuchsia-300" />
             <div>
               <p class="text-sm font-bold leading-none text-fuchsia-200">7 ngày</p>
@@ -344,7 +344,7 @@ const milestoneIconClasses: Record<string, string> = {
         <div
           v-for="day in loginRewards"
           :key="day.day"
-          class="relative flex flex-col items-center gap-1.5 rounded-xl border px-1.5 py-3 text-center transition-all"
+          class="relative flex flex-col items-center gap-1.5 rounded-sm border px-1.5 py-3 text-center transition-all"
           :class="{
             'border-emerald-400/30 bg-emerald-500/[0.07]': day.status === 'claimed',
             'border-cyan-400/50 bg-cyan-500/[0.12] ring-1 ring-cyan-400/30': day.status === 'claimable',
@@ -354,7 +354,7 @@ const milestoneIconClasses: Record<string, string> = {
           <!-- claimed check overlay -->
           <span
             v-if="day.status === 'claimed'"
-            class="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20"
+            class="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-sm bg-emerald-500/20"
           >
             <AppIcon name="check" class="h-2.5 w-2.5 text-emerald-400" />
           </span>
@@ -364,7 +364,7 @@ const milestoneIconClasses: Record<string, string> = {
           </span>
 
           <span
-            class="flex h-9 w-9 items-center justify-center rounded-xl"
+            class="flex h-9 w-9 items-center justify-center rounded-sm"
             :class="{
               'bg-emerald-500/15 text-emerald-300': day.status === 'claimed',
               'bg-cyan-500/20 text-cyan-300': day.status === 'claimable',
@@ -388,7 +388,7 @@ const milestoneIconClasses: Record<string, string> = {
           <button
             v-if="day.status === 'claimable'"
             type="button"
-            class="cosmic-btn mt-0.5 rounded-lg px-2.5 py-1 text-[0.65rem] font-semibold"
+            class="cosmic-btn mt-0.5 rounded-sm px-2.5 py-1 text-[0.65rem] font-semibold"
           >
             Nhận
           </button>
@@ -415,7 +415,7 @@ const milestoneIconClasses: Record<string, string> = {
           accent="cyan"
         >
           <template #header-actions>
-            <span class="rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+            <span class="rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
               {{ dailyDone }}/{{ dailyMissions.length }} hoàn thành
             </span>
           </template>
@@ -443,7 +443,7 @@ const milestoneIconClasses: Record<string, string> = {
           accent="violet"
         >
           <template #header-actions>
-            <span class="rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+            <span class="rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
               {{ weeklyDone }}/{{ weeklyMissions.length }} hoàn thành
             </span>
           </template>
@@ -474,7 +474,7 @@ const milestoneIconClasses: Record<string, string> = {
             <div
               v-for="ms in milestoneMissions"
               :key="ms.title"
-              class="relative flex flex-col gap-4 rounded-xl border p-4 transition-all hover:border-white/[0.12]"
+              class="relative flex flex-col gap-4 rounded-sm border p-4 transition-all hover:border-white/[0.12]"
               :class="[
                 ms.done
                   ? 'border-emerald-400/30 bg-emerald-500/[0.05]'
@@ -484,14 +484,14 @@ const milestoneIconClasses: Record<string, string> = {
               <!-- Done badge -->
               <span
                 v-if="ms.done"
-                class="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-300"
+                class="absolute right-3 top-3 flex items-center gap-1 rounded-sm bg-emerald-500/15 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-300"
               >
                 <AppIcon name="check-circle" class="h-3 w-3" />Đã đạt
               </span>
 
               <div class="flex items-start gap-3">
                 <span
-                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
                   :class="milestoneIconClasses[ms.accent]"
                 >
                   <AppIcon :name="ms.icon" class="h-6 w-6" />
@@ -519,7 +519,7 @@ const milestoneIconClasses: Record<string, string> = {
 
               <div class="flex items-center justify-between">
                 <span
-                  class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold"
+                  class="inline-flex items-center gap-1 rounded-sm border px-2.5 py-1 text-xs font-semibold"
                   :class="milestoneAccentClasses[ms.accent]"
                 >
                   <AppIcon name="coin" class="h-3.5 w-3.5" />
@@ -528,7 +528,7 @@ const milestoneIconClasses: Record<string, string> = {
                 <button
                   v-if="!ms.done"
                   type="button"
-                  class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-cyan-400/40"
+                  class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-cyan-400/40"
                 >
                   Chi tiết <AppIcon name="arrow-right" class="h-3.5 w-3.5" />
                 </button>
@@ -551,7 +551,7 @@ const milestoneIconClasses: Record<string, string> = {
           <div
             v-for="day in streakDays"
             :key="day.label"
-            class="flex flex-1 flex-col items-center gap-2 rounded-xl border px-1 py-3 transition-all"
+            class="flex flex-1 flex-col items-center gap-2 rounded-sm border px-1 py-3 transition-all"
             :class="{
               'border-fuchsia-400/40 bg-fuchsia-500/[0.12]': day.active && !day.today,
               'border-cyan-400/50 bg-cyan-500/[0.15] ring-1 ring-cyan-400/30': day.today,
@@ -582,7 +582,7 @@ const milestoneIconClasses: Record<string, string> = {
         <div class="hidden shrink-0 flex-col items-center gap-1 sm:flex">
           <span class="text-3xl font-bold text-foreground">{{ streakCount }}</span>
           <span class="text-xs text-muted-foreground">ngày liên tiếp</span>
-          <span class="mt-1 rounded-full bg-fuchsia-500/15 px-2.5 py-1 text-[0.65rem] font-semibold text-fuchsia-300">
+          <span class="mt-1 rounded-sm bg-fuchsia-500/15 px-2.5 py-1 text-[0.65rem] font-semibold text-fuchsia-300">
             Kỷ lục: 21 ngày
           </span>
         </div>

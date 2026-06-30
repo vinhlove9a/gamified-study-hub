@@ -10,11 +10,10 @@ const collapsed = ref(false);
 </script>
 
 <template>
-  <div class="cosmic-dashboard min-h-screen">
+  <div class="cosmic-dashboard focused-learning-workspace min-h-screen">
     <StarfieldCanvas />
     <ToastHost />
 
-    <!-- Desktop sidebar -->
     <aside
       class="fixed inset-y-0 left-0 z-20 hidden transition-[width] duration-200 lg:block"
       :class="collapsed ? 'w-[76px]' : 'w-64'"
@@ -22,15 +21,14 @@ const collapsed = ref(false);
       <AppSidebar :collapsed="collapsed" @navigate="mobileOpen = false" @toggle-collapse="collapsed = !collapsed" />
     </aside>
 
-    <!-- Mobile drawer -->
     <transition name="fade">
       <div v-if="mobileOpen" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" @click="mobileOpen = false" />
     </transition>
     <transition name="slide">
-      <aside v-if="mobileOpen" class="fixed inset-y-0 left-0 z-50 w-64 shadow-2xl lg:hidden">
+      <aside v-if="mobileOpen" class="fixed inset-y-0 left-0 z-50 w-64 lg:hidden">
         <button
           type="button"
-          class="absolute -right-11 top-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-foreground backdrop-blur"
+          class="absolute -right-11 top-3 flex h-9 w-9 items-center justify-center rounded-sm border border-zinc-800 bg-zinc-950 text-foreground"
           aria-label="Đóng menu"
           @click="mobileOpen = false"
         >
@@ -40,7 +38,6 @@ const collapsed = ref(false);
       </aside>
     </transition>
 
-    <!-- Main column -->
     <div class="flex min-h-screen flex-col transition-[padding] duration-200" :class="collapsed ? 'lg:pl-[76px]' : 'lg:pl-64'">
       <AppTopbar @open-sidebar="mobileOpen = true" />
       <main class="cosmic-scroll mx-auto w-full max-w-[1500px] flex-1 px-4 py-6 sm:px-6 lg:px-8">
@@ -83,5 +80,80 @@ const collapsed = ref(false);
 }
 .page-leave-to {
   opacity: 0;
+}
+
+:global(.focused-learning-workspace.cosmic-dashboard) {
+  background: oklch(0.08 0.01 260);
+}
+
+:global(.focused-learning-workspace .starfield-canvas) {
+  display: none;
+}
+
+:global(.focused-learning-workspace .glass-panel) {
+  border-color: oklch(0.28 0.02 260);
+  background: oklch(0.12 0.01 260);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:global(.focused-learning-workspace .glass-panel-hover:hover) {
+  border-color: oklch(0.38 0.02 260);
+  box-shadow: none;
+  transform: none;
+}
+
+:global(.focused-learning-workspace .cosmic-gradient-text) {
+  background: none;
+  color: oklch(0.96 0.01 240);
+  animation: none;
+}
+
+:global(.focused-learning-workspace .cosmic-badge) {
+  border-radius: 0.125rem;
+  border-color: oklch(0.28 0.02 260);
+  background: oklch(0.09 0.01 260);
+  color: oklch(0.68 0.02 250);
+  letter-spacing: 0.08em;
+}
+
+:global(.focused-learning-workspace .cosmic-btn) {
+  border-radius: 0.125rem;
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  box-shadow: none;
+  filter: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+:global(.focused-learning-workspace .cosmic-btn:hover:not(:disabled)) {
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+:global(.focused-learning-workspace .cosmic-btn::after),
+:global(.focused-learning-workspace .fx-aurora::before),
+:global(.focused-learning-workspace .fx-sheen::after) {
+  display: none;
+}
+
+:global(.focused-learning-workspace .gradient-border) {
+  background: oklch(0.12 0.01 260);
+  border: 1px solid oklch(0.28 0.02 260);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:global(.focused-learning-workspace .gradient-border::before) {
+  display: none;
+}
+
+:global(.focused-learning-workspace .fx-lift:hover) {
+  transform: none;
+  box-shadow: none;
 }
 </style>

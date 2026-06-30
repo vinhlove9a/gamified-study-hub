@@ -258,7 +258,7 @@ onUnmounted(() => {
       </div>
       <button
         type="button"
-        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm"
+        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-4 py-2 text-sm"
         @click="openModal"
       >
         <AppIcon name="plus" class="h-4 w-4" />
@@ -281,21 +281,21 @@ onUnmounted(() => {
     <div v-if="filteredCollections.length > 0" class="grid grid-cols-1 gap-5 lg:grid-cols-2">
       <div v-for="col in filteredCollections" :key="col.id" class="space-y-0">
         <article
-          class="group overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] transition-all hover:-translate-y-1 hover:border-white/[0.14]"
+          class="group overflow-hidden rounded-sm border border-white/[0.06] bg-white/[0.02] transition-all hover:-translate-y-1 hover:border-white/[0.14]"
           :class="col.pinned ? 'ring-1 ring-amber-400/30' : ''"
         >
           <!-- Gradient cover -->
-          <div class="relative h-28 bg-gradient-to-br" :class="cover[col.accent]">
+          <div class="relative h-28" :class="cover[col.accent]">
             <div
               class="absolute inset-0 opacity-50"
               style="background: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.28), transparent 55%)"
             />
-            <span class="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-xl backdrop-blur" :class="iconChip[col.accent]">
+            <span class="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-sm backdrop-blur" :class="iconChip[col.accent]">
               <AppIcon :name="col.icon" class="h-6 w-6" />
             </span>
             <!-- Share / private indicator -->
             <span
-              class="absolute right-14 top-4 inline-flex items-center gap-1 rounded-full bg-black/30 px-2 py-1 text-[0.68rem] font-medium text-white/90 backdrop-blur"
+              class="absolute right-14 top-4 inline-flex items-center gap-1 rounded-sm bg-black/30 px-2 py-1 text-[0.68rem] font-medium text-white/90 backdrop-blur"
             >
               <AppIcon :name="col.shared ? 'globe' : 'lock'" class="h-3 w-3" />
               {{ col.shared ? 'Chia sẻ' : 'Riêng tư' }}
@@ -303,7 +303,7 @@ onUnmounted(() => {
             <!-- Pin toggle -->
             <button
               type="button"
-              class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg bg-black/30 text-white/80 backdrop-blur transition-colors hover:text-amber-300"
+              class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-sm bg-black/30 text-white/80 backdrop-blur transition-colors hover:text-amber-300"
               :class="col.pinned ? 'text-amber-300' : ''"
               :aria-label="col.pinned ? 'Bỏ ghim bộ sưu tập' : 'Ghim bộ sưu tập'"
               @click="togglePin(col.id)"
@@ -340,14 +340,14 @@ onUnmounted(() => {
                 <span
                   v-for="(person, idx) in col.contributors.slice(0, 4)"
                   :key="person.name"
-                  class="-ml-2 rounded-full ring-2 ring-[#0c0c16] first:ml-0"
+                  class="-ml-2 rounded-sm ring-2 ring-[#0c0c16] first:ml-0"
                   :style="{ zIndex: String(4 - idx) }"
                 >
                   <Avatar :name="person.name" :accent="person.accent" :size="28" />
                 </span>
                 <span
                   v-if="col.contributors.length > 4"
-                  class="-ml-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[0.65rem] font-semibold text-foreground ring-2 ring-[#0c0c16]"
+                  class="-ml-2 flex h-7 w-7 items-center justify-center rounded-sm bg-white/10 text-[0.65rem] font-semibold text-foreground ring-2 ring-[#0c0c16]"
                 >
                   +{{ col.contributors.length - 4 }}
                 </span>
@@ -355,7 +355,7 @@ onUnmounted(() => {
 
               <button
                 type="button"
-                class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                 @click="toggleExpand(col.id)"
               >
                 {{ expandedId === col.id ? 'Thu gọn' : 'Xem tài liệu' }}
@@ -369,7 +369,7 @@ onUnmounted(() => {
         <Transition name="expand">
           <div
             v-if="expandedId === col.id"
-            class="mt-3 rounded-2xl border border-white/[0.06] bg-white/[0.01] p-4"
+            class="mt-3 rounded-sm border border-white/[0.06] bg-white/[0.01] p-4"
           >
             <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <AppIcon name="layers" class="h-4 w-4" /> Tài liệu trong bộ sưu tập
@@ -399,16 +399,16 @@ onUnmounted(() => {
     <!-- ── Empty state ─────────────────────────────────────────────────────── -->
     <div
       v-else
-      class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center"
+      class="flex flex-col items-center justify-center rounded-sm border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center"
     >
-      <span class="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
+      <span class="flex h-16 w-16 items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
         <AppIcon name="folder" class="h-8 w-8" />
       </span>
       <p class="mt-4 text-base font-semibold text-foreground">Chưa có bộ sưu tập</p>
       <p class="mt-1.5 max-w-xs text-sm text-muted-foreground">
         Không có bộ sưu tập nào trong mục này. Tạo một bộ sưu tập mới để bắt đầu sắp xếp tài liệu.
       </p>
-      <button type="button" class="cosmic-btn mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm" @click="openModal">
+      <button type="button" class="cosmic-btn mt-5 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm" @click="openModal">
         <AppIcon name="plus" class="h-4 w-4" />
         Tạo bộ sưu tập
       </button>
@@ -423,17 +423,17 @@ onUnmounted(() => {
           aria-label="Đóng cửa sổ"
           @click="closeModal"
         />
-        <div class="modal-panel glass-panel relative z-10 w-full max-w-md overflow-hidden rounded-2xl">
+        <div class="modal-panel glass-panel relative z-10 w-full max-w-md overflow-hidden rounded-sm">
           <header class="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-4">
             <div class="flex items-center gap-2.5">
-              <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300">
+              <span class="flex h-9 w-9 items-center justify-center rounded-sm bg-cyan-500/10 text-cyan-300">
                 <AppIcon name="plus" class="h-5 w-5" />
               </span>
               <p class="text-sm font-semibold text-foreground">Tạo bộ sưu tập mới</p>
             </div>
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
+              class="flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
               aria-label="Đóng"
               @click="closeModal"
             >
@@ -462,7 +462,7 @@ onUnmounted(() => {
                   v-for="ic in iconChoices"
                   :key="ic"
                   type="button"
-                  class="flex h-10 w-10 items-center justify-center rounded-xl border transition-all"
+                  class="flex h-10 w-10 items-center justify-center rounded-sm border transition-all"
                   :class="
                     formIcon === ic
                       ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
@@ -484,20 +484,20 @@ onUnmounted(() => {
                   v-for="ac in accentChoices"
                   :key="ac"
                   type="button"
-                  class="flex h-9 w-9 items-center justify-center rounded-xl border transition-all"
+                  class="flex h-9 w-9 items-center justify-center rounded-sm border transition-all"
                   :class="
                     formAccent === ac ? 'scale-110 border-white/40' : 'border-white/[0.08] hover:border-white/20'
                   "
                   :aria-label="`Chọn màu ${ac}`"
                   @click="formAccent = ac"
                 >
-                  <span class="h-5 w-5 rounded-full" :class="accentDot[ac]" />
+                  <span class="h-5 w-5 rounded-sm" :class="accentDot[ac]" />
                 </button>
               </div>
             </div>
 
             <!-- Privacy toggle -->
-            <div class="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+            <div class="flex items-center justify-between rounded-sm border border-white/[0.06] bg-white/[0.02] px-4 py-3">
               <div class="flex items-center gap-2.5">
                 <AppIcon :name="formPrivate ? 'lock' : 'globe'" class="h-4 w-4 text-muted-foreground" />
                 <div>
@@ -514,14 +514,14 @@ onUnmounted(() => {
           <footer class="flex items-center justify-end gap-2 border-t border-white/[0.06] px-5 py-4">
             <button
               type="button"
-              class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
+              class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
               @click="closeModal"
             >
               Huỷ
             </button>
             <button
               type="button"
-              class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm"
+              class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm"
               :disabled="!canCreate"
               @click="createCollection"
             >

@@ -147,7 +147,7 @@ const accentBorder: Record<Accent, string> = {
     <GlassPanel class="fx-aurora p-5 sm:p-6">
       <div class="relative z-10 flex items-center gap-4">
         <span
-          class="fx-float flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/30 to-fuchsia-500/20 text-cyan-200 shadow-[0_0_30px_oklch(0.78_0.18_195/30%)]"
+          class="fx-float flex h-14 w-14 items-center justify-center rounded-sm from-cyan-500/30 to-fuchsia-500/20 text-cyan-200"
         >
           <AppIcon name="shield" class="h-7 w-7" />
         </span>
@@ -168,7 +168,7 @@ const accentBorder: Record<Accent, string> = {
       <GlassPanel v-for="s in stats" :key="s.label" :glow="s.accent" hover padded>
         <div class="flex items-center gap-3">
           <span
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[s.accent]"
           >
             <AppIcon :name="s.icon" class="h-5 w-5" />
@@ -194,10 +194,10 @@ const accentBorder: Record<Accent, string> = {
           v-for="c in certificates"
           :key="c.id"
           type="button"
-          class="fx-lift fx-sheen group flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] text-left"
+          class="fx-lift fx-sheen group flex flex-col overflow-hidden rounded-sm border border-white/[0.08] bg-white/[0.02] text-left"
           @click="openCert(c)"
         >
-          <div class="relative h-24 bg-gradient-to-br" :class="banner[c.accent]">
+          <div class="relative h-24" :class="banner[c.accent]">
             <div
               class="absolute inset-0 opacity-40"
               style="
@@ -209,12 +209,12 @@ const accentBorder: Record<Accent, string> = {
               "
             />
             <span
-              class="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-xl bg-black/30 text-white backdrop-blur"
+              class="absolute left-4 top-4 flex h-12 w-12 items-center justify-center rounded-sm bg-black/30 text-white backdrop-blur"
             >
               <AppIcon :name="c.icon" class="h-6 w-6" />
             </span>
             <span
-              class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/40 bg-white/15 text-white backdrop-blur"
+              class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-sm border-2 border-white/40 bg-white/15 text-white backdrop-blur"
             >
               <AppIcon name="shield" class="h-5 w-5" />
             </span>
@@ -250,10 +250,10 @@ const accentBorder: Record<Accent, string> = {
         <li
           v-for="p in inProgress"
           :key="p.id"
-          class="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
+          class="flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
         >
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[p.accent]"
           >
             <AppIcon :name="p.icon" class="h-5 w-5" />
@@ -283,7 +283,7 @@ const accentBorder: Record<Accent, string> = {
         <div class="relative z-10 w-full max-w-lg">
           <button
             type="button"
-            class="absolute -top-11 right-0 rounded-lg bg-white/10 p-2 text-foreground backdrop-blur transition-colors hover:bg-white/20"
+            class="absolute -top-11 right-0 rounded-sm bg-white/10 p-2 text-foreground backdrop-blur transition-colors hover:bg-white/20"
             aria-label="Đóng"
             @click="selected = null"
           >
@@ -291,11 +291,11 @@ const accentBorder: Record<Accent, string> = {
           </button>
           <!-- Faux certificate -->
           <div
-            class="overflow-hidden rounded-2xl border-2 bg-gradient-to-br from-[oklch(0.16_0.03_280)] to-[oklch(0.1_0.02_280)] p-1"
+            class="overflow-hidden rounded-sm border-2 from-[oklch(0.16_0.03_280)] to-[oklch(0.1_0.02_280)] p-1"
             :class="accentBorder[selected.accent]"
           >
             <div
-              class="relative rounded-xl border border-white/[0.08] px-6 py-8 text-center sm:px-10"
+              class="relative rounded-sm border border-white/[0.08] px-6 py-8 text-center sm:px-10"
             >
               <div
                 class="absolute inset-0 opacity-[0.04]"
@@ -306,7 +306,7 @@ const accentBorder: Record<Accent, string> = {
               />
               <div class="relative">
                 <span
-                  class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-lg"
+                  class="mx-auto flex h-16 w-16 items-center justify-center rounded-sm text-white"
                   :class="banner[selected.accent]"
                 >
                   <AppIcon name="shield" class="h-8 w-8" />
@@ -329,7 +329,7 @@ const accentBorder: Record<Accent, string> = {
                   <span
                     v-for="sk in selected.skills"
                     :key="sk"
-                    class="rounded-full border border-white/[0.1] bg-white/[0.03] px-3 py-1 text-xs text-foreground"
+                    class="rounded-sm border border-white/[0.1] bg-white/[0.03] px-3 py-1 text-xs text-foreground"
                     >{{ sk }}</span
                   >
                 </div>
@@ -355,14 +355,14 @@ const accentBorder: Record<Accent, string> = {
           <div class="mt-3 flex gap-2">
             <button
               type="button"
-              class="cosmic-btn inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+              class="cosmic-btn inline-flex flex-1 items-center justify-center gap-2 rounded-sm px-4 py-2.5 text-sm"
               @click="download"
             >
               <AppIcon name="download" class="h-4 w-4" /> Tải PDF
             </button>
             <button
               type="button"
-              class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+              class="inline-flex flex-1 items-center justify-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
               @click="share"
             >
               <AppIcon name="share" class="h-4 w-4" /> Chia sẻ

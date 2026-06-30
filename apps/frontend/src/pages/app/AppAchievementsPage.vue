@@ -173,17 +173,17 @@ const rareBadgeCount = 4;
           </p>
 
           <div class="mt-4 flex flex-wrap gap-3">
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
+            <div class="inline-flex items-center gap-2 rounded-sm bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
               <AppIcon name="award" class="h-3.5 w-3.5 text-violet-400" />
               Đã mở khoá
               <span class="font-bold text-foreground">{{ UNLOCKED_COUNT }}/{{ TOTAL_BADGES }}</span>
             </div>
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
+            <div class="inline-flex items-center gap-2 rounded-sm bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
               <AppIcon name="coin" class="h-3.5 w-3.5 text-amber-400" />
               Tổng coin nhận được
               <span class="font-bold text-amber-300">{{ totalCoins.toLocaleString('vi-VN') }}</span>
             </div>
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
+            <div class="inline-flex items-center gap-2 rounded-sm bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-muted-foreground">
               <AppIcon name="gem" class="h-3.5 w-3.5 text-fuchsia-400" />
               Hạng hiếm nhất
               <span class="font-bold text-fuchsia-300">{{ rarestLabel }}</span>

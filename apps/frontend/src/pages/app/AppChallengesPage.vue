@@ -370,7 +370,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
       <div class="relative z-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
         <!-- left: title + countdown -->
         <div>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-violet-500/15 px-3 py-1 text-xs font-semibold text-violet-200">
+          <span class="inline-flex items-center gap-1.5 rounded-sm bg-violet-500/15 px-3 py-1 text-xs font-semibold text-violet-200">
             <AppIcon name="crown" class="h-3.5 w-3.5" /> Mùa giải đang diễn ra
           </span>
           <h2 class="mt-3 text-xl font-bold text-foreground sm:text-2xl">Mùa hè rực sáng: Hành trình tri thức</h2>
@@ -381,7 +381,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
             <div
               v-for="unit in seasonUnits"
               :key="unit.label"
-              class="rounded-xl border border-white/[0.06] bg-white/[0.03] py-2.5 text-center"
+              class="rounded-sm border border-white/[0.06] bg-white/[0.03] py-2.5 text-center"
             >
               <p class="text-xl font-bold tabular-nums text-foreground sm:text-2xl">{{ unit.value }}</p>
               <p class="text-[0.6rem] uppercase text-muted-foreground">{{ unit.label }}</p>
@@ -391,13 +391,13 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
           <!-- reward preview -->
           <div class="mt-4 flex flex-wrap items-center gap-2">
             <span class="text-xs text-muted-foreground">Phần thưởng cuối mùa:</span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-300">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-300">
               <AppIcon name="coin" class="h-3.5 w-3.5" /> 5.000
             </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-violet-500/10 px-2.5 py-1 text-xs font-semibold text-violet-300">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-violet-500/10 px-2.5 py-1 text-xs font-semibold text-violet-300">
               <AppIcon name="gem" class="h-3.5 w-3.5" /> 50
             </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-fuchsia-500/10 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
+            <span class="inline-flex items-center gap-1 rounded-sm bg-fuchsia-500/10 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
               <AppIcon name="award" class="h-3.5 w-3.5" /> Huy hiệu Huyền thoại
             </span>
           </div>
@@ -412,7 +412,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
         </div>
 
         <!-- right: mini leaderboard -->
-        <div class="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+        <div class="rounded-sm border border-white/[0.08] bg-white/[0.03] p-4">
           <h3 class="flex items-center gap-1.5 text-sm font-semibold text-foreground">
             <AppIcon name="trophy" class="h-4 w-4 text-amber-300" /> Top 3 mùa giải
           </h3>
@@ -420,10 +420,10 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
             <li
               v-for="row in leaderboard"
               :key="row.rank"
-              class="flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-2.5 py-2"
+              class="flex items-center gap-2.5 rounded-sm border border-white/[0.06] bg-white/[0.02] px-2.5 py-2"
             >
               <span
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm text-xs font-bold"
                 :class="rankBadge[row.rank]"
               >
                 {{ row.rank }}
@@ -441,7 +441,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
     <section class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       <GlassPanel v-for="kpi in kpis" :key="kpi.label" :glow="kpi.accent" hover padded>
         <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[kpi.accent]">
+          <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="accentChip[kpi.accent]">
             <AppIcon :name="kpi.icon" class="h-5 w-5" />
           </span>
           <div>
@@ -477,20 +477,20 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
         <article
           v-for="ch in visibleChallenges"
           :key="ch.id"
-          class="flex flex-col rounded-2xl border bg-white/[0.02] p-4 transition-colors"
+          class="flex flex-col rounded-sm border bg-white/[0.02] p-4 transition-colors"
           :class="isComplete(ch) && !ch.claimed
             ? 'border-emerald-400/30 hover:border-emerald-400/50'
             : 'border-white/[0.06] hover:border-white/[0.12]'"
         >
           <div class="flex items-start gap-3">
-            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" :class="accentChip[ch.accent]">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm" :class="accentChip[ch.accent]">
               <AppIcon :name="ch.icon" class="h-5 w-5" />
             </span>
             <div class="min-w-0 flex-1">
               <div class="flex items-center justify-between gap-2">
                 <h4 class="truncate text-sm font-semibold text-foreground">{{ ch.title }}</h4>
                 <span
-                  class="shrink-0 rounded-md px-2 py-0.5 text-[0.6rem] font-semibold"
+                  class="shrink-0 rounded-sm px-2 py-0.5 text-[0.6rem] font-semibold"
                   :class="difficultyMeta[ch.difficulty].class"
                 >
                   {{ difficultyMeta[ch.difficulty].label }}
@@ -512,7 +512,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
           <!-- meta row -->
           <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
             <span
-              class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-semibold"
+              class="inline-flex items-center gap-1 rounded-sm px-2 py-0.5 font-semibold"
               :class="accentChip[rewardMeta[ch.reward.kind].accent]"
             >
               <AppIcon :name="rewardMeta[ch.reward.kind].icon" class="h-3.5 w-3.5" />
@@ -523,7 +523,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
             </span>
             <span
               v-if="timeChip(ch)"
-              class="ml-auto inline-flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 font-medium tabular-nums text-muted-foreground"
+              class="ml-auto inline-flex items-center gap-1 rounded-sm bg-white/[0.04] px-2 py-0.5 font-medium tabular-nums text-muted-foreground"
             >
               <AppIcon name="clock" class="h-3.5 w-3.5" /> {{ timeChip(ch) }}
             </span>
@@ -534,7 +534,7 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
             <button
               v-if="isComplete(ch) && !ch.claimed"
               type="button"
-              class="claim-btn flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-2.5 text-sm font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/25"
+              class="claim-btn flex w-full items-center justify-center gap-2 rounded-sm border border-emerald-400/40 bg-emerald-500/15 px-4 py-2.5 text-sm font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/25"
               :class="{ 'claim-pulsing': claimPulseId === ch.id }"
               @click="claimReward(ch.id)"
             >
@@ -542,13 +542,13 @@ const seasonUnits = computed<{ label: string; value: string }[]>(() => [
             </button>
             <span
               v-else-if="ch.claimed"
-              class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm font-semibold text-muted-foreground"
+              class="flex w-full items-center justify-center gap-2 rounded-sm border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm font-semibold text-muted-foreground"
             >
               <AppIcon name="check-circle" class="h-4 w-4 text-emerald-300" /> Đã nhận
             </span>
             <span
               v-else
-              class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-muted-foreground"
+              class="flex w-full items-center justify-center gap-2 rounded-sm border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-muted-foreground"
             >
               <AppIcon name="route" class="h-4 w-4" /> Còn {{ ch.total - ch.current }} để hoàn thành
             </span>

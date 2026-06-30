@@ -170,9 +170,9 @@ const accentChip: Record<Accent, string> = {
 
     <!-- STATUS -->
     <div
-      class="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.07] px-4 py-3"
+      class="flex items-center gap-3 rounded-sm border border-emerald-400/20 bg-emerald-500/[0.07] px-4 py-3"
     >
-      <span class="fx-glow-pulse flex h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400" />
+      <span class="fx-glow-pulse flex h-2.5 w-2.5 shrink-0 rounded-sm bg-emerald-400" />
       <p class="text-sm text-emerald-200">Tất cả hệ thống đang hoạt động bình thường.</p>
       <span class="ml-auto text-xs text-muted-foreground">Cập nhật 2 phút trước</span>
     </div>
@@ -186,7 +186,7 @@ const accentChip: Record<Accent, string> = {
         class="fx-lift cursor-pointer p-4 text-center"
       >
         <span
-          class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl"
+          class="mx-auto flex h-12 w-12 items-center justify-center rounded-sm"
           :class="accentChip[cat.accent]"
         >
           <AppIcon :name="cat.icon" class="h-6 w-6" />
@@ -209,7 +209,7 @@ const accentChip: Record<Accent, string> = {
             <li
               v-for="f in filteredFaqs"
               :key="f.id"
-              class="overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02]"
+              class="overflow-hidden rounded-sm border border-white/[0.06] bg-white/[0.02]"
             >
               <button
                 type="button"
@@ -246,10 +246,10 @@ const accentChip: Record<Accent, string> = {
             <li
               v-for="c in contacts"
               :key="c.id"
-              class="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3"
+              class="flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3"
             >
               <span
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
                 :class="accentChip[c.accent]"
               >
                 <AppIcon :name="c.icon" class="h-5 w-5" />
@@ -260,7 +260,7 @@ const accentChip: Record<Accent, string> = {
               </div>
               <button
                 type="button"
-                class="shrink-0 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="shrink-0 rounded-sm border border-white/10 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                 @click="contact(c)"
               >
                 {{ c.action }}
@@ -274,10 +274,10 @@ const accentChip: Record<Accent, string> = {
             <li v-for="g in guides" :key="g.id">
               <button
                 type="button"
-                class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
+                class="flex w-full items-center gap-3 rounded-sm px-2 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
               >
                 <span
-                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm"
                   :class="accentChip[g.accent]"
                 >
                   <AppIcon :name="g.icon" class="h-4 w-4" />
@@ -304,7 +304,7 @@ const accentChip: Record<Accent, string> = {
       </div>
       <RouterLink
         to="/app/feedback"
-        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-sm"
+        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-5 py-2.5 text-sm"
       >
         <AppIcon name="send" class="h-4 w-4" /> Gửi phản hồi
       </RouterLink>

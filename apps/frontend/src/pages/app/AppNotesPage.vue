@@ -42,11 +42,11 @@ const swatchDot: Record<NoteColor, string> = {
 };
 
 const accentStrip: Record<NoteColor, string> = {
-  cyan: 'bg-gradient-to-b from-cyan-400 to-cyan-600',
-  magenta: 'bg-gradient-to-b from-fuchsia-400 to-fuchsia-600',
-  green: 'bg-gradient-to-b from-emerald-400 to-emerald-600',
-  violet: 'bg-gradient-to-b from-violet-400 to-violet-600',
-  amber: 'bg-gradient-to-b from-amber-300 to-amber-500',
+  cyan: ' from-cyan-400 to-cyan-600',
+  magenta: ' from-fuchsia-400 to-fuchsia-600',
+  green: ' from-emerald-400 to-emerald-600',
+  violet: ' from-violet-400 to-violet-600',
+  amber: ' from-amber-300 to-amber-500',
 };
 
 const cardTint: Record<NoteColor, string> = {
@@ -241,7 +241,7 @@ onUnmounted(() => {
       </div>
       <button
         type="button"
-        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm"
+        class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-4 py-2 text-sm"
         @click="createNote"
       >
         <AppIcon name="plus" class="h-4 w-4" />
@@ -288,16 +288,16 @@ onUnmounted(() => {
           v-model="searchQuery"
           type="text"
           placeholder="Tìm theo tiêu đề hoặc nội dung..."
-          class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+          class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
         />
       </div>
 
-      <div class="flex shrink-0 gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-1">
+      <div class="flex shrink-0 gap-1 rounded-sm border border-white/[0.08] bg-white/[0.03] p-1">
         <button
           v-for="opt in sortOptions"
           :key="opt.id"
           type="button"
-          class="rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+          class="rounded-sm px-3 py-1.5 text-sm font-medium transition-colors"
           :class="
             sortMode === opt.id
               ? 'bg-cyan-500/15 text-cyan-200'
@@ -314,7 +314,7 @@ onUnmounted(() => {
     <div class="flex flex-wrap gap-2">
       <button
         type="button"
-        class="rounded-full border px-3 py-1 text-xs font-medium transition-colors"
+        class="rounded-sm border px-3 py-1 text-xs font-medium transition-colors"
         :class="
           activeTag === 'all'
             ? 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200'
@@ -328,7 +328,7 @@ onUnmounted(() => {
         v-for="tag in availableTags"
         :key="tag"
         type="button"
-        class="rounded-full border px-3 py-1 text-xs font-medium transition-colors"
+        class="rounded-sm border px-3 py-1 text-xs font-medium transition-colors"
         :class="
           activeTag === tag
             ? 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200'
@@ -350,11 +350,11 @@ onUnmounted(() => {
       <article
         v-for="note in filteredNotes"
         :key="note.id"
-        class="note-card group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border bg-gradient-to-br to-transparent p-4 transition-all hover:-translate-y-1"
+        class="note-card group relative flex cursor-pointer flex-col overflow-hidden rounded-sm border to-transparent p-4 transition-all hover:-translate-y-1"
         :class="[
           cardTint[note.color],
           note.pinned
-            ? 'border-amber-400/30 shadow-[0_0_22px_oklch(0.8_0.16_85/15%)]'
+            ? 'border-amber-400/30'
             : 'border-white/[0.06] hover:border-white/[0.14]',
         ]"
         @click="openEditor(note.id)"
@@ -368,7 +368,7 @@ onUnmounted(() => {
           </h3>
           <button
             type="button"
-            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors"
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm transition-colors"
             :class="note.pinned ? 'text-amber-300' : 'text-muted-foreground/60 hover:text-amber-300'"
             :aria-label="note.pinned ? 'Bỏ ghim' : 'Ghim ghi chú'"
             @click.stop="togglePin(note.id)"
@@ -383,7 +383,7 @@ onUnmounted(() => {
 
         <div class="mt-auto flex items-center justify-between gap-2 pl-2 pt-3">
           <span
-            class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.68rem] font-medium"
+            class="inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[0.68rem] font-medium"
             :class="tagChipColor[note.color]"
           >
             <AppIcon name="badge" class="h-3 w-3" /> {{ note.tag }}
@@ -398,9 +398,9 @@ onUnmounted(() => {
     <!-- ── Empty state ─────────────────────────────────────────────────────── -->
     <div
       v-else
-      class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center"
+      class="flex flex-col items-center justify-center rounded-sm border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center"
     >
-      <span class="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
+      <span class="flex h-16 w-16 items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
         <AppIcon name="inbox" class="h-8 w-8" />
       </span>
       <p class="mt-4 text-base font-semibold text-foreground">Không tìm thấy ghi chú</p>
@@ -410,13 +410,13 @@ onUnmounted(() => {
       <div class="mt-5 flex flex-wrap justify-center gap-3">
         <button
           type="button"
-          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
+          class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
           @click="resetFilters"
         >
           <AppIcon name="refresh" class="h-4 w-4" />
           Đặt lại bộ lọc
         </button>
-        <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm" @click="createNote">
+        <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm" @click="createNote">
           <AppIcon name="plus" class="h-4 w-4" />
           Ghi chú mới
         </button>
@@ -435,12 +435,12 @@ onUnmounted(() => {
         <div class="drawer-panel relative z-10 flex h-full w-full max-w-md flex-col overflow-hidden border-l border-white/[0.08] bg-[#0c0c16]">
           <header class="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-4">
             <div class="flex items-center gap-2.5">
-              <span class="h-3 w-3 rounded-full" :class="swatchDot[editingNote.color]" />
+              <span class="h-3 w-3 rounded-sm" :class="swatchDot[editingNote.color]" />
               <p class="text-sm font-semibold text-foreground">Chỉnh sửa ghi chú</p>
             </div>
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
+              class="flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
               aria-label="Đóng"
               @click="closeEditor"
             >
@@ -490,7 +490,7 @@ onUnmounted(() => {
                   v-for="sw in swatches"
                   :key="sw.id"
                   type="button"
-                  class="flex h-9 w-9 items-center justify-center rounded-xl border transition-all"
+                  class="flex h-9 w-9 items-center justify-center rounded-sm border transition-all"
                   :class="
                     editingNote.color === sw.id
                       ? 'scale-110 border-white/40'
@@ -499,7 +499,7 @@ onUnmounted(() => {
                   :aria-label="`Chọn màu ${sw.label}`"
                   @click="setColor(sw.id)"
                 >
-                  <span class="h-5 w-5 rounded-full" :class="swatchDot[sw.id]" />
+                  <span class="h-5 w-5 rounded-sm" :class="swatchDot[sw.id]" />
                 </button>
               </div>
             </div>
@@ -509,7 +509,7 @@ onUnmounted(() => {
           <footer class="flex items-center justify-between gap-2 border-t border-white/[0.06] px-5 py-4">
             <button
               type="button"
-              class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm text-muted-foreground hover:border-rose-400/40 hover:text-rose-200"
+              class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm text-muted-foreground hover:border-rose-400/40 hover:text-rose-200"
               @click="deleteNote(editingNote.id)"
             >
               <AppIcon name="trash" class="h-4 w-4" />
@@ -518,14 +518,14 @@ onUnmounted(() => {
             <div class="flex items-center gap-2">
               <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm"
+                class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm"
                 :class="editingNote.pinned ? 'text-amber-300' : 'text-muted-foreground hover:text-amber-300'"
                 @click="togglePin(editingNote.id)"
               >
                 <AppIcon name="bookmark" class="h-4 w-4" />
                 {{ editingNote.pinned ? 'Đã ghim' : 'Ghim' }}
               </button>
-              <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm" @click="closeEditor">
+              <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm" @click="closeEditor">
                 <AppIcon name="check" class="h-4 w-4" />
                 Xong
               </button>

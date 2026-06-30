@@ -16,20 +16,16 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const glowOverlay: Record<Glow, string> = {
-  cyan: 'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-cyan-500/[0.07] before:to-transparent before:pointer-events-none',
-  magenta:
-    'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-fuchsia-500/[0.07] before:to-transparent before:pointer-events-none',
-  green:
-    'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-emerald-500/[0.07] before:to-transparent before:pointer-events-none',
-  violet:
-    'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-violet-500/[0.08] before:to-transparent before:pointer-events-none',
-  amber:
-    'before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-amber-500/[0.07] before:to-transparent before:pointer-events-none',
+  cyan: '',
+  magenta: '',
+  green: '',
+  violet: '',
+  amber: '',
   none: ''
 };
 
 const classes = computed(() => [
-  'glass-panel relative overflow-hidden rounded-2xl',
+  'glass-panel relative overflow-hidden rounded-sm',
   props.hover ? 'glass-panel-hover' : '',
   props.padded ? 'p-5' : '',
   glowOverlay[props.glow]

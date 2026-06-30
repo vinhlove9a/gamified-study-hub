@@ -189,7 +189,7 @@ function handleSave(): void {
         </div>
         <button
           type="button"
-          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold"
+          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-5 py-2.5 text-sm font-semibold"
           :disabled="saveState === 'saving'"
           @click="handleSave"
         >
@@ -208,13 +208,13 @@ function handleSave(): void {
     <div class="grid gap-6 lg:grid-cols-[220px_1fr]">
       <!-- ── Sticky side nav ── -->
       <aside class="lg:sticky lg:top-6 lg:self-start">
-        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-2">
+        <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-2">
           <nav class="space-y-0.5">
             <button
               v-for="item in navItems"
               :key="item.id"
               type="button"
-              class="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors"
+              class="group flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-sm font-medium transition-colors"
               :class="
                 activeSection === item.id
                   ? 'bg-white/[0.07] text-foreground'
@@ -255,7 +255,7 @@ function handleSave(): void {
                 <Avatar name="Người dùng" :size="80" accent="cyan" />
                 <button
                   type="button"
-                  class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs font-medium text-foreground hover:border-cyan-400/40"
+                  class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs font-medium text-foreground hover:border-cyan-400/40"
                 >
                   <AppIcon name="upload" class="h-3.5 w-3.5" />
                   Đổi ảnh
@@ -273,7 +273,7 @@ function handleSave(): void {
                       v-model="accountForm.fullName"
                       type="text"
                       placeholder="Nguyễn Văn A"
-                      class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                      class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                     />
                   </div>
                   <div class="space-y-1.5">
@@ -284,7 +284,7 @@ function handleSave(): void {
                       v-model="accountForm.displayName"
                       type="text"
                       placeholder="nguyen_van_a"
-                      class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                      class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                     />
                   </div>
                 </div>
@@ -296,7 +296,7 @@ function handleSave(): void {
                     v-model="accountForm.email"
                     type="email"
                     placeholder="nguyen.van.a@example.com"
-                    class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                    class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                   />
                 </div>
                 <p class="text-[0.7rem] text-muted-foreground/70">
@@ -350,7 +350,7 @@ function handleSave(): void {
                     v-for="choice in themeChoices"
                     :key="choice.value"
                     type="button"
-                    class="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-colors"
+                    class="inline-flex items-center gap-2 rounded-sm border px-4 py-2 text-sm font-medium transition-colors"
                     :class="
                       selectedTheme === choice.value
                         ? 'border-fuchsia-400/60 bg-fuchsia-500/10 text-fuchsia-200'
@@ -374,7 +374,7 @@ function handleSave(): void {
                     v-for="dot in accentDots"
                     :key="dot.value"
                     type="button"
-                    class="h-7 w-7 rounded-full transition-transform hover:scale-110"
+                    class="h-7 w-7 rounded-sm transition-transform hover:scale-110"
                     :class="[
                       dot.bg,
                       selectedAccent === dot.value
@@ -388,7 +388,7 @@ function handleSave(): void {
               </div>
 
               <!-- Reduce motion toggle -->
-              <div class="flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+              <div class="flex items-center justify-between gap-4 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
                 <div>
                   <p class="text-sm font-semibold text-foreground">Giảm chuyển động</p>
                   <p class="mt-0.5 text-xs text-muted-foreground">Tắt hoạt ảnh và hiệu ứng chuyển cảnh trong giao diện</p>
@@ -418,7 +418,7 @@ function handleSave(): void {
                     v-for="opt in goalOptions"
                     :key="opt"
                     type="button"
-                    class="rounded-xl border px-4 py-2 text-sm font-semibold tabular-nums transition-colors"
+                    class="rounded-sm border px-4 py-2 text-sm font-semibold tabular-nums transition-colors"
                     :class="
                       dailyGoal === opt
                         ? 'border-emerald-400/60 bg-emerald-500/10 text-emerald-200'
@@ -438,7 +438,7 @@ function handleSave(): void {
                 </label>
                 <select
                   v-model="selectedLanguage"
-                  class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground focus:border-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
+                  class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] px-3.5 text-sm text-foreground focus:border-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
                 >
                   <option value="vi">Tiếng Việt</option>
                   <option value="en">English</option>
@@ -446,7 +446,7 @@ function handleSave(): void {
               </div>
 
               <!-- Study toggles -->
-              <div class="divide-y divide-white/[0.05] rounded-xl border border-white/[0.06] bg-white/[0.02]">
+              <div class="divide-y divide-white/[0.05] rounded-sm border border-white/[0.06] bg-white/[0.02]">
                 <div class="flex items-center justify-between gap-4 p-4">
                   <div>
                     <p class="text-sm font-semibold text-foreground">Nhắc nhở học tập</p>
@@ -510,9 +510,9 @@ function handleSave(): void {
             icon="trash"
             accent="magenta"
           >
-            <div class="rounded-xl border border-rose-500/20 bg-rose-500/[0.04] p-4">
+            <div class="rounded-sm border border-rose-500/20 bg-rose-500/[0.04] p-4">
               <div class="mb-4 flex items-start gap-3">
-                <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-500/15 text-rose-300">
+                <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-rose-500/15 text-rose-300">
                   <AppIcon name="flag" class="h-4 w-4" />
                 </span>
                 <div>
@@ -526,7 +526,7 @@ function handleSave(): void {
 
               <div class="space-y-3">
                 <!-- Sign out all devices -->
-                <div class="flex flex-col gap-3 rounded-xl border border-white/[0.06] bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-3 rounded-sm border border-white/[0.06] bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div class="min-w-0 flex-1">
                     <p class="text-sm font-semibold text-foreground">Đăng xuất tất cả thiết bị</p>
                     <p class="mt-0.5 text-xs text-muted-foreground">
@@ -535,7 +535,7 @@ function handleSave(): void {
                   </div>
                   <button
                     type="button"
-                    class="inline-flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground hover:border-cyan-400/40"
+                    class="inline-flex shrink-0 items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground hover:border-cyan-400/40"
                   >
                     <AppIcon name="logout" class="h-4 w-4" />
                     Đăng xuất tất cả
@@ -543,7 +543,7 @@ function handleSave(): void {
                 </div>
 
                 <!-- Delete account -->
-                <div class="flex flex-col gap-3 rounded-xl border border-rose-500/20 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-3 rounded-sm border border-rose-500/20 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div class="min-w-0 flex-1">
                     <p class="text-sm font-semibold text-rose-200">Xoá tài khoản</p>
                     <p class="mt-0.5 text-xs text-muted-foreground">
@@ -552,7 +552,7 @@ function handleSave(): void {
                   </div>
                   <button
                     type="button"
-                    class="inline-flex shrink-0 items-center gap-2 rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-300 hover:bg-rose-500/20"
+                    class="inline-flex shrink-0 items-center gap-2 rounded-sm border border-rose-500/40 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-300 hover:bg-rose-500/20"
                   >
                     <AppIcon name="trash" class="h-4 w-4" />
                     Xoá tài khoản
@@ -567,7 +567,7 @@ function handleSave(): void {
         <div class="sticky bottom-6 flex justify-end pt-2">
           <button
             type="button"
-            class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold shadow-lg"
+            class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-6 py-3 text-sm font-semibold"
             :disabled="saveState === 'saving'"
             @click="handleSave"
           >

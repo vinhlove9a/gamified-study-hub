@@ -329,7 +329,7 @@ onUnmounted(() => {
         </div>
         <button
           type="button"
-          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm"
+          class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-4 py-2 text-sm"
           @click="toggleComposer"
         >
           <AppIcon name="plus" class="h-4 w-4" />
@@ -352,14 +352,14 @@ onUnmounted(() => {
         <div class="space-y-4 p-5">
           <div class="flex items-center justify-between">
             <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-300">
+              <span class="flex h-8 w-8 items-center justify-center rounded-sm bg-cyan-500/10 text-cyan-300">
                 <AppIcon name="edit" class="h-4 w-4" />
               </span>
               Đặt câu hỏi mới
             </p>
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
+              class="flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
               aria-label="Đóng trình soạn thảo"
               @click="toggleComposer"
             >
@@ -390,10 +390,10 @@ onUnmounted(() => {
                 v-for="c in composerCategories"
                 :key="c"
                 type="button"
-                class="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors"
+                class="rounded-sm px-2.5 py-1 text-xs font-medium transition-colors"
                 :class="
                   newCategory === c
-                    ? 'bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+                    ? 'bg-cyan-500/15 text-cyan-200'
                     : 'border border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground'
                 "
                 @click="newCategory = c"
@@ -403,7 +403,7 @@ onUnmounted(() => {
             </div>
             <button
               type="button"
-              class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm"
+              class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm"
               :disabled="!canPost"
               @click="publishThread"
             >
@@ -425,26 +425,26 @@ onUnmounted(() => {
               v-for="c in categories"
               :key="c.id"
               type="button"
-              class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors"
+              class="inline-flex shrink-0 items-center gap-1.5 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors"
               :class="
                 activeCategory === c.id
-                  ? 'bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+                  ? 'bg-cyan-500/15 text-cyan-200'
                   : 'border border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground'
               "
               @click="activeCategory = c.id"
             >
               <AppIcon :name="c.icon" class="h-3.5 w-3.5" />
               {{ c.label }}
-              <span class="rounded-full bg-white/10 px-1.5 text-[0.6rem] font-semibold">{{ categoryCount[c.id] ?? 0 }}</span>
+              <span class="rounded-sm bg-white/10 px-1.5 text-[0.6rem] font-semibold">{{ categoryCount[c.id] ?? 0 }}</span>
             </button>
           </div>
 
-          <div class="inline-flex shrink-0 items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1">
+          <div class="inline-flex shrink-0 items-center gap-1 rounded-sm border border-white/[0.06] bg-white/[0.03] p-1">
             <button
               v-for="s in sortOptions"
               :key="s.id"
               type="button"
-              class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors"
+              class="inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors"
               :class="
                 activeSort === s.id
                   ? 'bg-violet-500/15 text-violet-200'
@@ -463,14 +463,14 @@ onUnmounted(() => {
           <li
             v-for="t in filteredThreads"
             :key="t.id"
-            class="group flex gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.14] hover:bg-white/[0.035]"
+            class="group flex gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.14] hover:bg-white/[0.035]"
             :class="t.pinned ? 'ring-1 ring-amber-400/20' : ''"
           >
             <!-- Upvote -->
             <div class="flex shrink-0 flex-col items-center gap-1">
               <button
                 type="button"
-                class="flex h-9 w-9 items-center justify-center rounded-lg border transition-all"
+                class="flex h-9 w-9 items-center justify-center rounded-sm border transition-all"
                 :class="
                   t.upvoted
                     ? 'upvote-pop border-cyan-400/50 bg-cyan-500/20 text-cyan-200'
@@ -489,17 +489,17 @@ onUnmounted(() => {
               <div class="flex flex-wrap items-center gap-2">
                 <span
                   v-if="t.pinned"
-                  class="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-1.5 py-0.5 text-[0.62rem] font-semibold text-amber-300"
+                  class="inline-flex items-center gap-1 rounded-sm bg-amber-500/15 px-1.5 py-0.5 text-[0.62rem] font-semibold text-amber-300"
                 >
                   <AppIcon name="bookmark" class="h-3 w-3" /> Ghim
                 </span>
                 <span
                   v-if="t.solved"
-                  class="solved-glow inline-flex items-center gap-1 rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[0.62rem] font-semibold text-emerald-300"
+                  class="solved-glow inline-flex items-center gap-1 rounded-sm bg-emerald-500/15 px-1.5 py-0.5 text-[0.62rem] font-semibold text-emerald-300"
                 >
                   <AppIcon name="check-circle" class="h-3 w-3" /> Đã giải đáp
                 </span>
-                <span class="rounded-md px-1.5 py-0.5 text-[0.62rem] font-semibold" :class="tagPill[tagAccent(t.category)]">
+                <span class="rounded-sm px-1.5 py-0.5 text-[0.62rem] font-semibold" :class="tagPill[tagAccent(t.category)]">
                   {{ t.category }}
                 </span>
               </div>
@@ -514,7 +514,7 @@ onUnmounted(() => {
                 <span
                   v-for="tag in t.tags"
                   :key="tag"
-                  class="rounded-full bg-white/[0.04] px-2 py-0.5 text-[0.65rem] text-muted-foreground"
+                  class="rounded-sm bg-white/[0.04] px-2 py-0.5 text-[0.65rem] text-muted-foreground"
                 >
                   #{{ tag }}
                 </span>
@@ -534,7 +534,7 @@ onUnmounted(() => {
           </li>
         </ul>
 
-        <div v-if="filteredThreads.length === 0" class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center">
+        <div v-if="filteredThreads.length === 0" class="flex flex-col items-center justify-center rounded-sm border border-dashed border-white/[0.08] bg-white/[0.01] py-16 text-center">
           <AppIcon name="inbox" class="h-8 w-8 text-muted-foreground/50" />
           <p class="mt-3 text-sm font-medium text-foreground">Chưa có chủ đề nào</p>
           <p class="mt-1 max-w-xs text-xs text-muted-foreground">Hãy là người đầu tiên đặt câu hỏi trong chủ đề này.</p>
@@ -548,11 +548,11 @@ onUnmounted(() => {
             <span
               v-for="tag in trendingTags"
               :key="tag.name"
-              class="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-amber-400/40 hover:text-amber-200"
+              class="inline-flex items-center gap-1.5 rounded-sm border border-white/[0.08] bg-white/[0.02] px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-amber-400/40 hover:text-amber-200"
             >
               <AppIcon name="trending-up" class="h-3.5 w-3.5 text-amber-300" />
               #{{ tag.name }}
-              <span class="rounded-full bg-white/10 px-1.5 text-[0.6rem] font-semibold">{{ tag.score }}</span>
+              <span class="rounded-sm bg-white/10 px-1.5 text-[0.6rem] font-semibold">{{ tag.score }}</span>
             </span>
           </div>
         </SectionPanel>
@@ -560,19 +560,19 @@ onUnmounted(() => {
         <SectionPanel title="Người đóng góp nổi bật" subtitle="Tuần này" icon="award" accent="violet" flush>
           <ul class="divide-y divide-white/[0.05]">
             <li class="flex items-center gap-3 px-5 py-2.5">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/20 text-xs font-bold text-amber-300">1</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-sm bg-amber-400/20 text-xs font-bold text-amber-300">1</span>
               <Avatar name="Minh Anh" accent="cyan" :size="32" />
               <span class="flex-1 truncate text-sm font-medium text-foreground">Minh Anh</span>
               <span class="text-xs font-semibold text-violet-300">18 trả lời</span>
             </li>
             <li class="flex items-center gap-3 px-5 py-2.5">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300/15 text-xs font-bold text-slate-200">2</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-sm bg-slate-300/15 text-xs font-bold text-slate-200">2</span>
               <Avatar name="Bá Lộc" accent="amber" :size="32" />
               <span class="flex-1 truncate text-sm font-medium text-foreground">Bá Lộc</span>
               <span class="text-xs font-semibold text-violet-300">14 trả lời</span>
             </li>
             <li class="flex items-center gap-3 px-5 py-2.5">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full bg-orange-400/20 text-xs font-bold text-orange-300">3</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-sm bg-orange-400/20 text-xs font-bold text-orange-300">3</span>
               <Avatar name="Khánh Vy" accent="violet" :size="32" />
               <span class="flex-1 truncate text-sm font-medium text-foreground">Khánh Vy</span>
               <span class="text-xs font-semibold text-violet-300">11 trả lời</span>

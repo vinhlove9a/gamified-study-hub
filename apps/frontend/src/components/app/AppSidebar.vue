@@ -61,7 +61,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
       <img
         src="/images/gmf-logo.png"
         alt="Gamified Study Hub"
-        class="h-9 w-9 shrink-0 rounded-xl object-cover shadow-[0_0_18px_oklch(0.78_0.18_195/45%)]"
+        class="h-9 w-9 shrink-0 rounded-sm object-cover"
       />
       <div v-if="!props.collapsed" class="min-w-0 leading-tight">
         <p class="cosmic-gradient-text truncate text-sm font-bold">Study Hub</p>
@@ -77,7 +77,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
           v-model="query"
           type="search"
           placeholder="Lọc chức năng…"
-          class="h-9 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+          class="h-9 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
         />
       </label>
     </div>
@@ -104,7 +104,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
             <RouterLink
               :to="item.to"
               :title="props.collapsed ? item.label : undefined"
-              class="group relative flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium transition-colors"
+              class="group relative flex items-center gap-3 rounded-sm px-2.5 py-2 text-sm font-medium transition-colors"
               :class="[
                 isActive(item.to)
                   ? 'bg-cyan-500/10 text-cyan-200'
@@ -115,18 +115,18 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
             >
               <span
                 v-if="isActive(item.to)"
-                class="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_8px_oklch(0.78_0.18_195/80%)]"
+                class="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-sm bg-cyan-400"
               />
               <AppIcon
                 :name="item.icon"
                 class="h-5 w-5 shrink-0 transition-transform group-hover:scale-110"
-                :class="isActive(item.to) ? 'drop-shadow-[0_0_6px_oklch(0.78_0.18_195/70%)]' : ''"
+                :class="isActive(item.to) ? 'drop-' : ''"
               />
               <template v-if="!props.collapsed">
                 <span class="flex-1 truncate text-left">{{ item.label }}</span>
                 <span
                   v-if="item.badge"
-                  class="shrink-0 rounded-full px-1.5 py-0.5 text-[0.65rem] font-semibold"
+                  class="shrink-0 rounded-sm px-1.5 py-0.5 text-[0.65rem] font-semibold"
                   :class="isActive(item.to) ? 'bg-cyan-400 text-slate-900' : 'bg-white/10 text-muted-foreground'"
                 >
                   {{ item.badge }}
@@ -134,7 +134,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
               </template>
               <span
                 v-else-if="item.badge"
-                class="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400"
+                class="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-sm bg-cyan-400"
               />
             </RouterLink>
           </li>
@@ -148,9 +148,9 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
         <span>Cấp {{ level.current }}</span>
         <span class="tabular-nums">{{ level.xp }}/{{ level.next }} XP</span>
       </div>
-      <div class="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+      <div class="mt-1 h-1.5 w-full overflow-hidden rounded-sm bg-white/[0.06]">
         <div
-          class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_8px_oklch(0.78_0.18_195/50%)]"
+          class="h-full rounded-sm from-cyan-400 to-fuchsia-500"
           :style="{ width: `${xpPct}%` }"
         />
       </div>
@@ -158,13 +158,13 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
 
     <!-- VIP promo -->
     <div v-if="!props.collapsed" class="px-3 pb-3 pt-2">
-      <div class="gradient-border rounded-2xl p-4">
-        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/15 text-amber-300">
+      <div class="gradient-border rounded-sm p-4">
+        <span class="flex h-8 w-8 items-center justify-center rounded-sm bg-amber-400/15 text-amber-300">
           <AppIcon name="crown" class="h-5 w-5" />
         </span>
         <p class="mt-2.5 text-sm font-semibold text-foreground">Nâng cấp VIP</p>
         <p class="mt-0.5 text-xs text-muted-foreground">Mở khoá tài liệu cao cấp &amp; x2 coin.</p>
-        <button type="button" class="cosmic-btn mt-3 w-full rounded-lg py-1.5 text-xs">Khám phá ngay</button>
+        <button type="button" class="cosmic-btn mt-3 w-full rounded-sm py-1.5 text-xs">Khám phá ngay</button>
       </div>
     </div>
 
@@ -175,7 +175,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
           <RouterLink
             :to="item.to"
             :title="props.collapsed ? item.label : undefined"
-            class="flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium transition-colors"
+            class="flex items-center gap-3 rounded-sm px-2.5 py-2 text-sm font-medium transition-colors"
             :class="[
               isActive(item.to) ? 'bg-cyan-500/10 text-cyan-200' : 'text-muted-foreground hover:bg-white/[0.04] hover:text-foreground',
               props.collapsed ? 'justify-center' : ''
@@ -190,7 +190,7 @@ const xpPct = computed(() => Math.round((level.xp / level.next) * 100));
 
       <button
         type="button"
-        class="mt-1 hidden w-full items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground lg:flex"
+        class="mt-1 hidden w-full items-center gap-3 rounded-sm px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground lg:flex"
         :class="props.collapsed ? 'justify-center' : ''"
         :title="props.collapsed ? 'Mở rộng' : 'Thu gọn'"
         @click="$emit('toggle-collapse')"

@@ -132,7 +132,7 @@ function rowIndex(row: Row): number {
       >
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="close" />
         <div
-          class="glass-panel cmdk-panel relative z-10 w-full max-w-xl overflow-hidden rounded-2xl shadow-2xl"
+          class="glass-panel cmdk-panel relative z-10 w-full max-w-xl overflow-hidden rounded-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Bảng lệnh"
@@ -148,7 +148,7 @@ function rowIndex(row: Row): number {
               class="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
               @keydown="onKeydown"
             />
-            <kbd class="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[0.65rem] font-medium text-muted-foreground">
+            <kbd class="rounded-sm border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[0.65rem] font-medium text-muted-foreground">
               ESC
             </kbd>
           </div>
@@ -167,13 +167,13 @@ function rowIndex(row: Row): number {
                 v-for="row in navRows"
                 :key="`nav-${row.to}`"
                 type="button"
-                class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors"
+                class="flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left text-sm transition-colors"
                 :class="rowIndex(row) === activeIndex ? 'bg-cyan-500/15 text-cyan-100' : 'text-muted-foreground hover:bg-white/[0.05] hover:text-foreground'"
                 @click="select(row)"
                 @mousemove="activeIndex = rowIndex(row)"
               >
                 <span
-                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm"
                   :class="rowIndex(row) === activeIndex ? 'bg-cyan-400/20 text-cyan-200' : 'bg-white/[0.05] text-muted-foreground'"
                 >
                   <AppIcon :name="row.icon" class="h-4 w-4" />
@@ -194,13 +194,13 @@ function rowIndex(row: Row): number {
                 v-for="row in actionRows"
                 :key="`act-${row.label}`"
                 type="button"
-                class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors"
+                class="flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left text-sm transition-colors"
                 :class="rowIndex(row) === activeIndex ? 'bg-fuchsia-500/15 text-fuchsia-100' : 'text-muted-foreground hover:bg-white/[0.05] hover:text-foreground'"
                 @click="select(row)"
                 @mousemove="activeIndex = rowIndex(row)"
               >
                 <span
-                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm"
                   :class="rowIndex(row) === activeIndex ? 'bg-fuchsia-400/20 text-fuchsia-200' : 'bg-white/[0.05] text-muted-foreground'"
                 >
                   <AppIcon :name="row.icon" class="h-4 w-4" />

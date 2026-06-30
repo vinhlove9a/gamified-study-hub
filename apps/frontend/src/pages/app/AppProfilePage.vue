@@ -162,13 +162,13 @@ const rewardTone: Record<string, string> = {
     <!-- ── 1. Profile header ───────────────────────────────────────────────── -->
     <GlassPanel glow="cyan" :padded="false" class="overflow-hidden">
       <!-- Decorative banner strip -->
-      <div class="h-[72px] w-full bg-gradient-to-r from-cyan-900/40 via-violet-900/30 to-fuchsia-900/40" />
+      <div class="h-[72px] w-full from-cyan-900/40 via-violet-900/30 to-fuchsia-900/40" />
 
       <div class="px-5 pb-5 sm:px-6 sm:pb-6">
         <!-- Avatar row — pulled up over the banner -->
         <div class="-mt-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div class="flex items-end gap-4">
-            <div class="ring-background rounded-full ring-4">
+            <div class="ring-background rounded-sm ring-4">
               <Avatar :name="displayName" :size="80" accent="cyan" />
             </div>
             <div class="mb-1 min-w-0">
@@ -181,14 +181,14 @@ const rewardTone: Record<string, string> = {
           <div class="flex shrink-0 items-center gap-2">
             <button
               type="button"
-              class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
+              class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40"
             >
               <AppIcon name="edit" class="h-4 w-4" />
               Chỉnh sửa hồ sơ
             </button>
             <button
               type="button"
-              class="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] p-2 text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
+              class="inline-flex items-center justify-center rounded-sm border border-white/10 bg-white/[0.03] p-2 text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
               aria-label="Chia sẻ hồ sơ"
             >
               <AppIcon name="share" class="h-4 w-4" />
@@ -202,13 +202,13 @@ const rewardTone: Record<string, string> = {
         </p>
 
         <div class="mt-3 flex flex-wrap items-center gap-2">
-          <span class="rounded-full bg-violet-500/20 px-2.5 py-1 text-xs font-semibold text-violet-200">
+          <span class="rounded-sm bg-violet-500/20 px-2.5 py-1 text-xs font-semibold text-violet-200">
             Cấp 7
           </span>
-          <span class="rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-medium text-cyan-300">
+          <span class="rounded-sm bg-cyan-500/15 px-2.5 py-1 text-xs font-medium text-cyan-300">
             Học viên
           </span>
-          <span class="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2.5 py-1 text-xs text-muted-foreground">
+          <span class="inline-flex items-center gap-1 rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs text-muted-foreground">
             <AppIcon name="calendar" class="h-3 w-3" />
             Tham gia từ tháng 9, 2024
           </span>
@@ -275,7 +275,7 @@ const rewardTone: Record<string, string> = {
                     :key="reward.label"
                     class="flex items-center gap-2.5"
                   >
-                    <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg" :class="rewardTone[reward.tone]">
+                    <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm" :class="rewardTone[reward.tone]">
                       <AppIcon :name="reward.icon" class="h-3.5 w-3.5" />
                     </span>
                     <span class="text-sm text-muted-foreground">{{ reward.label }}</span>
@@ -352,7 +352,7 @@ const rewardTone: Record<string, string> = {
           <ul class="space-y-3.5">
             <li v-for="(item, i) in recentActivity" :key="i" class="flex gap-3">
               <span
-                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm"
                 :class="activityTone[item.tone]"
               >
                 <AppIcon :name="item.icon" class="h-4 w-4" />
@@ -375,7 +375,7 @@ const rewardTone: Record<string, string> = {
             <span
               v-for="sub in favSubjects"
               :key="sub.label"
-              class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors"
+              class="inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-xs font-medium transition-colors"
               :class="subjectAccent[sub.accent]"
             >
               <AppIcon :name="sub.icon" class="h-3 w-3" />

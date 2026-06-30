@@ -480,16 +480,16 @@ function formatDue(sm2: SM2State): string {
           </p>
         </div>
         <div v-if="!activeDeck" class="flex shrink-0 flex-wrap items-center gap-3">
-          <div class="flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
+          <div class="flex items-center gap-2 rounded-sm border border-amber-400/20 bg-amber-500/10 px-4 py-2.5">
             <AppIcon name="clock" class="h-5 w-5 text-amber-300" />
             <div><p class="text-sm font-bold leading-none text-amber-200">{{ totalDue }} thẻ</p><p class="mt-0.5 text-[0.65rem] text-muted-foreground">Đến hạn hôm nay</p></div>
           </div>
-          <div class="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2.5">
+          <div class="flex items-center gap-2 rounded-sm border border-emerald-400/20 bg-emerald-500/10 px-4 py-2.5">
             <AppIcon name="check-circle" class="h-5 w-5 text-emerald-300" />
             <div><p class="text-sm font-bold leading-none text-emerald-200">{{ masteryPct }}%</p><p class="mt-0.5 text-[0.65rem] text-muted-foreground">Đã thuộc</p></div>
           </div>
         </div>
-        <button v-else type="button" class="inline-flex shrink-0 items-center gap-2 self-start rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="exitReview">
+        <button v-else type="button" class="inline-flex shrink-0 items-center gap-2 self-start rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="exitReview">
           <AppIcon name="chevron-left" class="h-4 w-4" /> Thư viện bộ thẻ
         </button>
       </div>
@@ -506,7 +506,7 @@ function formatDue(sm2: SM2State): string {
         <div class="flex items-end justify-between gap-2 sm:gap-4" style="height: 120px;">
           <div v-for="(day, i) in forecast" :key="i" class="flex flex-1 flex-col items-center gap-2">
             <span class="text-xs font-semibold tabular-nums" :class="day.count > 0 ? 'text-foreground' : 'text-muted-foreground/50'">{{ day.count }}</span>
-            <div class="w-full rounded-t-md transition-all" :style="{ height: `${(day.count / maxForecast) * 80 + 4}px`, background: day.isToday ? 'linear-gradient(180deg, #22D3EE, #7C3AED)' : 'rgba(255,255,255,0.08)' }" />
+            <div class="w-full rounded-sm transition-all" :style="{ height: `${(day.count / maxForecast) * 80 + 4}px`, background: day.isToday ? 'linear-gradient(180deg, #22D3EE, #7C3AED)' : 'rgba(255,255,255,0.08)' }" />
             <span class="text-[0.7rem]" :class="day.isToday ? 'font-bold text-cyan-300' : 'text-muted-foreground'">{{ day.label }}</span>
           </div>
         </div>
@@ -530,9 +530,9 @@ function formatDue(sm2: SM2State): string {
       <!-- Deck library -->
       <SectionPanel title="Thư viện bộ thẻ" subtitle="Chọn một bộ để bắt đầu phiên ôn" icon="layers" accent="violet">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <button v-for="deck in decks" :key="deck.id" type="button" class="deck-card group flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-left transition-all hover:-translate-y-1 hover:border-white/[0.14]" @click="startDeck(deck)">
+          <button v-for="deck in decks" :key="deck.id" type="button" class="deck-card group flex flex-col gap-4 rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 text-left transition-all hover:-translate-y-1 hover:border-white/[0.14]" @click="startDeck(deck)">
             <div class="flex items-start justify-between gap-3">
-              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110" :class="deckIconClasses[deck.accent]">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm transition-transform group-hover:scale-110" :class="deckIconClasses[deck.accent]">
                 <AppIcon :name="deck.icon" class="h-6 w-6" />
               </span>
               <RingProgress :value="deckMastery(deck)" :size="52" :stroke="6" :accent="deck.accent">
@@ -554,7 +554,7 @@ function formatDue(sm2: SM2State): string {
             </div>
 
             <div class="flex items-center justify-between">
-              <span class="inline-flex items-center gap-1 rounded-full border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-300">
+              <span class="inline-flex items-center gap-1 rounded-sm border border-amber-400/20 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-300">
                 <AppIcon name="clock" class="h-3.5 w-3.5" /> {{ deckDueCount(deck) }} đến hạn
               </span>
               <span class="inline-flex items-center gap-1 text-xs font-medium text-cyan-300">
@@ -572,7 +572,7 @@ function formatDue(sm2: SM2State): string {
       <template v-if="finished">
         <GlassPanel glow="green" class="relative overflow-hidden p-6 sm:p-8">
           <div class="pointer-events-none absolute inset-0">
-            <span v-for="sp in sparkles" :key="sp.id" class="sparkle absolute rounded-full" :style="{ left: sp.left + '%', top: sp.top + '%', width: sp.size + 'px', height: sp.size + 'px', animationDelay: sp.delay + 's' }" />
+            <span v-for="sp in sparkles" :key="sp.id" class="sparkle absolute rounded-sm" :style="{ left: sp.left + '%', top: sp.top + '%', width: sp.size + 'px', height: sp.size + 'px', animationDelay: sp.delay + 's' }" />
           </div>
 
           <div class="relative flex flex-col items-center gap-5 text-center">
@@ -598,16 +598,16 @@ function formatDue(sm2: SM2State): string {
               </div>
             </div>
 
-            <div class="flex items-center gap-4 rounded-xl border border-violet-400/20 bg-violet-500/[0.07] px-5 py-3">
+            <div class="flex items-center gap-4 rounded-sm border border-violet-400/20 bg-violet-500/[0.07] px-5 py-3">
               <AppIcon name="zap" class="h-5 w-5 text-violet-300" />
               <span class="text-sm text-muted-foreground">Nhận <span class="font-bold text-violet-200">+{{ earnedXp }} XP</span> — lịch ôn đã được cập nhật theo SM-2</span>
             </div>
 
             <div class="flex flex-wrap items-center justify-center gap-3">
-              <button type="button" class="cosmic-btn rounded-xl px-4 py-2 text-sm" @click="restartDeck">
+              <button type="button" class="cosmic-btn rounded-sm px-4 py-2 text-sm" @click="restartDeck">
                 <AppIcon name="refresh" class="mr-1.5 inline h-4 w-4" />Ôn lại
               </button>
-              <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="exitReview">
+              <button type="button" class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="exitReview">
                 <AppIcon name="grid" class="h-4 w-4" />Chọn bộ khác
               </button>
             </div>
@@ -621,7 +621,7 @@ function formatDue(sm2: SM2State): string {
           <!-- Session header -->
           <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-3">
-              <span class="flex h-10 w-10 items-center justify-center rounded-xl" :class="deckIconClasses[activeDeck.accent]">
+              <span class="flex h-10 w-10 items-center justify-center rounded-sm" :class="deckIconClasses[activeDeck.accent]">
                 <AppIcon :name="activeDeck.icon" class="h-5 w-5" />
               </span>
               <div>
@@ -630,19 +630,19 @@ function formatDue(sm2: SM2State): string {
               </div>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <span class="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+              <span class="inline-flex items-center gap-1 rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
                 <AppIcon name="clock" class="h-3 w-3" /> {{ formattedTime }}
               </span>
-              <span class="rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-300">
+              <span class="rounded-sm bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-300">
                 ✓ {{ sessionStats.easy }}
               </span>
-              <span class="rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-300">
+              <span class="rounded-sm bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-300">
                 ? {{ sessionStats.medium }}
               </span>
-              <span class="rounded-full bg-fuchsia-500/15 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
+              <span class="rounded-sm bg-fuchsia-500/15 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
                 ✕ {{ sessionStats.hard }}
               </span>
-              <span class="rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+              <span class="rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs font-semibold text-muted-foreground">
                 {{ cardIndex + 1 }}/{{ sessionTotal }}
               </span>
             </div>
@@ -683,7 +683,7 @@ function formatDue(sm2: SM2State): string {
           <!-- Rating buttons -->
           <transition name="fade-up">
             <div v-if="flipped" class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <button v-for="opt in ratingOptions" :key="opt.id" type="button" class="flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition-all" :class="selectedRating === opt.id ? ratingActiveClasses[opt.accent] : ratingIdleClasses[opt.accent]" @click="rateCard(opt.id)">
+              <button v-for="opt in ratingOptions" :key="opt.id" type="button" class="flex items-center justify-center gap-2 rounded-sm border px-4 py-3 text-sm font-semibold transition-all" :class="selectedRating === opt.id ? ratingActiveClasses[opt.accent] : ratingIdleClasses[opt.accent]" @click="rateCard(opt.id)">
                 <AppIcon :name="opt.icon" class="h-4 w-4" /> {{ opt.label }} <span class="text-[0.6rem] font-normal opacity-60">({{ opt.hint }})</span>
               </button>
             </div>
@@ -691,7 +691,7 @@ function formatDue(sm2: SM2State): string {
 
           <!-- Navigation -->
           <div class="mt-5 flex items-center justify-between">
-            <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 disabled:cursor-not-allowed disabled:opacity-40" :disabled="cardIndex === 0" @click="goPrev">
+            <button type="button" class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 disabled:cursor-not-allowed disabled:opacity-40" :disabled="cardIndex === 0" @click="goPrev">
               <AppIcon name="chevron-left" class="h-4 w-4" />Trước
             </button>
             <span class="text-xs text-muted-foreground">
@@ -699,7 +699,7 @@ function formatDue(sm2: SM2State): string {
               <span class="font-mono text-foreground">← →</span> điều hướng ·
               <span class="font-mono text-foreground">1 2 3</span> đánh giá
             </span>
-            <button type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="goNext">
+            <button type="button" class="inline-flex items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40" @click="goNext">
               {{ cardIndex === sessionTotal - 1 ? 'Kết thúc' : 'Sau' }} <AppIcon name="chevron-right" class="h-4 w-4" />
             </button>
           </div>

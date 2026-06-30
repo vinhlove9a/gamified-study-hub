@@ -170,18 +170,18 @@ onUnmounted(() => {
             phần thưởng càng lớn — đừng bỏ lỡ mốc ngày 7, 14 và 30!
           </p>
           <div class="mt-4 flex flex-wrap gap-3">
-            <div class="flex items-center gap-2 rounded-xl border border-orange-400/30 bg-orange-500/10 px-3.5 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-orange-400/30 bg-orange-500/10 px-3.5 py-2">
               <AppIcon name="flame" class="streak-flame h-6 w-6 text-orange-300" />
               <div>
                 <p class="text-lg font-bold leading-none text-orange-100">{{ streak }} ngày</p>
                 <p class="text-[0.7rem] text-muted-foreground">Chuỗi điểm danh</p>
               </div>
             </div>
-            <div class="flex items-center gap-2 rounded-xl border border-amber-400/25 bg-amber-500/10 px-3 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-amber-400/25 bg-amber-500/10 px-3 py-2">
               <AppIcon name="coin" class="h-5 w-5 text-amber-300" />
               <span class="text-lg font-bold tabular-nums text-amber-100">{{ coins.toLocaleString('vi-VN') }}</span>
             </div>
-            <div class="flex items-center gap-2 rounded-xl border border-fuchsia-400/25 bg-fuchsia-500/10 px-3 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-fuchsia-400/25 bg-fuchsia-500/10 px-3 py-2">
               <AppIcon name="gem" class="h-5 w-5 text-fuchsia-300" />
               <span class="text-lg font-bold tabular-nums text-fuchsia-100">{{ gems }}</span>
             </div>
@@ -192,7 +192,7 @@ onUnmounted(() => {
         <div class="flex shrink-0 flex-col items-center">
           <button
             type="button"
-            class="group relative flex h-32 w-32 items-center justify-center rounded-3xl border transition-all disabled:cursor-not-allowed"
+            class="group relative flex h-32 w-32 items-center justify-center rounded-sm border transition-all disabled:cursor-not-allowed"
             :class="claimedToday
               ? 'border-emerald-400/40 bg-emerald-500/10'
               : 'border-amber-400/40 bg-amber-500/10 hover:scale-[1.03]'"
@@ -204,7 +204,7 @@ onUnmounted(() => {
             <span
               v-for="s in sparks"
               :key="s.id"
-              class="spark pointer-events-none absolute left-1/2 top-1/2 h-2 w-2 rounded-full"
+              class="spark pointer-events-none absolute left-1/2 top-1/2 h-2 w-2 rounded-sm"
               :style="{
                 background: s.color,
                 '--angle': `${s.angle}deg`,
@@ -223,7 +223,7 @@ onUnmounted(() => {
           </button>
           <button
             type="button"
-            class="cosmic-btn mt-4 w-44 rounded-xl px-4 py-2.5 text-sm disabled:cursor-not-allowed"
+            class="cosmic-btn mt-4 w-44 rounded-sm px-4 py-2.5 text-sm disabled:cursor-not-allowed"
             :disabled="claimedToday || claiming"
             @click="claim"
           >
@@ -251,7 +251,7 @@ onUnmounted(() => {
         <div
           v-for="d in weekDays"
           :key="d.index"
-          class="relative flex flex-col items-center gap-2 rounded-2xl border p-3 text-center transition-colors"
+          class="relative flex flex-col items-center gap-2 rounded-sm border p-3 text-center transition-colors"
           :class="[
             dayState(d.index) === 'claimed' ? 'border-emerald-400/30 bg-emerald-500/10' : '',
             dayState(d.index) === 'today' ? 'border-amber-400/50 bg-amber-500/10 pulse-glow-magenta' : '',
@@ -261,11 +261,11 @@ onUnmounted(() => {
         >
           <span
             v-if="d.milestone"
-            class="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full bg-violet-500/30 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-violet-100"
+            class="absolute -top-2 left-1/2 -translate-x-1/2 rounded-sm bg-violet-500/30 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-violet-100"
           >Mốc</span>
           <span class="text-[0.7rem] font-medium text-muted-foreground">{{ d.label }}</span>
           <span
-            class="flex h-11 w-11 items-center justify-center rounded-xl"
+            class="flex h-11 w-11 items-center justify-center rounded-sm"
             :class="dayState(d.index) === 'locked' ? 'bg-white/[0.04] text-muted-foreground' : accentChip[kindAccent[d.kind]]"
           >
             <AppIcon :name="dayState(d.index) === 'claimed' ? 'check' : kindIcon[d.kind]" class="h-5 w-5" />
@@ -285,7 +285,7 @@ onUnmounted(() => {
             <div
               v-for="c in calendar"
               :key="c.day"
-              class="relative flex flex-col items-center gap-1 rounded-xl border p-2 text-center transition-colors"
+              class="relative flex flex-col items-center gap-1 rounded-sm border p-2 text-center transition-colors"
               :class="[
                 calState(c.day) === 'claimed' ? 'border-emerald-400/25 bg-emerald-500/[0.08]' : '',
                 calState(c.day) === 'today' ? 'border-amber-400/50 bg-amber-500/[0.12]' : '',
@@ -295,10 +295,10 @@ onUnmounted(() => {
             >
               <span class="text-[0.65rem] text-muted-foreground">N{{ c.day }}</span>
               <span
-                class="flex h-7 w-7 items-center justify-center rounded-lg"
+                class="flex h-7 w-7 items-center justify-center rounded-sm"
                 :class="[
                   calState(c.day) === 'locked' ? 'bg-white/[0.04] text-muted-foreground' : accentChip[kindAccent[c.kind]],
-                  c.milestone ? 'shadow-[0_0_12px_oklch(0.62_0.2_290/45%)]' : '',
+                  c.milestone ? '' : '',
                 ]"
               >
                 <AppIcon :name="calState(c.day) === 'claimed' ? 'check' : kindIcon[c.kind]" class="h-3.5 w-3.5" />
@@ -318,13 +318,13 @@ onUnmounted(() => {
       <!-- Week preview -->
       <div class="space-y-6">
         <SectionPanel title="Phần thưởng tuần" subtitle="Tổng quà nếu điểm danh đủ 7 ngày" icon="gift" accent="amber">
-          <div class="rounded-2xl border border-amber-400/25 bg-amber-500/[0.07] p-4 text-center">
+          <div class="rounded-sm border border-amber-400/25 bg-amber-500/[0.07] p-4 text-center">
             <p class="text-3xl font-bold tabular-nums text-amber-200 glow-magenta">+{{ weekTotalPreview }}</p>
             <p class="mt-1 text-xs text-muted-foreground">coin + 2 gem + 1 hộp quà bí ẩn</p>
           </div>
           <ul class="mt-4 space-y-2">
             <li v-for="d in weekDays" :key="d.index" class="flex items-center gap-3 text-sm">
-              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg" :class="accentChip[kindAccent[d.kind]]">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm" :class="accentChip[kindAccent[d.kind]]">
                 <AppIcon :name="kindIcon[d.kind]" class="h-3.5 w-3.5" />
               </span>
               <span class="flex-1 text-muted-foreground">{{ d.label }}</span>
@@ -335,11 +335,11 @@ onUnmounted(() => {
 
         <SectionPanel title="Thống kê chuỗi" icon="flame" accent="magenta">
           <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+            <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-3 text-center">
               <p class="text-2xl font-bold tabular-nums text-foreground">{{ streak }}</p>
               <p class="text-[0.7rem] text-muted-foreground">Chuỗi hiện tại</p>
             </div>
-            <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+            <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-3 text-center">
               <p class="text-2xl font-bold tabular-nums text-amber-300">{{ bestStreak }}</p>
               <p class="text-[0.7rem] text-muted-foreground">Kỷ lục</p>
             </div>

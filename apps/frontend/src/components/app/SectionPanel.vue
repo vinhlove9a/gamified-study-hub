@@ -24,11 +24,11 @@ const props = withDefaults(defineProps<Props>(), {
 defineEmits<{ (e: 'action'): void }>();
 
 const accentChip: Record<Accent, string> = {
-  cyan: 'bg-cyan-500/10 text-cyan-300 shadow-[0_0_18px_oklch(0.78_0.18_195/25%)]',
-  magenta: 'bg-fuchsia-500/10 text-fuchsia-300 shadow-[0_0_18px_oklch(0.68_0.22_350/25%)]',
-  green: 'bg-emerald-500/10 text-emerald-300 shadow-[0_0_18px_oklch(0.75_0.18_145/25%)]',
-  violet: 'bg-violet-500/10 text-violet-300 shadow-[0_0_18px_oklch(0.6_0.2_290/25%)]',
-  amber: 'bg-amber-500/10 text-amber-300 shadow-[0_0_18px_oklch(0.8_0.16_85/25%)]'
+  cyan: 'border-zinc-800 bg-zinc-950 text-primary',
+  magenta: 'border-zinc-800 bg-zinc-950 text-primary',
+  green: 'border-zinc-800 bg-zinc-950 text-primary',
+  violet: 'border-zinc-800 bg-zinc-950 text-primary',
+  amber: 'border-zinc-800 bg-zinc-950 text-primary'
 };
 </script>
 
@@ -38,7 +38,7 @@ const accentChip: Record<Accent, string> = {
       <div class="flex min-w-0 items-center gap-3">
         <span
           v-if="props.icon"
-          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border"
           :class="accentChip[props.accent]"
         >
           <AppIcon :name="props.icon" class="h-5 w-5" />
@@ -54,7 +54,7 @@ const accentChip: Record<Accent, string> = {
         <button
           v-if="props.actionLabel"
           type="button"
-          class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-cyan-300 transition-colors hover:bg-cyan-500/10"
+          class="inline-flex items-center gap-1 rounded-sm border border-zinc-800 px-2 py-1 text-xs font-medium text-zinc-300 transition-colors hover:border-primary hover:text-primary"
           @click="$emit('action')"
         >
           {{ props.actionLabel }}

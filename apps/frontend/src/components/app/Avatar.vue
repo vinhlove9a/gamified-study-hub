@@ -14,12 +14,12 @@ const props = withDefaults(defineProps<Props>(), {
   accent: 'cyan'
 });
 
-const gradient: Record<Accent, string> = {
-  cyan: 'from-cyan-400 to-blue-500',
-  magenta: 'from-fuchsia-400 to-purple-500',
-  green: 'from-emerald-400 to-teal-500',
-  violet: 'from-violet-400 to-indigo-500',
-  amber: 'from-amber-300 to-orange-500'
+const accentClass: Record<Accent, string> = {
+  cyan: 'border-zinc-700 bg-zinc-900 text-zinc-100',
+  magenta: 'border-zinc-700 bg-zinc-900 text-zinc-100',
+  green: 'border-zinc-700 bg-zinc-900 text-zinc-100',
+  violet: 'border-zinc-700 bg-zinc-900 text-zinc-100',
+  amber: 'border-zinc-700 bg-zinc-900 text-zinc-100'
 };
 
 const initials = computed(() =>
@@ -34,8 +34,8 @@ const initials = computed(() =>
 
 <template>
   <span
-    class="inline-flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br font-bold text-white"
-    :class="gradient[props.accent]"
+    class="inline-flex shrink-0 items-center justify-center rounded-sm border font-bold"
+    :class="accentClass[props.accent]"
     :style="{ width: `${props.size}px`, height: `${props.size}px`, fontSize: `${Math.round(props.size * 0.36)}px` }"
   >
     {{ initials }}

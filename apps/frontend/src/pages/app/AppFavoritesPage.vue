@@ -247,7 +247,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
     <GlassPanel class="fx-aurora p-5 sm:p-6">
       <div class="relative z-10 flex items-center gap-4">
         <span
-          class="fx-float flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500/30 to-fuchsia-500/20 text-rose-300 shadow-[0_0_30px_oklch(0.7_0.2_15/30%)]"
+          class="fx-float flex h-14 w-14 items-center justify-center rounded-sm from-rose-500/30 to-fuchsia-500/20 text-rose-300"
         >
           <AppIcon name="heart" class="h-7 w-7 fill-current" />
         </span>
@@ -287,11 +287,11 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         </div>
         <div
           v-if="activeTab === 'docs'"
-          class="inline-flex shrink-0 items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1"
+          class="inline-flex shrink-0 items-center gap-1 rounded-sm border border-white/[0.06] bg-white/[0.03] p-1"
         >
           <button
             type="button"
-            class="rounded-lg p-1.5 transition-colors"
+            class="rounded-sm p-1.5 transition-colors"
             :class="
               viewMode === 'grid'
                 ? 'bg-cyan-500/15 text-cyan-200'
@@ -304,7 +304,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
           </button>
           <button
             type="button"
-            class="rounded-lg p-1.5 transition-colors"
+            class="rounded-sm p-1.5 transition-colors"
             :class="
               viewMode === 'list'
                 ? 'bg-cyan-500/15 text-cyan-200'
@@ -341,7 +341,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
           />
           <button
             type="button"
-            class="absolute right-2.5 top-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-lg bg-black/40 text-rose-300 backdrop-blur transition-colors hover:bg-rose-500/30"
+            class="absolute right-2.5 top-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-sm bg-black/40 text-rose-300 backdrop-blur transition-colors hover:bg-rose-500/30"
             aria-label="Bỏ yêu thích"
             @click="removeDoc(doc.id)"
           >
@@ -354,10 +354,10 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         <li
           v-for="doc in shownDocs"
           :key="doc.id"
-          class="fx-lift flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3"
+          class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-3"
         >
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm
             :class="cover[doc.tone]"
           >
             <AppIcon name="file-text" class="h-5 w-5 text-white/90" />
@@ -373,7 +373,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
           >
           <button
             type="button"
-            class="shrink-0 rounded-lg p-2 text-rose-300 transition-colors hover:bg-rose-500/15"
+            class="shrink-0 rounded-sm p-2 text-rose-300 transition-colors hover:bg-rose-500/15"
             aria-label="Bỏ yêu thích"
             @click="removeDoc(doc.id)"
           >
@@ -391,15 +391,15 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
     >
       <GlassPanel v-for="c in shownCollections" :key="c.id" hover class="fx-sheen overflow-hidden">
-        <div class="relative h-20 bg-gradient-to-br" :class="cover[c.accent]">
+        <div class="relative h-20" :class="cover[c.accent]">
           <span
-            class="absolute left-3 top-3 flex h-10 w-10 items-center justify-center rounded-xl bg-black/30 text-white backdrop-blur"
+            class="absolute left-3 top-3 flex h-10 w-10 items-center justify-center rounded-sm bg-black/30 text-white backdrop-blur"
           >
             <AppIcon :name="c.icon" class="h-5 w-5" />
           </span>
           <button
             type="button"
-            class="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-lg bg-black/40 text-rose-300 backdrop-blur transition-colors hover:bg-rose-500/30"
+            class="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-sm bg-black/40 text-rose-300 backdrop-blur transition-colors hover:bg-rose-500/30"
             aria-label="Bỏ yêu thích"
             @click="removeCollection(c.id)"
           >
@@ -427,10 +427,10 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
       <li
         v-for="m in shownMissions"
         :key="m.id"
-        class="fx-lift flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
+        class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
       >
         <span
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
           :class="accentChip[m.accent]"
         >
           <AppIcon name="target" class="h-5 w-5" />
@@ -439,7 +439,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
           <div class="flex items-center justify-between gap-2">
             <p class="truncate text-sm font-semibold text-foreground">{{ m.title }}</p>
             <span
-              class="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
+              class="inline-flex shrink-0 items-center gap-0.5 rounded-sm bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-300"
               ><AppIcon name="coin" class="h-3 w-3" /> +{{ m.reward }}</span
             >
           </div>
@@ -456,7 +456,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         </div>
         <button
           type="button"
-          class="shrink-0 rounded-lg p-2 text-rose-300 transition-colors hover:bg-rose-500/15"
+          class="shrink-0 rounded-sm p-2 text-rose-300 transition-colors hover:bg-rose-500/15"
           aria-label="Bỏ yêu thích"
           @click="removeMission(m.id)"
         >
@@ -475,7 +475,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
       <li
         v-for="a in shownAuthors"
         :key="a.id"
-        class="fx-lift flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
+        class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3.5 py-3"
       >
         <Avatar :name="a.name" :accent="a.accent" :size="44" />
         <div class="min-w-0 flex-1">
@@ -486,7 +486,7 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         </div>
         <button
           type="button"
-          class="shrink-0 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
+          class="shrink-0 rounded-sm border border-white/10 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
           @click="removeAuthor(a.id)"
         >
           Bỏ theo dõi
@@ -502,10 +502,10 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         (activeTab === 'missions' && !shownMissions.length) ||
         (activeTab === 'authors' && !shownAuthors.length)
       "
-      class="rounded-2xl border border-dashed border-white/[0.1] py-12 text-center"
+      class="rounded-sm border border-dashed border-white/[0.1] py-12 text-center"
     >
       <span
-        class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.04] text-muted-foreground"
+        class="mx-auto flex h-14 w-14 items-center justify-center rounded-sm bg-white/[0.04] text-muted-foreground"
       >
         <AppIcon name="heart" class="h-7 w-7" />
       </span>
@@ -515,14 +515,14 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
       </p>
       <RouterLink
         to="/app/explore"
-        class="cosmic-btn mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm"
+        class="cosmic-btn mt-4 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm"
       >
         <AppIcon name="compass" class="h-4 w-4" /> Khám phá tài liệu
       </RouterLink>
     </div>
 
     <!-- RECOMMENDED -->
-    <section class="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 sm:p-5">
+    <section class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 sm:p-5">
       <h2 class="flex items-center gap-2 text-sm font-semibold text-foreground">
         <AppIcon name="sparkles" class="h-4 w-4 text-cyan-300" /> Có thể bạn cũng thích
       </h2>
@@ -530,10 +530,10 @@ const recommended: { id: number; title: string; reason: string; icon: string; ac
         <div
           v-for="r in recommended"
           :key="r.id"
-          class="fx-lift flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3"
+          class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3"
         >
           <span
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[r.accent]"
           >
             <AppIcon :name="r.icon" class="h-5 w-5" />

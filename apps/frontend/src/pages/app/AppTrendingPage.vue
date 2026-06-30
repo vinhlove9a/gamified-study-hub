@@ -264,16 +264,16 @@ const barFill: Record<Accent, string> = {
           </p>
         </div>
         <div
-          class="inline-flex shrink-0 items-center gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-1"
+          class="inline-flex shrink-0 items-center gap-1 rounded-sm border border-white/[0.08] bg-white/[0.03] p-1"
         >
           <button
             v-for="r in ranges"
             :key="r.id"
             type="button"
-            class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+            class="rounded-sm px-3 py-1.5 text-xs font-semibold transition-colors"
             :class="
               activeRange === r.id
-                ? 'bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+                ? 'bg-cyan-500/15 text-cyan-200'
                 : 'text-muted-foreground hover:text-foreground'
             "
             @click="activeRange = r.id"
@@ -289,7 +289,7 @@ const barFill: Record<Accent, string> = {
       <GlassPanel v-for="k in kpis" :key="k.label" :glow="k.accent" hover padded>
         <div class="flex items-center gap-3">
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[k.accent]"
           >
             <AppIcon :name="k.icon" class="h-5 w-5" />
@@ -312,13 +312,13 @@ const barFill: Record<Accent, string> = {
       >
         <div class="flex items-center justify-between">
           <span
-            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br text-2xl"
+            class="flex h-12 w-12 items-center justify-center rounded-sm text-2xl"
             :class="podiumStyle[i].ring"
           >
             {{ podiumStyle[i].medal }}
           </span>
           <span
-            class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold"
+            class="inline-flex items-center gap-1 rounded-sm px-2 py-1 text-xs font-semibold"
             :class="
               doc.trend[activeRange] >= 0
                 ? 'bg-emerald-500/10 text-emerald-300'
@@ -367,14 +367,14 @@ const barFill: Record<Accent, string> = {
             <li
               v-for="(doc, i) in rest"
               :key="doc.id"
-              class="fx-lift flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3"
+              class="fx-lift flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-3"
             >
               <span
                 class="w-7 shrink-0 text-center text-lg font-bold text-muted-foreground tabular-nums"
                 >{{ i + 4 }}</span
               >
               <span
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm"
                 :class="accentChip[doc.accent]"
               >
                 <AppIcon :name="doc.icon" class="h-5 w-5" />
@@ -426,9 +426,9 @@ const barFill: Record<Accent, string> = {
                   <AppIcon name="arrow-up" class="h-3 w-3" /> {{ t.growth }}%
                 </span>
               </div>
-              <div class="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+              <div class="mt-1.5 h-2 w-full overflow-hidden rounded-sm bg-white/[0.06]">
                 <div
-                  class="h-full rounded-full bg-gradient-to-r"
+                  class="h-full rounded-sm
                   :class="barFill[t.accent]"
                   :style="{ width: `${t.heat}%` }"
                 />
@@ -454,7 +454,7 @@ const barFill: Record<Accent, string> = {
               </div>
               <button
                 type="button"
-                class="shrink-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors"
+                class="shrink-0 rounded-sm border px-3 py-1.5 text-xs font-semibold transition-colors"
                 :class="
                   c.followed
                     ? 'border-white/[0.12] bg-white/[0.04] text-muted-foreground'

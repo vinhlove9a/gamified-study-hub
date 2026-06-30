@@ -204,9 +204,9 @@ onUnmounted(() => {
       </div>
 
       <!-- Online-now strip -->
-      <div class="mt-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3">
+      <div class="mt-5 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3">
         <div class="mb-2.5 flex items-center gap-2 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          <span class="h-2 w-2 rounded-full bg-emerald-400 pulse-glow-green" />
+          <span class="h-2 w-2 rounded-sm bg-emerald-400 pulse-glow-green" />
           Đang hoạt động · {{ onlineFriends.length }}
         </div>
         <div class="cosmic-scroll flex gap-3 overflow-x-auto pb-1">
@@ -214,13 +214,13 @@ onUnmounted(() => {
             v-for="f in onlineFriends"
             :key="f.id"
             type="button"
-            class="group flex w-20 shrink-0 flex-col items-center gap-1.5 rounded-xl p-1.5 text-center transition-colors hover:bg-white/[0.04]"
+            class="group flex w-20 shrink-0 flex-col items-center gap-1.5 rounded-sm p-1.5 text-center transition-colors hover:bg-white/[0.04]"
             @click="openCompare(f.id)"
           >
             <span class="relative">
               <Avatar :name="f.name" :accent="f.accent" :size="48" />
               <span
-                class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full ring-2 ring-[#0c0c16]"
+                class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-sm ring-2 ring-[#0c0c16]"
                 :class="statusMeta[f.status].dot"
               />
             </span>
@@ -262,14 +262,14 @@ onUnmounted(() => {
               <span class="relative">
                 <Avatar :name="f.name" :accent="f.accent" :size="44" />
                 <span
-                  class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full ring-2 ring-[#0c0c16]"
+                  class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-sm ring-2 ring-[#0c0c16]"
                   :class="statusMeta[f.status].dot"
                 />
               </span>
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2">
                   <p class="truncate text-sm font-semibold text-foreground">{{ f.name }}</p>
-                  <span class="inline-flex shrink-0 items-center gap-1 rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[0.65rem] font-semibold text-muted-foreground">
+                  <span class="inline-flex shrink-0 items-center gap-1 rounded-sm bg-white/[0.06] px-1.5 py-0.5 text-[0.65rem] font-semibold text-muted-foreground">
                     <AppIcon name="star" class="h-3 w-3 text-amber-300" /> Cấp {{ f.level }}
                   </span>
                 </div>
@@ -279,12 +279,12 @@ onUnmounted(() => {
                   <span class="truncate text-muted-foreground">{{ f.activity }}</span>
                 </p>
               </div>
-              <div class="hidden shrink-0 items-center gap-1 rounded-lg border border-orange-400/20 bg-orange-500/10 px-2 py-1 text-xs font-semibold text-orange-300 sm:flex">
+              <div class="hidden shrink-0 items-center gap-1 rounded-sm border border-orange-400/20 bg-orange-500/10 px-2 py-1 text-xs font-semibold text-orange-300 sm:flex">
                 <AppIcon name="flame" class="h-3.5 w-3.5" /> {{ f.streak }}
               </div>
               <button
                 type="button"
-                class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
                 @click="openCompare(f.id)"
               >
                 <AppIcon name="chart" class="h-3.5 w-3.5" />
@@ -322,7 +322,7 @@ onUnmounted(() => {
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2">
                   <p class="truncate text-sm font-semibold text-foreground">{{ req.name }}</p>
-                  <span class="inline-flex shrink-0 items-center gap-1 rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[0.65rem] font-semibold text-muted-foreground">
+                  <span class="inline-flex shrink-0 items-center gap-1 rounded-sm bg-white/[0.06] px-1.5 py-0.5 text-[0.65rem] font-semibold text-muted-foreground">
                     Cấp {{ req.level }}
                   </span>
                 </div>
@@ -332,14 +332,14 @@ onUnmounted(() => {
               </div>
               <button
                 type="button"
-                class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/25"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-500/25"
                 @click="acceptRequest(req)"
               >
                 <AppIcon name="check" class="h-3.5 w-3.5" /> Chấp nhận
               </button>
               <button
                 type="button"
-                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
+                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-white/10 bg-white/[0.03] text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
                 aria-label="Từ chối lời mời"
                 @click="declineRequest(req.id)"
               >
@@ -348,7 +348,7 @@ onUnmounted(() => {
             </li>
           </TransitionGroup>
           <div v-else class="flex flex-col items-center justify-center py-12 text-center">
-            <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.04] text-muted-foreground">
+            <span class="flex h-14 w-14 items-center justify-center rounded-sm bg-white/[0.04] text-muted-foreground">
               <AppIcon name="inbox" class="h-7 w-7" />
             </span>
             <p class="mt-3 text-sm font-medium text-foreground">Không có lời mời nào</p>
@@ -368,7 +368,7 @@ onUnmounted(() => {
             <article
               v-for="s in suggestions"
               :key="s.id"
-              class="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
+              class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
             >
               <div class="flex items-center gap-3">
                 <Avatar :name="s.name" :accent="s.accent" :size="48" />
@@ -382,7 +382,7 @@ onUnmounted(() => {
               </p>
               <button
                 type="button"
-                class="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors"
+                class="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-sm px-3 py-2 text-sm font-medium transition-colors"
                 :class="
                   s.sent
                     ? 'cursor-default border border-emerald-400/30 bg-emerald-500/10 text-emerald-300'
@@ -409,7 +409,7 @@ onUnmounted(() => {
               class="flex items-center gap-3 px-5 py-2.5"
             >
               <span
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm text-xs font-bold"
                 :class="rankColor[user.rank] ?? 'bg-white/[0.06] text-muted-foreground'"
               >
                 {{ user.rank }}
@@ -429,19 +429,19 @@ onUnmounted(() => {
         <SectionPanel title="Mẹo kết nối" icon="lightbulb" accent="green">
           <ul class="space-y-3">
             <li class="flex gap-3">
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-300">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-cyan-500/15 text-cyan-300">
                 <AppIcon name="users" class="h-4 w-4" />
               </span>
               <p class="text-sm leading-snug text-muted-foreground">Tham gia <span class="font-medium text-foreground">nhóm học</span> để gặp bạn mới cùng mục tiêu.</p>
             </li>
             <li class="flex gap-3">
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-amber-500/15 text-amber-300">
                 <AppIcon name="flame" class="h-4 w-4" />
               </span>
               <p class="text-sm leading-snug text-muted-foreground">Giữ <span class="font-medium text-foreground">chuỗi học</span> để leo lên BXH bạn bè.</p>
             </li>
             <li class="flex gap-3">
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-violet-500/15 text-violet-300">
                 <AppIcon name="chart" class="h-4 w-4" />
               </span>
               <p class="text-sm leading-snug text-muted-foreground"><span class="font-medium text-foreground">So sánh tiến độ</span> để cùng nhau tiến bộ mỗi tuần.</p>
@@ -460,17 +460,17 @@ onUnmounted(() => {
           aria-label="Đóng cửa sổ so sánh"
           @click="closeCompare"
         />
-        <div class="modal-panel glass-panel relative z-10 w-full max-w-lg overflow-hidden rounded-2xl">
+        <div class="modal-panel glass-panel relative z-10 w-full max-w-lg overflow-hidden rounded-sm">
           <header class="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-4">
             <div class="flex items-center gap-2.5">
-              <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300">
+              <span class="flex h-9 w-9 items-center justify-center rounded-sm bg-violet-500/10 text-violet-300">
                 <AppIcon name="chart" class="h-5 w-5" />
               </span>
               <p class="text-sm font-semibold text-foreground">So sánh tiến độ</p>
             </div>
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
+              class="flex h-8 w-8 items-center justify-center rounded-sm text-muted-foreground hover:bg-white/[0.06] hover:text-foreground"
               aria-label="Đóng"
               @click="closeCompare"
             >
@@ -504,7 +504,7 @@ onUnmounted(() => {
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="flex flex-1 justify-end">
-                    <div class="w-full overflow-hidden rounded-full bg-white/[0.06]">
+                    <div class="w-full overflow-hidden rounded-sm bg-white/[0.06]">
                       <ProgressBar :value="metric(me.streak, compareFriend.streak).pctMe" accent="cyan" :height="8" />
                     </div>
                   </div>
@@ -539,7 +539,7 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <p class="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center text-xs text-muted-foreground">
+            <p class="mt-5 rounded-sm border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center text-xs text-muted-foreground">
               <AppIcon name="sparkles" class="mr-1 inline h-3.5 w-3.5 text-amber-300" />
               {{ compareFriend.weeklyMinutes > me.weeklyMinutes
                 ? `${compareFriend.name} đang học chăm hơn bạn ${compareFriend.weeklyMinutes - me.weeklyMinutes} phút tuần này — cố lên nhé!`

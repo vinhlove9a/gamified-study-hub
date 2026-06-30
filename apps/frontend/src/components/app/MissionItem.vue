@@ -25,14 +25,14 @@ const pct = () => Math.min(100, Math.round((props.current / props.total) * 100))
 
 <template>
   <div
-    class="flex items-center gap-3.5 rounded-xl border border-white/[0.05] bg-white/[0.02] px-3.5 py-3 transition-colors hover:border-white/[0.1] hover:bg-white/[0.04]"
+    class="flex items-center gap-3.5 rounded-sm border border-zinc-800 bg-zinc-950 px-3.5 py-3 transition-colors hover:border-zinc-700"
   >
     <span
-      class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+      class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border"
       :class="{
-        'bg-emerald-500/15 text-emerald-300 shadow-[0_0_16px_oklch(0.75_0.18_145/30%)]': props.status === 'done',
-        'bg-cyan-500/15 text-cyan-300 shadow-[0_0_16px_oklch(0.78_0.18_195/30%)]': props.status === 'active',
-        'bg-white/5 text-muted-foreground': props.status === 'locked'
+        'border-zinc-700 bg-zinc-900 text-zinc-200': props.status === 'done',
+        'border-zinc-700 bg-zinc-900 text-primary': props.status === 'active',
+        'border-zinc-800 bg-zinc-950 text-muted-foreground': props.status === 'locked'
       }"
     >
       <AppIcon
@@ -46,7 +46,7 @@ const pct = () => Math.min(100, Math.round((props.current / props.total) * 100))
         <p class="truncate text-sm font-semibold text-foreground" :class="{ 'line-through opacity-50': props.status === 'done' }">
           {{ props.title }}
         </p>
-        <span class="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[0.7rem] font-semibold text-amber-300">
+        <span class="inline-flex shrink-0 items-center gap-0.5 rounded-sm border border-zinc-800 px-1.5 py-0.5 text-[0.7rem] font-semibold text-zinc-400">
           <AppIcon name="coin" class="h-3 w-3" /> +{{ props.reward }}
         </span>
       </div>
@@ -61,7 +61,7 @@ const pct = () => Math.min(100, Math.round((props.current / props.total) * 100))
     <button
       v-if="props.status === 'done'"
       type="button"
-      class="shrink-0 rounded-lg bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/25"
+      class="shrink-0 rounded-sm border border-zinc-700 px-3 py-1.5 text-xs font-semibold text-zinc-200 transition-colors hover:border-primary hover:text-primary"
       @click="$emit('action')"
     >
       Nhận
@@ -69,7 +69,7 @@ const pct = () => Math.min(100, Math.round((props.current / props.total) * 100))
     <button
       v-else-if="props.status === 'active'"
       type="button"
-      class="shrink-0 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:border-cyan-400/50 hover:text-cyan-300"
+      class="shrink-0 rounded-sm border border-zinc-700 px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
       @click="$emit('action')"
     >
       Tiếp tục

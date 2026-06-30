@@ -23,11 +23,11 @@ const props = withDefaults(defineProps<Props>(), {
 const max = computed(() => Math.max(1, ...props.data.map((d) => d.value)));
 
 const activeBar: Record<Accent, string> = {
-  cyan: 'bg-gradient-to-t from-cyan-500/80 to-cyan-300 shadow-[0_0_12px_oklch(0.78_0.18_195/50%)]',
-  magenta: 'bg-gradient-to-t from-fuchsia-500/80 to-fuchsia-300 shadow-[0_0_12px_oklch(0.68_0.22_350/50%)]',
-  green: 'bg-gradient-to-t from-emerald-500/80 to-emerald-300 shadow-[0_0_12px_oklch(0.75_0.18_145/50%)]',
-  violet: 'bg-gradient-to-t from-violet-500/80 to-violet-300 shadow-[0_0_12px_oklch(0.62_0.2_290/50%)]',
-  amber: 'bg-gradient-to-t from-amber-500/80 to-amber-300 shadow-[0_0_12px_oklch(0.8_0.16_85/50%)]'
+  cyan: 'bg-primary',
+  magenta: 'bg-primary',
+  green: 'bg-primary',
+  violet: 'bg-primary',
+  amber: 'bg-primary'
 };
 </script>
 
@@ -36,8 +36,8 @@ const activeBar: Record<Accent, string> = {
     <div v-for="bar in props.data" :key="bar.label" class="flex flex-1 flex-col items-center justify-end gap-1.5">
       <div class="flex w-full flex-1 items-end justify-center">
         <div
-          class="w-full max-w-[20px] rounded-md transition-all duration-500"
-          :class="bar.active ? activeBar[props.accent] : 'bg-white/[0.08]'"
+          class="w-full max-w-[20px] border border-zinc-800 transition-all duration-500"
+          :class="bar.active ? activeBar[props.accent] : 'bg-zinc-800'"
           :style="{ height: `${Math.max(6, (bar.value / max) * 100)}%` }"
           :title="`${bar.value}`"
         />

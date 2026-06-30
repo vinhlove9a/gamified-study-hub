@@ -212,12 +212,12 @@ onUnmounted(() => {
         </div>
 
         <!-- Billing toggle -->
-        <div class="flex shrink-0 items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+        <div class="flex shrink-0 items-center gap-3 rounded-sm border border-white/[0.08] bg-white/[0.03] px-4 py-3">
           <span class="text-sm font-medium" :class="!annual ? 'text-foreground' : 'text-muted-foreground'">Hàng tháng</span>
           <Toggle :model-value="annual" @update:model-value="(v) => (annual = v)" />
           <span class="text-sm font-medium" :class="annual ? 'text-foreground' : 'text-muted-foreground'">
             Hàng năm
-            <span class="ml-1 rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[0.65rem] font-bold text-emerald-300">-20%</span>
+            <span class="ml-1 rounded-sm bg-emerald-500/20 px-1.5 py-0.5 text-[0.65rem] font-bold text-emerald-300">-20%</span>
           </span>
         </div>
       </div>
@@ -228,22 +228,22 @@ onUnmounted(() => {
       <div
         v-for="tier in tiers"
         :key="tier.id"
-        class="gradient-border relative flex flex-col rounded-2xl p-5"
+        class="gradient-border relative flex flex-col rounded-sm p-5"
         :class="tier.popular ? 'ring-1 ring-amber-400/40' : ''"
       >
         <span
           v-if="tier.popular"
-          class="popular-ribbon absolute -top-3 left-1/2 -translate-x-1/2 overflow-hidden rounded-full border border-amber-300/40 bg-amber-500/20 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-amber-100"
+          class="popular-ribbon absolute -top-3 left-1/2 -translate-x-1/2 overflow-hidden rounded-sm border border-amber-300/40 bg-amber-500/20 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-amber-100"
         >
           ⭐ Phổ biến nhất
         </span>
         <span
           v-if="tier.current"
-          class="absolute right-4 top-4 rounded-full bg-cyan-500/20 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-cyan-200"
+          class="absolute right-4 top-4 rounded-sm bg-cyan-500/20 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-cyan-200"
         >Đang dùng</span>
 
         <div class="flex items-center gap-3">
-          <span class="flex h-12 w-12 items-center justify-center rounded-xl" :class="accentChip[tier.accent]">
+          <span class="flex h-12 w-12 items-center justify-center rounded-sm" :class="accentChip[tier.accent]">
             <AppIcon :name="tier.icon" class="h-6 w-6" />
           </span>
           <div>
@@ -269,7 +269,7 @@ onUnmounted(() => {
 
         <ul class="mt-5 flex-1 space-y-2.5">
           <li v-for="feat in tier.features" :key="feat" class="flex items-start gap-2 text-sm">
-            <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full" :class="accentChip[tier.accent]">
+            <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-sm" :class="accentChip[tier.accent]">
               <AppIcon name="check" class="h-3 w-3" />
             </span>
             <span class="text-muted-foreground">{{ feat }}</span>
@@ -278,7 +278,7 @@ onUnmounted(() => {
 
         <button
           type="button"
-          class="mt-6 w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all"
+          class="mt-6 w-full rounded-sm px-4 py-2.5 text-sm font-semibold transition-all"
           :class="tier.current
             ? 'cursor-default border border-white/[0.1] bg-white/[0.04] text-muted-foreground'
             : 'cosmic-btn'"
@@ -292,21 +292,21 @@ onUnmounted(() => {
     <!-- Flash deals -->
     <SectionPanel title="Flash deal" subtitle="Giá sốc · số lượng & thời gian có hạn" icon="zap" accent="amber">
       <template #header-actions>
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 px-2.5 py-1 text-xs font-semibold text-rose-300">
-          <span class="pulse-glow-magenta h-2 w-2 rounded-full bg-rose-400" /> LIVE
+        <span class="inline-flex items-center gap-1.5 rounded-sm bg-rose-500/15 px-2.5 py-1 text-xs font-semibold text-rose-300">
+          <span class="pulse-glow-magenta h-2 w-2 rounded-sm bg-rose-400" /> LIVE
         </span>
       </template>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div
           v-for="deal in flashDeals"
           :key="deal.id"
-          class="flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
+          class="flex flex-col rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
         >
           <div class="flex items-center justify-between">
-            <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[deal.accent]">
+            <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="accentChip[deal.accent]">
               <AppIcon :name="deal.icon" class="h-5 w-5" />
             </span>
-            <span class="rounded-md bg-rose-500/20 px-2 py-1 text-xs font-bold text-rose-300">-{{ deal.discount }}%</span>
+            <span class="rounded-sm bg-rose-500/20 px-2 py-1 text-xs font-bold text-rose-300">-{{ deal.discount }}%</span>
           </div>
           <p class="mt-3 text-sm font-semibold text-foreground">{{ deal.name }}</p>
           <p class="text-xs text-muted-foreground">{{ deal.desc }}</p>
@@ -317,7 +317,7 @@ onUnmounted(() => {
             <span class="text-xs text-muted-foreground">coin</span>
           </div>
 
-          <div class="mt-3 flex items-center gap-2 rounded-xl border border-white/[0.06] bg-black/20 px-3 py-2">
+          <div class="mt-3 flex items-center gap-2 rounded-sm border border-white/[0.06] bg-black/20 px-3 py-2">
             <AppIcon name="clock" class="h-4 w-4 text-rose-300" />
             <span v-if="deal.remaining > 0" class="font-mono text-sm font-bold tabular-nums text-rose-200">
               {{ formatCountdown(deal.remaining) }}
@@ -327,7 +327,7 @@ onUnmounted(() => {
 
           <button
             type="button"
-            class="cosmic-btn mt-3 w-full rounded-xl px-3 py-2 text-sm disabled:cursor-not-allowed"
+            class="cosmic-btn mt-3 w-full rounded-sm px-3 py-2 text-sm disabled:cursor-not-allowed"
             :disabled="deal.remaining <= 0"
           >
             {{ deal.remaining > 0 ? 'Mua ngay' : 'Hết hạn' }}
@@ -344,9 +344,9 @@ onUnmounted(() => {
             <li
               v-for="coupon in coupons"
               :key="coupon.id"
-              class="flex items-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-white/[0.02] p-3"
+              class="flex items-center gap-3 rounded-sm border border-dashed border-white/[0.12] bg-white/[0.02] p-3"
             >
-              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" :class="accentChip[coupon.accent]">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm" :class="accentChip[coupon.accent]">
                 <AppIcon name="badge" class="h-4 w-4" />
               </span>
               <div class="min-w-0 flex-1">
@@ -355,7 +355,7 @@ onUnmounted(() => {
               </div>
               <button
                 type="button"
-                class="shrink-0 rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition-colors"
+                class="shrink-0 rounded-sm border px-2.5 py-1.5 text-xs font-semibold transition-colors"
                 :class="coupon.copied
                   ? 'border-emerald-400/40 bg-emerald-500/15 text-emerald-300'
                   : 'border-white/[0.1] bg-white/[0.04] text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200'"
@@ -376,10 +376,10 @@ onUnmounted(() => {
             <div
               v-for="bundle in bundles"
               :key="bundle.id"
-              class="flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
+              class="flex flex-col rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
             >
               <div class="flex items-center gap-3">
-                <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[bundle.accent]">
+                <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="accentChip[bundle.accent]">
                   <AppIcon :name="bundle.icon" class="h-5 w-5" />
                 </span>
                 <div>
@@ -399,16 +399,16 @@ onUnmounted(() => {
                     {{ bundle.left }}/{{ bundle.total }} suất
                   </span>
                 </div>
-                <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                <div class="h-1.5 w-full overflow-hidden rounded-sm bg-white/[0.06]">
                   <div
-                    class="h-full rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-500"
+                    class="h-full rounded-sm from-violet-400 to-fuchsia-500"
                     :style="{ width: `${(bundle.left / bundle.total) * 100}%` }"
                   />
                 </div>
               </div>
               <div class="mt-4 flex items-center justify-between">
                 <span class="text-lg font-bold text-foreground">{{ bundle.price }}</span>
-                <button type="button" class="cosmic-btn rounded-xl px-4 py-2 text-sm">Mua gói</button>
+                <button type="button" class="cosmic-btn rounded-sm px-4 py-2 text-sm">Mua gói</button>
               </div>
             </div>
           </div>

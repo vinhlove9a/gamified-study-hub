@@ -384,7 +384,7 @@ const followBtnClass: Record<Accent, string> = {
             v-if="searchQuery"
             type="button"
             aria-label="Xoá tìm kiếm"
-            class="absolute right-3 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+            class="absolute right-3 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
             @click="searchQuery = ''"
           >
             <AppIcon name="x" class="h-4 w-4" />
@@ -397,7 +397,7 @@ const followBtnClass: Record<Accent, string> = {
             v-for="term in popularSearches"
             :key="term"
             type="button"
-            class="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+            class="rounded-sm border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
             @click="applyPopularSearch(term)"
           >
             {{ term }}
@@ -410,7 +410,7 @@ const followBtnClass: Record<Accent, string> = {
     <section class="grid grid-cols-2 gap-4 lg:grid-cols-4">
       <GlassPanel v-for="kpi in kpis" :key="kpi.label" :glow="kpi.accent" hover padded>
         <div class="flex items-center gap-3">
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl" :class="accentChip[kpi.accent]">
+          <span class="flex h-11 w-11 items-center justify-center rounded-sm" :class="accentChip[kpi.accent]">
             <AppIcon :name="kpi.icon" class="h-5 w-5" />
           </span>
           <div>
@@ -428,9 +428,9 @@ const followBtnClass: Record<Accent, string> = {
           v-for="cat in categories"
           :key="cat.id"
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+          class="inline-flex items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
           :class="activeCategory === cat.id
-            ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+            ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
             : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'"
           @click="activeCategory = cat.id"
         >
@@ -439,13 +439,13 @@ const followBtnClass: Record<Accent, string> = {
         </button>
       </div>
 
-      <div class="inline-flex shrink-0 items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1">
+      <div class="inline-flex shrink-0 items-center gap-1 rounded-sm border border-white/[0.06] bg-white/[0.03] p-1">
         <AppIcon name="filter" class="ml-1.5 h-4 w-4 text-muted-foreground" />
         <button
           v-for="opt in sortOptions"
           :key="opt.id"
           type="button"
-          class="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+          class="rounded-sm px-3 py-1.5 text-xs font-medium transition-colors"
           :class="sortKey === opt.id
             ? 'bg-cyan-500/15 text-cyan-200'
             : 'text-muted-foreground hover:bg-white/[0.04] hover:text-foreground'"
@@ -457,10 +457,10 @@ const followBtnClass: Record<Accent, string> = {
     </div>
 
     <!-- ───────────────── FEATURED COLLECTION BANNER ───────────────── -->
-    <div class="featured-banner relative overflow-hidden rounded-2xl border border-white/[0.08] p-6 sm:p-8">
+    <div class="featured-banner relative overflow-hidden rounded-sm border border-white/[0.08] p-6 sm:p-8">
       <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="max-w-xl">
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+          <span class="inline-flex items-center gap-1.5 rounded-sm bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
             <AppIcon name="sparkles" class="h-3.5 w-3.5" /> Bộ sưu tập nổi bật
           </span>
           <h2 class="mt-3 text-xl font-bold text-white sm:text-2xl">Hành trang mùa thi: 30 tài liệu chọn lọc</h2>
@@ -470,7 +470,7 @@ const followBtnClass: Record<Accent, string> = {
         </div>
         <button
           type="button"
-          class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition-transform hover:scale-105"
+          class="inline-flex shrink-0 items-center gap-2 rounded-sm bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition-transform hover:scale-105"
         >
           Khám phá bộ sưu tập
           <AppIcon name="arrow-right" class="h-4 w-4" />
@@ -522,9 +522,9 @@ const followBtnClass: Record<Accent, string> = {
         <article
           v-for="pick in personalPicks"
           :key="pick.id"
-          class="doc-lift flex w-64 shrink-0 flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
+          class="doc-lift flex w-64 shrink-0 flex-col rounded-sm border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]"
         >
-          <span class="flex h-10 w-10 items-center justify-center rounded-xl" :class="accentChip[pick.accent]">
+          <span class="flex h-10 w-10 items-center justify-center rounded-sm" :class="accentChip[pick.accent]">
             <AppIcon :name="pick.icon" class="h-5 w-5" />
           </span>
           <h3 class="mt-3 text-sm font-semibold leading-snug text-foreground">{{ pick.title }}</h3>
@@ -554,7 +554,7 @@ const followBtnClass: Record<Accent, string> = {
             <li
               v-for="author in authors"
               :key="author.id"
-              class="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 transition-colors hover:border-white/[0.12]"
+              class="flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-3 transition-colors hover:border-white/[0.12]"
             >
               <Avatar :name="author.name" :accent="author.accent" :size="44" />
               <div class="min-w-0 flex-1">
@@ -565,7 +565,7 @@ const followBtnClass: Record<Accent, string> = {
               </div>
               <button
                 type="button"
-                class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-3.5 py-1.5 text-xs font-semibold transition-colors"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-1.5 text-xs font-semibold transition-colors"
                 :class="author.following
                   ? 'border-white/[0.12] bg-white/[0.04] text-muted-foreground hover:border-rose-400/40 hover:text-rose-300'
                   : followBtnClass[author.accent]"
@@ -586,7 +586,7 @@ const followBtnClass: Record<Accent, string> = {
             v-for="tag in tagCloud"
             :key="tag.id"
             type="button"
-            class="rounded-full border px-3 py-1 font-medium leading-none transition-all"
+            class="rounded-sm border px-3 py-1 font-medium leading-none transition-all"
             :class="[
               tagWeightClass[tag.weight],
               activeTag === tag.id
@@ -601,7 +601,7 @@ const followBtnClass: Record<Accent, string> = {
         <button
           v-if="activeTag"
           type="button"
-          class="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+          class="mt-4 inline-flex items-center gap-1.5 rounded-sm border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
           @click="activeTag = ''"
         >
           <AppIcon name="x" class="h-3.5 w-3.5" /> Bỏ lọc chủ đề

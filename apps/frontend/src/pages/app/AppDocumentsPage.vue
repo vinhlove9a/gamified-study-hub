@@ -301,7 +301,7 @@ function selectSort(option: string): void {
           Khám phá, đọc và lưu tài liệu học tập từ cộng đồng.
         </p>
       </div>
-      <button type="button" class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm">
+      <button type="button" class="cosmic-btn inline-flex shrink-0 items-center gap-2 rounded-sm px-4 py-2 text-sm">
         <AppIcon name="upload" class="h-4 w-4" />
         Tải lên tài liệu
       </button>
@@ -335,7 +335,7 @@ function selectSort(option: string): void {
           v-model="searchQuery"
           type="text"
           placeholder="Tìm kiếm tài liệu, tác giả, chủ đề..."
-          class="h-11 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+          class="h-11 w-full rounded-sm border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
         />
       </div>
 
@@ -343,7 +343,7 @@ function selectSort(option: string): void {
       <div class="relative shrink-0">
         <button
           type="button"
-          class="inline-flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 text-sm text-foreground hover:border-cyan-400/40 hover:text-cyan-200"
+          class="inline-flex h-11 items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 text-sm text-foreground hover:border-cyan-400/40 hover:text-cyan-200"
           @click="showSortMenu = !showSortMenu"
         >
           <AppIcon name="filter" class="h-4 w-4 text-muted-foreground" />
@@ -353,7 +353,7 @@ function selectSort(option: string): void {
         <!-- Dropdown -->
         <div
           v-if="showSortMenu"
-          class="absolute right-0 top-[calc(100%+6px)] z-20 min-w-[160px] rounded-xl border border-white/[0.08] bg-[#0e0e1a] py-1.5 shadow-xl"
+          class="absolute right-0 top-[calc(100%+6px)] z-20 min-w-[160px] rounded-sm border border-white/[0.08] bg-[#0e0e1a] py-1.5"
         >
           <button
             v-for="opt in sortOptions"
@@ -371,10 +371,10 @@ function selectSort(option: string): void {
       </div>
 
       <!-- View mode toggle -->
-      <div class="flex shrink-0 gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-1">
+      <div class="flex shrink-0 gap-1 rounded-sm border border-white/[0.08] bg-white/[0.03] p-1">
         <button
           type="button"
-          class="flex h-[34px] w-[34px] items-center justify-center rounded-lg transition-colors"
+          class="flex h-[34px] w-[34px] items-center justify-center rounded-sm transition-colors"
           :class="
             viewMode === 'grid'
               ? 'bg-cyan-500/15 text-cyan-300'
@@ -386,7 +386,7 @@ function selectSort(option: string): void {
         </button>
         <button
           type="button"
-          class="flex h-[34px] w-[34px] items-center justify-center rounded-lg transition-colors"
+          class="flex h-[34px] w-[34px] items-center justify-center rounded-sm transition-colors"
           :class="
             viewMode === 'list'
               ? 'bg-cyan-500/15 text-cyan-300'
@@ -405,7 +405,7 @@ function selectSort(option: string): void {
         v-for="cat in categories"
         :key="cat.id"
         type="button"
-        class="rounded-full border px-3 py-1 text-xs font-medium transition-colors"
+        class="rounded-sm border px-3 py-1 text-xs font-medium transition-colors"
         :class="
           activeCategory === cat.id
             ? 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200'
@@ -448,7 +448,7 @@ function selectSort(option: string): void {
       accent="violet"
     >
       <template #header-actions>
-        <span class="rounded-full bg-white/[0.06] px-2.5 py-1 text-xs text-muted-foreground">
+        <span class="rounded-sm bg-white/[0.06] px-2.5 py-1 text-xs text-muted-foreground">
           Trang 1 / 8
         </span>
       </template>
@@ -475,7 +475,7 @@ function selectSort(option: string): void {
 
       <!-- Empty state -->
       <div v-else class="flex flex-col items-center justify-center py-14 text-center">
-        <span class="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
+        <span class="flex h-16 w-16 items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] text-muted-foreground/60">
           <AppIcon name="inbox" class="h-8 w-8" />
         </span>
         <p class="mt-4 text-base font-semibold text-foreground">Không có tài liệu nào</p>
@@ -485,13 +485,13 @@ function selectSort(option: string): void {
         <div class="mt-5 flex flex-wrap justify-center gap-3">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
+            class="inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
             @click="activeCategory = 'all'"
           >
             <AppIcon name="grid" class="h-4 w-4" />
             Xem tất cả danh mục
           </button>
-          <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm">
+          <button type="button" class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm">
             <AppIcon name="upload" class="h-4 w-4" />
             Tải lên tài liệu
           </button>
@@ -508,7 +508,7 @@ function selectSort(option: string): void {
     >
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <!-- Loại tài liệu -->
-        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
           <p class="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Loại tài liệu</p>
           <div class="flex flex-col gap-2">
             <label
@@ -523,7 +523,7 @@ function selectSort(option: string): void {
         </div>
 
         <!-- Số trang -->
-        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
           <p class="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Độ dài</p>
           <div class="flex flex-col gap-2">
             <label
@@ -538,7 +538,7 @@ function selectSort(option: string): void {
         </div>
 
         <!-- Xếp hạng -->
-        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
           <p class="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Đánh giá tối thiểu</p>
           <div class="flex flex-col gap-2">
             <label
@@ -554,7 +554,7 @@ function selectSort(option: string): void {
         </div>
 
         <!-- Truy cập -->
-        <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-4">
           <p class="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quyền truy cập</p>
           <div class="flex flex-col gap-2">
             <label
@@ -570,7 +570,7 @@ function selectSort(option: string): void {
       </div>
 
       <!-- Bộ lọc nâng cao — trạng thái trống -->
-      <div class="mt-4 flex items-center justify-between rounded-xl border border-dashed border-white/[0.08] bg-white/[0.01] px-5 py-4">
+      <div class="mt-4 flex items-center justify-between rounded-sm border border-dashed border-white/[0.08] bg-white/[0.01] px-5 py-4">
         <div class="flex items-center gap-3">
           <AppIcon name="inbox" class="h-5 w-5 text-muted-foreground/50" />
           <p class="text-sm text-muted-foreground">Chưa có bộ lọc nào được áp dụng. Chọn tiêu chí ở trên để thu hẹp kết quả.</p>
@@ -611,7 +611,7 @@ function selectSort(option: string): void {
       <!-- Prev -->
       <button
         type="button"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
       >
         <AppIcon name="chevron-left" class="h-4 w-4" />
       </button>
@@ -620,7 +620,7 @@ function selectSort(option: string): void {
       <template v-for="page in pages" :key="page.value">
         <button
           type="button"
-          class="inline-flex h-9 min-w-[36px] items-center justify-center rounded-xl border px-2.5 text-sm font-medium transition-colors"
+          class="inline-flex h-9 min-w-[36px] items-center justify-center rounded-sm border px-2.5 text-sm font-medium transition-colors"
           :class="
             page.active
               ? 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200'
@@ -637,7 +637,7 @@ function selectSort(option: string): void {
       <!-- Next -->
       <button
         type="button"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.03] text-muted-foreground hover:border-cyan-400/40 hover:text-cyan-200"
       >
         <AppIcon name="chevron-right" class="h-4 w-4" />
       </button>

@@ -124,7 +124,7 @@ const typeBtn: Record<Accent, string> = {
     <GlassPanel class="fx-aurora p-5 sm:p-6">
       <div class="relative z-10 flex items-center gap-4">
         <span
-          class="fx-float flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/30 to-fuchsia-500/20 text-cyan-200 shadow-[0_0_30px_oklch(0.78_0.18_195/30%)]"
+          class="fx-float flex h-14 w-14 items-center justify-center rounded-sm from-cyan-500/30 to-fuchsia-500/20 text-cyan-200"
         >
           <AppIcon name="megaphone" class="h-7 w-7" />
         </span>
@@ -147,7 +147,7 @@ const typeBtn: Record<Accent, string> = {
           <!-- Success state -->
           <div v-if="submitted" class="py-8 text-center">
             <span
-              class="float-slow mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500/30 to-cyan-500/20 text-emerald-300 shadow-[0_0_40px_oklch(0.75_0.18_145/35%)]"
+              class="float-slow mx-auto flex h-20 w-20 items-center justify-center rounded-sm from-emerald-500/30 to-cyan-500/20 text-emerald-300"
             >
               <AppIcon name="check-circle" class="h-10 w-10" />
             </span>
@@ -159,14 +159,14 @@ const typeBtn: Record<Accent, string> = {
             <div class="mt-5 flex flex-wrap justify-center gap-2">
               <button
                 type="button"
-                class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+                class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-4 py-2.5 text-sm"
                 @click="reset"
               >
                 <AppIcon name="edit" class="h-4 w-4" /> Gửi phản hồi khác
               </button>
               <RouterLink
                 to="/app"
-                class="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+                class="inline-flex items-center gap-2 rounded-sm border border-white/10 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
               >
                 <AppIcon name="home" class="h-4 w-4" /> Về trang chủ
               </RouterLink>
@@ -181,7 +181,7 @@ const typeBtn: Record<Accent, string> = {
                 v-for="t in types"
                 :key="t.id"
                 type="button"
-                class="flex flex-col items-center gap-1.5 rounded-xl border py-3 text-xs font-medium transition-all"
+                class="flex flex-col items-center gap-1.5 rounded-sm border py-3 text-xs font-medium transition-all"
                 :class="
                   fbType === t.id
                     ? typeBtn[t.accent]
@@ -200,7 +200,7 @@ const typeBtn: Record<Accent, string> = {
                   v-for="n in 5"
                   :key="n"
                   type="button"
-                  class="rounded-md p-1 transition-transform hover:scale-110"
+                  class="rounded-sm p-1 transition-transform hover:scale-110"
                   :aria-label="`${n} sao`"
                   @mouseenter="hoverRating = n"
                   @click="rating = n"
@@ -250,7 +250,7 @@ const typeBtn: Record<Accent, string> = {
             <div class="mt-5 flex items-center gap-3">
               <button
                 type="submit"
-                class="cosmic-btn inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm disabled:opacity-50"
+                class="cosmic-btn inline-flex items-center gap-2 rounded-sm px-5 py-2.5 text-sm disabled:opacity-50"
                 :disabled="!canSubmit"
               >
                 <AppIcon name="send" class="h-4 w-4" /> Gửi phản hồi
@@ -275,12 +275,12 @@ const typeBtn: Record<Accent, string> = {
             <li
               v-for="item in roadmap"
               :key="item.id"
-              class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5"
+              class="rounded-sm border border-white/[0.06] bg-white/[0.02] p-3.5"
             >
               <div class="flex items-start gap-3">
                 <button
                   type="button"
-                  class="flex w-12 shrink-0 flex-col items-center rounded-lg border py-1.5 transition-all"
+                  class="flex w-12 shrink-0 flex-col items-center rounded-sm border py-1.5 transition-all"
                   :class="
                     item.voted
                       ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
@@ -295,7 +295,7 @@ const typeBtn: Record<Accent, string> = {
                   <p class="text-sm font-semibold text-foreground">{{ item.title }}</p>
                   <p class="mt-0.5 text-xs text-muted-foreground">{{ item.desc }}</p>
                   <span
-                    class="mt-2 inline-block rounded-full px-2 py-0.5 text-[0.65rem] font-medium"
+                    class="mt-2 inline-block rounded-sm px-2 py-0.5 text-[0.65rem] font-medium"
                     :class="statusMeta[item.status].cls"
                   >
                     {{ statusMeta[item.status].label }}

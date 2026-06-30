@@ -186,7 +186,7 @@ const accentChip: Record<Accent, string> = {
           </p>
           <button
             type="button"
-            class="mt-4 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
+            class="mt-4 inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-cyan-400/40 hover:text-cyan-200"
             @click="clearCache"
           >
             <AppIcon name="refresh" class="h-4 w-4" /> Dọn bộ nhớ đệm
@@ -212,10 +212,10 @@ const accentChip: Record<Accent, string> = {
         v-for="f in filters"
         :key="f.id"
         type="button"
-        class="inline-flex shrink-0 items-center rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+        class="inline-flex shrink-0 items-center rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
         :class="
           activeFilter === f.id
-            ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+            ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
             : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
         "
         @click="activeFilter = f.id"
@@ -235,7 +235,7 @@ const accentChip: Record<Accent, string> = {
       <ul class="divide-y divide-white/[0.05]">
         <li v-for="item in filtered" :key="item.id" class="flex items-center gap-3 px-5 py-3.5">
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm"
             :class="accentChip[typeMeta[item.type].accent]"
           >
             <AppIcon :name="typeMeta[item.type].icon" class="h-5 w-5" />
@@ -258,13 +258,13 @@ const accentChip: Record<Accent, string> = {
           <div class="flex shrink-0 items-center gap-1.5">
             <template v-if="item.status === 'done'">
               <span
-                class="hidden items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[0.7rem] font-medium text-emerald-300 sm:inline-flex"
+                class="hidden items-center gap-1 rounded-sm bg-emerald-500/10 px-2 py-1 text-[0.7rem] font-medium text-emerald-300 sm:inline-flex"
               >
                 <AppIcon name="check-circle" class="h-3.5 w-3.5" /> Đã lưu
               </span>
               <button
                 type="button"
-                class="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-cyan-300"
+                class="rounded-sm p-2 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-cyan-300"
                 aria-label="Mở"
               >
                 <AppIcon
@@ -274,7 +274,7 @@ const accentChip: Record<Accent, string> = {
               </button>
               <button
                 type="button"
-                class="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-rose-500/15 hover:text-rose-300"
+                class="rounded-sm p-2 text-muted-foreground transition-colors hover:bg-rose-500/15 hover:text-rose-300"
                 aria-label="Xoá"
                 @click="removeItem(item)"
               >
@@ -284,7 +284,7 @@ const accentChip: Record<Accent, string> = {
             <template v-else-if="item.status === 'downloading'">
               <button
                 type="button"
-                class="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
+                class="rounded-sm border border-white/10 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
                 @click="cancelDownload(item)"
               >
                 Huỷ
@@ -293,7 +293,7 @@ const accentChip: Record<Accent, string> = {
             <template v-else>
               <button
                 type="button"
-                class="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition-colors hover:bg-cyan-500/25"
+                class="inline-flex items-center gap-1.5 rounded-sm border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition-colors hover:bg-cyan-500/25"
                 @click="startDownload(item)"
               >
                 <AppIcon name="download" class="h-4 w-4" /> Tải về
@@ -332,7 +332,7 @@ const accentChip: Record<Accent, string> = {
         padded
       >
         <span
-          class="flex h-10 w-10 items-center justify-center rounded-xl"
+          class="flex h-10 w-10 items-center justify-center rounded-sm"
           :class="accentChip[tip.accent as Accent]"
         >
           <AppIcon :name="tip.icon" class="h-5 w-5" />

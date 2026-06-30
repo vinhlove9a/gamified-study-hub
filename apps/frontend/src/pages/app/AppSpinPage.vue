@@ -221,22 +221,22 @@ onUnmounted(() => {
             <span class="font-semibold text-amber-300">JACKPOT 1000 coin</span>!
           </p>
           <div class="mt-4 flex flex-wrap gap-3">
-            <div class="flex items-center gap-2 rounded-xl border border-amber-400/25 bg-amber-500/10 px-3 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-amber-400/25 bg-amber-500/10 px-3 py-2">
               <AppIcon name="coin" class="h-5 w-5 text-amber-300" />
               <span class="text-lg font-bold tabular-nums text-amber-100">{{ coins.toLocaleString('vi-VN') }}</span>
             </div>
-            <div class="flex items-center gap-2 rounded-xl border border-fuchsia-400/25 bg-fuchsia-500/10 px-3 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-fuchsia-400/25 bg-fuchsia-500/10 px-3 py-2">
               <AppIcon name="gem" class="h-5 w-5 text-fuchsia-300" />
               <span class="text-lg font-bold tabular-nums text-fuchsia-100">{{ gems }}</span>
             </div>
-            <div class="flex items-center gap-2 rounded-xl border border-cyan-400/25 bg-cyan-500/10 px-3 py-2">
+            <div class="flex items-center gap-2 rounded-sm border border-cyan-400/25 bg-cyan-500/10 px-3 py-2">
               <AppIcon name="gift" class="h-5 w-5 text-cyan-300" />
               <span class="text-lg font-bold tabular-nums text-cyan-100">{{ tickets }}</span>
               <span class="text-xs text-muted-foreground">vé quay</span>
             </div>
           </div>
         </div>
-        <div class="shrink-0 rounded-2xl border border-white/[0.08] bg-white/[0.03] px-5 py-4 text-center">
+        <div class="shrink-0 rounded-sm border border-white/[0.08] bg-white/[0.03] px-5 py-4 text-center">
           <p class="text-[0.7rem] uppercase tracking-wider text-muted-foreground">Lượt quay còn lại</p>
           <p class="mt-1 text-4xl font-bold tabular-nums text-amber-200 glow-magenta">{{ totalSpinsLeft }}</p>
           <p class="mt-1 text-xs text-muted-foreground">
@@ -247,11 +247,11 @@ onUnmounted(() => {
     </GlassPanel>
 
     <!-- Jackpot banner -->
-    <div class="scan-line relative overflow-hidden rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-500/15 via-fuchsia-500/10 to-violet-500/15 p-4">
+    <div class="scan-line relative overflow-hidden rounded-sm border border-amber-400/30 from-amber-500/15 via-fuchsia-500/10 to-violet-500/15 p-4">
       <div class="jackpot-shimmer pointer-events-none absolute inset-0" />
       <div class="relative flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <span class="float-slow flex h-11 w-11 items-center justify-center rounded-xl bg-amber-400/20 text-amber-200">
+          <span class="float-slow flex h-11 w-11 items-center justify-center rounded-sm bg-amber-400/20 text-amber-200">
             <AppIcon name="crown" class="h-6 w-6" />
           </span>
           <div>
@@ -273,10 +273,10 @@ onUnmounted(() => {
               <div class="pointer-glow h-0 w-0 border-x-[14px] border-t-[26px] border-x-transparent border-t-amber-300" />
             </div>
             <!-- Outer glow ring -->
-            <div class="absolute inset-[-10px] rounded-full border border-amber-300/30" :class="spinning ? 'pulse-glow-magenta' : ''" />
+            <div class="absolute inset-[-10px] rounded-sm border border-amber-300/30" :class="spinning ? 'pulse-glow-magenta' : ''" />
             <!-- Wheel -->
             <div
-              class="absolute inset-0 rounded-full border-4 border-white/10 shadow-[0_0_50px_oklch(0.62_0.2_290/40%)]"
+              class="absolute inset-0 rounded-sm border-4 border-white/10"
               :style="{
                 background: wheelGradient,
                 transform: `rotate(${rotation}deg)`,
@@ -300,7 +300,7 @@ onUnmounted(() => {
             <div class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
               <button
                 type="button"
-                class="cosmic-btn flex h-24 w-24 flex-col items-center justify-center rounded-full text-base disabled:cursor-not-allowed"
+                class="cosmic-btn flex h-24 w-24 flex-col items-center justify-center rounded-sm text-base disabled:cursor-not-allowed"
                 :disabled="spinning || totalSpinsLeft <= 0"
                 @click="spin(canFreeSpin)"
               >
@@ -314,7 +314,7 @@ onUnmounted(() => {
           <div class="mt-7 flex w-full max-w-[420px] flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              class="flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+              class="flex-1 rounded-sm border px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               :class="canFreeSpin && !spinning
                 ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/20'
                 : 'border-white/[0.08] bg-white/[0.03] text-muted-foreground'"
@@ -326,7 +326,7 @@ onUnmounted(() => {
             </button>
             <button
               type="button"
-              class="flex-1 rounded-xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 transition-colors hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+              class="flex-1 rounded-sm border border-cyan-400/30 bg-cyan-500/10 px-4 py-2.5 text-sm font-semibold text-cyan-200 transition-colors hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="tickets <= 0 || spinning"
               @click="spin(false)"
             >
@@ -352,9 +352,9 @@ onUnmounted(() => {
             <li
               v-for="seg in segments"
               :key="seg.id"
-              class="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2"
+              class="flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] px-3 py-2"
             >
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" :class="accentChip[seg.accent]">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm" :class="accentChip[seg.accent]">
                 <AppIcon :name="seg.icon" class="h-4 w-4" />
               </span>
               <span class="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{{ seg.label }}</span>
@@ -366,7 +366,7 @@ onUnmounted(() => {
         <SectionPanel title="Lịch sử trúng thưởng" subtitle="Hôm nay" icon="clock" accent="cyan" flush>
           <ul v-if="history.length" class="divide-y divide-white/[0.05]">
             <li v-for="rec in history" :key="rec.id" class="flex items-center gap-3 px-5 py-2.5">
-              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" :class="accentChip[rec.accent]">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm" :class="accentChip[rec.accent]">
                 <AppIcon :name="rec.icon" class="h-4 w-4" />
               </span>
               <div class="min-w-0 flex-1">
@@ -416,7 +416,7 @@ onUnmounted(() => {
         </div>
         <GlassPanel :glow="winner.accent" class="relative z-10 w-full max-w-sm p-6 text-center">
           <span
-            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full"
+            class="mx-auto flex h-20 w-20 items-center justify-center rounded-sm"
             :class="[accentChip[winner.accent], winner.kind === 'empty' ? '' : 'pulse-glow-cyan']"
           >
             <AppIcon :name="winner.icon" class="h-10 w-10" />
@@ -430,7 +430,7 @@ onUnmounted(() => {
               ? 'Lần sau may mắn hơn nhé! Hãy thử thêm một vé.'
               : `Phần thưởng đã được cộng vào tài khoản của bạn.` }}
           </p>
-          <button type="button" class="cosmic-btn mt-5 w-full rounded-xl px-4 py-2.5 text-sm" @click="closeModal">
+          <button type="button" class="cosmic-btn mt-5 w-full rounded-sm px-4 py-2.5 text-sm" @click="closeModal">
             Tuyệt vời!
           </button>
         </GlassPanel>

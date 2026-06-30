@@ -203,7 +203,7 @@ const accentChip: Record<Accent, string> = {
         </div>
         <button
           type="button"
-          class="inline-flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
+          class="inline-flex shrink-0 items-center gap-2 rounded-sm border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-rose-400/40 hover:text-rose-300"
           @click="clearHistory"
         >
           <AppIcon name="trash" class="h-4 w-4" /> Xoá lịch sử
@@ -216,7 +216,7 @@ const accentChip: Record<Accent, string> = {
       <div class="grid grid-cols-3 gap-3 lg:col-span-2 lg:grid-cols-3">
         <GlassPanel v-for="s in stats" :key="s.label" :glow="s.accent" hover padded>
           <span
-            class="flex h-10 w-10 items-center justify-center rounded-xl"
+            class="flex h-10 w-10 items-center justify-center rounded-sm"
             :class="accentChip[s.accent]"
           >
             <AppIcon :name="s.icon" class="h-5 w-5" />
@@ -239,10 +239,10 @@ const accentChip: Record<Accent, string> = {
           v-for="f in filters"
           :key="f.id"
           type="button"
-          class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
           :class="
             activeFilter === f.id
-              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
               : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
           "
           @click="activeFilter = f.id"
@@ -269,7 +269,7 @@ const accentChip: Record<Accent, string> = {
       <div v-for="group in grouped" :key="group.label">
         <div class="mb-3 flex items-center gap-3">
           <h2 class="text-sm font-semibold text-foreground">{{ group.label }}</h2>
-          <div class="h-px flex-1 bg-gradient-to-r from-white/[0.1] to-transparent" />
+          <div class="h-px flex-1 from-white/[0.1] to-transparent" />
         </div>
         <ul
           class="relative space-y-2.5 before:absolute before:bottom-3 before:left-[21px] before:top-3 before:w-px before:bg-white/[0.08]"
@@ -277,10 +277,10 @@ const accentChip: Record<Accent, string> = {
           <li
             v-for="a in group.items"
             :key="a.id"
-            class="fx-lift relative flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] py-3 pl-3 pr-4"
+            class="fx-lift relative flex items-center gap-3 rounded-sm border border-white/[0.06] bg-white/[0.02] py-3 pl-3 pr-4"
           >
             <span
-              class="z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-4 ring-[oklch(0.13_0.025_280)]"
+              class="z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-sm ring-4 ring-[oklch(0.13_0.025_280)]"
               :class="accentChip[typeMeta[a.type].accent]"
             >
               <AppIcon :name="typeMeta[a.type].icon" class="h-4 w-4" />
@@ -298,9 +298,9 @@ const accentChip: Record<Accent, string> = {
     </div>
 
     <!-- EMPTY -->
-    <div v-else class="rounded-2xl border border-dashed border-white/[0.1] py-12 text-center">
+    <div v-else class="rounded-sm border border-dashed border-white/[0.1] py-12 text-center">
       <span
-        class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.04] text-muted-foreground"
+        class="mx-auto flex h-14 w-14 items-center justify-center rounded-sm bg-white/[0.04] text-muted-foreground"
       >
         <AppIcon name="clock" class="h-7 w-7" />
       </span>
@@ -308,7 +308,7 @@ const accentChip: Record<Accent, string> = {
       <p class="mt-1 text-xs text-muted-foreground">Bắt đầu học để xây dựng lịch sử của bạn.</p>
       <RouterLink
         to="/app/explore"
-        class="cosmic-btn mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm"
+        class="cosmic-btn mt-4 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-sm"
       >
         <AppIcon name="compass" class="h-4 w-4" /> Khám phá ngay
       </RouterLink>

@@ -273,9 +273,9 @@ const rarityText: Record<Rarity, string> = {
             <span
               v-for="r in rarityCounts"
               :key="r.rarity"
-              class="inline-flex items-center gap-1.5 rounded-full border border-white/[0.07] bg-white/[0.02] px-3 py-1 text-xs"
+              class="inline-flex items-center gap-1.5 rounded-sm border border-white/[0.07] bg-white/[0.02] px-3 py-1 text-xs"
             >
-              <span class="h-2 w-2 rounded-full bg-gradient-to-br" :class="rarityRing[r.rarity]" />
+              <span class="h-2 w-2 rounded-sm" :class="rarityRing[r.rarity]" />
               <span :class="rarityText[r.rarity]">{{ r.label }}</span>
               <span class="text-muted-foreground">{{ r.count }}/{{ r.total }}</span>
             </span>
@@ -297,10 +297,10 @@ const rarityText: Record<Rarity, string> = {
           v-for="cat in categories"
           :key="cat.id"
           type="button"
-          class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition-all"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-3.5 py-2 text-sm font-medium transition-all"
           :class="
             activeCategory === cat.id
-              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200 shadow-[inset_0_0_0_1px_oklch(0.78_0.18_195/30%)]'
+              ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-200'
               : 'border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-white/[0.12] hover:text-foreground'
           "
           @click="activeCategory = cat.id"
@@ -310,13 +310,13 @@ const rarityText: Record<Rarity, string> = {
       </div>
       <div class="flex flex-wrap items-center gap-2">
         <div
-          class="inline-flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1"
+          class="inline-flex items-center gap-1 rounded-sm border border-white/[0.06] bg-white/[0.03] p-1"
         >
           <button
             v-for="r in rarities"
             :key="r.id"
             type="button"
-            class="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+            class="rounded-sm px-3 py-1.5 text-xs font-medium transition-colors"
             :class="
               activeRarity === r.id
                 ? 'bg-fuchsia-500/15 text-fuchsia-200'
@@ -328,13 +328,13 @@ const rarityText: Record<Rarity, string> = {
           </button>
         </div>
         <div
-          class="inline-flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.03] p-1"
+          class="inline-flex items-center gap-1 rounded-sm border border-white/[0.06] bg-white/[0.03] p-1"
         >
           <button
             v-for="s in statusFilters"
             :key="s.id"
             type="button"
-            class="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+            class="rounded-sm px-3 py-1.5 text-xs font-medium transition-colors"
             :class="
               activeStatus === s.id
                 ? 'bg-cyan-500/15 text-cyan-200'
@@ -374,7 +374,7 @@ const rarityText: Record<Rarity, string> = {
 
     <p
       v-if="filtered.length === 0"
-      class="rounded-2xl border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
+      class="rounded-sm border border-dashed border-white/[0.1] py-10 text-center text-sm text-muted-foreground"
     >
       Không có huy hiệu nào khớp bộ lọc.
     </p>
@@ -396,16 +396,16 @@ const rarityText: Record<Rarity, string> = {
           class="flex items-center gap-3"
         >
           <span
-            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm
             :class="rarityRing[b.rarity]"
           >
             <AppIcon :name="b.icon" class="h-5 w-5" />
           </span>
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-semibold text-foreground">{{ b.name }}</p>
-            <div class="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+            <div class="mt-1.5 h-2 w-full overflow-hidden rounded-sm bg-white/[0.06]">
               <div
-                class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-400"
+                class="h-full rounded-sm from-cyan-400 to-fuchsia-400"
                 :style="{ width: `${b.progress ?? 0}%` }"
               />
             </div>
@@ -437,24 +437,24 @@ const rarityText: Record<Rarity, string> = {
         >
           <button
             type="button"
-            class="absolute right-4 top-4 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
+            class="absolute right-4 top-4 rounded-sm p-1.5 text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-foreground"
             aria-label="Đóng"
             @click="selected = null"
           >
             <AppIcon name="x" class="h-5 w-5" />
           </button>
           <span
-            class="float-slow mx-auto flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br"
+            class="float-slow mx-auto flex h-24 w-24 items-center justify-center rounded-sm border border-zinc-800 bg-zinc-950"
             :class="
               selected.unlocked
                 ? rarityRing[selected.rarity]
-                : 'from-white/5 to-white/[0.02] text-muted-foreground'
+                : 'text-muted-foreground'
             "
           >
             <AppIcon :name="selected.unlocked ? selected.icon : 'lock'" class="h-12 w-12" />
           </span>
           <p
-            class="mt-4 inline-block rounded-full px-3 py-1 text-xs font-semibold"
+            class="mt-4 inline-block rounded-sm px-3 py-1 text-xs font-semibold"
             :class="[rarityText[selected.rarity], 'bg-white/[0.06]']"
           >
             {{ rarityLabel[selected.rarity] }}
@@ -463,7 +463,7 @@ const rarityText: Record<Rarity, string> = {
           <p class="mt-1.5 text-sm text-muted-foreground">{{ selected.description }}</p>
 
           <div
-            class="mt-4 space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-left text-sm"
+            class="mt-4 space-y-2 rounded-sm border border-white/[0.06] bg-white/[0.02] p-3 text-left text-sm"
           >
             <div class="flex items-center justify-between">
               <span class="text-muted-foreground">Điều kiện</span>
@@ -476,9 +476,9 @@ const rarityText: Record<Rarity, string> = {
           </div>
 
           <div v-if="!selected.unlocked && selected.progress !== undefined" class="mt-3">
-            <div class="h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+            <div class="h-2.5 w-full overflow-hidden rounded-sm bg-white/[0.06]">
               <div
-                class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-400"
+                class="h-full rounded-sm from-cyan-400 to-fuchsia-400"
                 :style="{ width: `${selected.progress}%` }"
               />
             </div>
@@ -488,7 +488,7 @@ const rarityText: Record<Rarity, string> = {
           <button
             v-if="selected.unlocked"
             type="button"
-            class="cosmic-btn mt-5 w-full rounded-xl px-4 py-2.5 text-sm"
+            class="cosmic-btn mt-5 w-full rounded-sm px-4 py-2.5 text-sm"
             @click="shareBadge"
           >
             <AppIcon name="share" class="mr-1.5 inline h-4 w-4" /> Khoe huy hiệu

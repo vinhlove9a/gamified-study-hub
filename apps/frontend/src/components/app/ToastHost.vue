@@ -22,17 +22,17 @@ const accentClass: Record<ToastAccent, string> = {
       <div
         v-for="t in toasts"
         :key="t.id"
-        class="glass-panel pointer-events-auto flex items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl"
+        class="glass-panel pointer-events-auto flex items-center gap-3 rounded-sm border px-4 py-3"
         :class="accentClass[t.accent]"
         role="status"
       >
-        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-white/10">
           <AppIcon :name="t.icon" class="h-4 w-4" />
         </span>
         <p class="flex-1 text-sm font-medium text-foreground">{{ t.message }}</p>
         <button
           type="button"
-          class="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground"
+          class="shrink-0 rounded-sm p-1 text-muted-foreground transition-colors hover:text-foreground"
           aria-label="Đóng"
           @click="dismiss(t.id)"
         >
