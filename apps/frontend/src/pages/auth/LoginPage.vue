@@ -197,26 +197,22 @@ onUnmounted(() => {
     <main class="auth-main">
       <div class="auth-split">
         <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
-          <div class="brand-icon-wrap" aria-hidden="true">
-            <div class="pulse pulse-1"></div>
-            <div class="pulse pulse-2"></div>
-            <div class="brand-icon animate-wiggle">
-              <img src="/images/gmf-logo.png" alt="Gamified Study Hub" class="h-full w-full rounded-2xl object-cover" />
-            </div>
+        <div class="auth-brand">
+          <div class="brand-logo" aria-hidden="true">
+            <img src="/images/gmf-logo.png" alt="Gamified Study Hub" class="brand-logo-img" />
           </div>
 
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title cosmic-gradient-text">Đăng nhập vào tài khoản</h1>
-          <p class="auth-subtitle animate-fade-in delay-300">Tiếp tục quản lý tài liệu, nhiệm vụ và điểm thưởng cho cộng đồng học tập của bạn.</p>
+          <h1 class="auth-title">Đăng nhập vào tài khoản</h1>
+          <p class="auth-subtitle">Tiếp tục quản lý tài liệu, nhiệm vụ và điểm thưởng cho cộng đồng học tập của bạn.</p>
         </div>
 
-        <section class="auth-card cosmic-glass cosmic-glass-hover animate-slide-up delay-200" aria-label="Form đăng nhập">
-          <div class="social-grid animate-fade-in delay-400" aria-hidden="false">
-            <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với Google" @click="startGoogleLogin">
+        <section class="auth-card" aria-label="Form đăng nhập">
+          <div class="social-grid">
+            <button type="button" class="social-btn" aria-label="Tiếp tục với Google" @click="startGoogleLogin">
               <span>Tiếp tục với Google</span>
             </button>
-            <button type="button" class="social-btn floating-icon" aria-label="Tiếp tục với GitHub">
+            <button type="button" class="social-btn" aria-label="Tiếp tục với GitHub">
               <span>Tiếp tục với GitHub</span>
             </button>
           </div>
@@ -226,13 +222,13 @@ onUnmounted(() => {
           </div>
 
           <form class="space-y-5" novalidate @submit.prevent="handleSubmit">
-            <div class="animate-slide-up delay-300">
+            <div>
               <label for="email" class="field-label">Email</label>
-              <div class="relative input-wrap" :class="{ 'input-wrap--focused': emailFocused }">
+              <div class="input-wrap" :class="{ 'input-wrap--focused': emailFocused }">
                 <input
                   id="email"
                   v-model="form.email"
-                  class="field-input input-focus-effect"
+                  class="field-input"
                   :class="{ 'field-input--error': errors.email }"
                   type="email"
                   placeholder="hello@example.com"
@@ -249,13 +245,13 @@ onUnmounted(() => {
               <p v-if="errors.email" id="email-error" class="field-error" role="alert">{{ errors.email }}</p>
             </div>
 
-            <div class="animate-slide-up delay-400">
+            <div>
               <label for="password" class="field-label">Mật khẩu</label>
-              <div class="relative">
+              <div class="password-wrap">
                 <input
                   id="password"
                   v-model="form.password"
-                  class="field-input pr-12 input-focus-effect"
+                  class="field-input pr-12"
                   :class="{ 'field-input--error': errors.password }"
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="••••••••"
@@ -278,7 +274,7 @@ onUnmounted(() => {
               <p v-if="errors.password" id="password-error" class="field-error" role="alert">{{ errors.password }}</p>
             </div>
 
-            <div class="option-row animate-fade-in delay-500">
+            <div class="option-row">
               <label class="remember-label">
                 <input v-model="form.remember" type="checkbox" class="remember-checkbox" :disabled="loading" />
                 <span>Ghi nhớ đăng nhập</span>
@@ -286,7 +282,7 @@ onUnmounted(() => {
               <RouterLink to="/auth/forgot-password" class="auth-link">Quên mật khẩu?</RouterLink>
             </div>
 
-            <button type="submit" class="submit-btn cosmic-btn animate-slide-up delay-500" :disabled="loading" :aria-busy="loading">
+            <button type="submit" class="submit-btn" :disabled="loading" :aria-busy="loading">
               {{ loading ? 'Đang xử lý...' : 'Đăng nhập' }}
             </button>
           </form>
@@ -300,22 +296,22 @@ onUnmounted(() => {
 
           <a href="/" class="back-home-link">Quay lại trang chủ</a>
         </section>
-
-        <div class="wave-row" aria-hidden="true">
-          <span>🌸</span><span>🌼</span><span>🦋</span><span>✨</span><span>🌈</span>
-        </div>
         </div>
 
         <AuthShowcasePanel variant="login" class="auth-aside" />
       </div>
     </main>
-    <canvas ref="trailCanvasRef" class="trail-canvas" aria-hidden="true"></canvas>
   </div>
 </template>
 
 <style scoped>
 .login-page {
   overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 80% 100%, rgba(34, 211, 238, 0.03) 0%, transparent 60%),
+    #09090E;
+  background-attachment: fixed;
 }
 
 .auth-main {
@@ -369,112 +365,98 @@ onUnmounted(() => {
   }
 }
 
+/* ── Brand ─────────────────────────────────────────────────────────────── */
 .auth-brand {
   text-align: center;
   margin-bottom: 1.5rem;
+  animation: auth-fade-in 0.4s ease-out both;
 }
 
-.brand-icon-wrap {
-  position: relative;
-  width: 5rem;
-  height: 5rem;
-  margin: 0 auto 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.brand-logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 0.875rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.pulse {
-  position: absolute;
-  inset: 0;
-  border: 2px solid oklch(0.78 0.18 195 / 45%);
-  border-radius: 9999px;
-  animation: ring 2s ease-out infinite;
-}
-
-.pulse-2 {
-  animation-delay: 0.8s;
-}
-
-.brand-icon {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: oklch(0.08 0.02 280);
-  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
-  box-shadow: 0 12px 30px oklch(0.78 0.18 195 / 40%), 0 0 28px oklch(0.68 0.22 350 / 30%);
-}
-
-.animate-wiggle {
-  animation: wiggle 3s ease-in-out infinite;
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-name {
   margin: 0;
-  color: oklch(0.82 0.16 195);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  color: #6B7280;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .auth-title {
-  margin: 0.35rem 0;
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 700;
+  margin: 0.5rem 0;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #E8E8F0;
+  letter-spacing: -0.01em;
 }
 
 .auth-subtitle {
   margin: 0;
-  color: oklch(0.7 0.03 240 / 85%);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  color: #8B8B9F;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
+/* ── Card ──────────────────────────────────────────────────────────────── */
 .auth-card {
-  border-radius: 1.6rem;
+  border-radius: 1.25rem;
   padding: 1.5rem;
+  background: rgba(14, 14, 22, 0.72);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 24px 48px rgba(0, 0, 0, 0.6);
+  animation: auth-fade-up 0.5s ease-out both;
 }
 
+/* ── Social login ──────────────────────────────────────────────────────── */
 .social-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.75rem;
+  gap: 0.625rem;
 }
 
 .social-btn {
-  border: 1px solid oklch(0.7 0.1 280 / 22%);
-  background: oklch(0.13 0.025 280 / 45%);
-  color: oklch(0.92 0.02 240);
-  border-radius: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #C0C0D4;
+  border-radius: 0.625rem;
   padding: 0.75rem 1rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.88rem;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .social-btn:hover {
-  border-color: oklch(0.78 0.18 195 / 45%);
-  background: oklch(0.78 0.18 195 / 10%);
-  color: oklch(0.9 0.12 200);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #E8E8F0;
 }
 
-.floating-icon {
-  transition: all 0.3s ease;
-}
-
-.floating-icon:hover {
-  transform: translateY(-5px) scale(1.03);
-}
-
+/* ── Divider ───────────────────────────────────────────────────────────── */
 .divider {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 1.2rem 0;
+  margin: 1.25rem 0;
 }
 
 .divider::before,
@@ -482,89 +464,83 @@ onUnmounted(() => {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, oklch(0.78 0.18 195 / 35%), transparent);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .divider-text {
-  font-size: 0.73rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: oklch(0.7 0.03 240 / 80%);
-  font-weight: 600;
+  color: #5A5A6E;
+  font-weight: 500;
 }
 
+/* ── Form fields ───────────────────────────────────────────────────────── */
 .field-label {
   display: block;
-  margin-bottom: 0.45rem;
-  margin-left: 0.15rem;
-  font-size: 0.87rem;
-  color: oklch(0.85 0.03 220);
-  font-weight: 600;
+  margin-bottom: 0.375rem;
+  font-size: 0.82rem;
+  color: #8B8B9F;
+  font-weight: 500;
 }
 
-/* Cosmic glass field (see .cosmic-input recipe in dashboard.css). */
 .field-input {
   width: 100%;
-  border: 1px solid oklch(0.7 0.1 280 / 25%);
-  background: oklch(0.13 0.025 280 / 55%);
-  color: oklch(0.96 0.01 240);
-  border-radius: 0.95rem;
-  padding: 0.75rem 0.95rem;
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #E8E8F0;
+  border-radius: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.field-input::placeholder {
+  color: #5A5A6E;
+}
+
+.field-input:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), 0 0 20px rgba(34, 211, 238, 0.06);
+}
+
+.field-input--error {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.field-error {
+  margin: 0.375rem 0 0;
+  color: #EF4444;
+  font-size: 0.78rem;
 }
 
 .input-wrap {
-  transition: transform 0.3s ease;
-}
-
-.input-wrap--focused {
-  transform: scale(1.02);
-}
-
-.input-focus-effect:focus {
-  transform: translateY(-2px);
+  position: relative;
 }
 
 .input-check {
   position: absolute;
-  right: 0.95rem;
+  right: 0.875rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.95rem;
-  color: oklch(0.78 0.18 195);
-  text-shadow: 0 0 8px oklch(0.78 0.18 195 / 70%);
+  font-size: 0.85rem;
+  color: #10B981;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
 }
 
 .input-check--show {
   opacity: 1;
 }
 
-.field-input::placeholder {
-  color: oklch(0.7 0.03 240 / 55%);
-}
-
-.field-input:hover {
-  border-color: oklch(0.78 0.18 195 / 35%);
-}
-
-.field-input:focus {
-  outline: none;
-  border-color: oklch(0.78 0.18 195 / 70%);
-  background: oklch(0.13 0.025 280 / 75%);
-  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%), 0 0 18px oklch(0.78 0.18 195 / 18%);
-}
-
-.field-input--error {
-  border-color: oklch(0.65 0.25 25 / 80%);
-}
-
-.field-error {
-  margin: 0.35rem 0 0;
-  color: oklch(0.72 0.2 20);
-  font-size: 0.8rem;
+.password-wrap {
+  position: relative;
 }
 
 .password-toggle {
@@ -574,131 +550,130 @@ onUnmounted(() => {
   transform: translateY(-50%);
   border: none;
   background: transparent;
-  color: oklch(0.82 0.16 195);
-  font-size: 0.78rem;
-  font-weight: 700;
+  color: #5A5A6E;
+  font-size: 0.76rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
+.password-toggle:hover {
+  color: #8B8B9F;
+}
+
+/* ── Option row ────────────────────────────────────────────────────────── */
 .option-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.625rem;
 }
 
 .remember-label {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: oklch(0.8 0.03 230);
-  font-size: 0.87rem;
+  color: #8B8B9F;
+  font-size: 0.85rem;
 }
 
 .remember-checkbox {
   width: 1rem;
   height: 1rem;
-  accent-color: oklch(0.78 0.18 195);
+  accent-color: #22D3EE;
 }
 
 .auth-link {
-  color: oklch(0.82 0.16 195);
+  color: #22D3EE;
   text-decoration: none;
-  font-size: 0.87rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .auth-link:hover {
-  text-decoration: underline;
-  color: oklch(0.88 0.14 200);
+  color: #67E8F9;
 }
 
+.auth-link--strong {
+  font-weight: 600;
+}
+
+/* ── Submit button ─────────────────────────────────────────────────────── */
 .submit-btn {
   width: 100%;
-  margin-top: 0.2rem;
-  border-radius: 0.95rem;
-  font-size: 0.95rem;
-  padding: 0.85rem 1rem;
+  margin-top: 0.25rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: linear-gradient(135deg, #22D3EE, #7C3AED);
+  color: #09090E;
+  border-radius: 0.625rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   cursor: pointer;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+  transition: box-shadow 0.2s ease, filter 0.2s ease, transform 0.15s ease;
 }
 
+.submit-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.2);
+  transform: translateY(-1px);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Messages & links ──────────────────────────────────────────────────── */
 .submit-message {
-  margin: 0.95rem 0 0;
-  border-radius: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  background: oklch(0.78 0.18 195 / 10%);
-  border: 1px solid oklch(0.78 0.18 195 / 25%);
-  color: oklch(0.9 0.05 210);
-  font-size: 0.84rem;
+  margin: 0.875rem 0 0;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: rgba(34, 211, 238, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  color: #C0C0D4;
+  font-size: 0.82rem;
 }
 
 .register-row {
   margin: 1rem 0 0;
   text-align: center;
-  color: oklch(0.7 0.03 240 / 85%);
-  font-size: 0.9rem;
-}
-
-.auth-link--strong {
-  margin-left: 0.25rem;
-  font-weight: 700;
+  color: #8B8B9F;
+  font-size: 0.88rem;
 }
 
 .back-home-link {
-  margin-top: 0.9rem;
+  margin-top: 0.875rem;
   display: block;
   text-align: center;
-  color: oklch(0.7 0.03 240 / 70%);
+  color: #5A5A6E;
   text-decoration: none;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
+  transition: color 0.2s ease;
 }
 
 .back-home-link:hover {
-  text-decoration: underline;
-  color: oklch(0.82 0.16 195);
+  color: #8B8B9F;
 }
 
-.wave-row {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 0.25rem;
+/* ── Animations ────────────────────────────────────────────────────────── */
+@keyframes auth-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.wave-row span {
-  display: inline-block;
-  animation: wave 3s ease-in-out infinite;
+@keyframes auth-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.wave-row span:nth-child(2) { animation-delay: 0.1s; }
-.wave-row span:nth-child(3) { animation-delay: 0.2s; }
-.wave-row span:nth-child(4) { animation-delay: 0.3s; }
-.wave-row span:nth-child(5) { animation-delay: 0.4s; }
-
-/* Cursor-trail canvas sits above content but ignores pointer events. */
-.trail-canvas {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(3deg); }
-  75% { transform: rotate(-3deg); }
-}
-
-@keyframes ring {
-  from { transform: scale(0.8); opacity: 1; }
-  to { transform: scale(1.7); opacity: 0; }
-}
-
-@keyframes wave {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-6px) scaleY(1.08); }
-}
-
+/* ── Responsive ────────────────────────────────────────────────────────── */
 @media (min-width: 640px) {
   .auth-main {
     padding: 2rem;
@@ -713,37 +688,10 @@ onUnmounted(() => {
   }
 }
 
-.animate-slide-up {
-  animation: slide-up 0.8s ease-out both;
-}
-
-.animate-fade-in {
-  animation: fade-in 1s ease-out both;
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.8s ease-out both;
-}
-
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes bounce-in {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .auth-brand,
+  .auth-card {
+    animation: none;
+  }
 }
 </style>

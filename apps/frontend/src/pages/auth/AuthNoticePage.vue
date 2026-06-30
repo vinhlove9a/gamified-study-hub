@@ -111,20 +111,16 @@ const handleResend = async () => {
 
     <main class="auth-main">
       <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">{{ noticeConfig.title }}</h1>
+          <h1 class="auth-title">{{ noticeConfig.title }}</h1>
           <p class="auth-subtitle">{{ noticeConfig.message }}</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Thông báo xác thực">
+        <section class="auth-card" aria-label="Thông báo xác thực">
           <div class="auth-grid">
             <aside class="notice-panel" aria-label="Các bước tiếp theo">
-              <div class="status-visual" aria-hidden="true">
-                <span class="status-ring"></span>
-                <span class="status-core" :class="{ 'status-core--success': noticeConfig.icon === 'success' }"></span>
-                <span class="status-icon">{{ noticeConfig.icon === 'success' ? '✓' : '✉' }}</span>
-              </div>
+              <div class="panel-icon" :class="{ 'panel-icon--success': noticeConfig.icon === 'success' }" aria-hidden="true">{{ noticeConfig.icon === 'success' ? '✓' : '✉' }}</div>
 
               <p class="panel-title">Bước tiếp theo</p>
 
@@ -136,7 +132,7 @@ const handleResend = async () => {
             </aside>
 
             <div class="action-stack" role="group" aria-label="Hành động thông báo">
-              <RouterLink to="/auth/login" class="submit-btn btn-shimmer">{{ noticeConfig.primaryLabel }}</RouterLink>
+              <RouterLink to="/auth/login" class="submit-btn">{{ noticeConfig.primaryLabel }}</RouterLink>
 
               <button
                 v-if="noticeConfig.secondaryMode === 'resend'"

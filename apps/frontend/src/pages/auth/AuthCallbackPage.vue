@@ -32,7 +32,7 @@ onMounted(async () => {
 
     <main class="auth-main">
       <div class="auth-shell auth-shell--narrow">
-        <section class="auth-card animate-slide-up">
+        <section class="auth-card">
           <div class="callback-card">
             <span class="spinner" aria-hidden="true"></span>
             <p class="hint">{{ message }}</p>

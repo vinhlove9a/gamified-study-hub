@@ -88,42 +88,40 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <aside class="showcase cosmic-glass" aria-label="Giới thiệu Gamified Study Hub">
+  <aside class="showcase" aria-label="Giới thiệu Gamified Study Hub">
     <FlowParticles
       class="showcase-particles"
       :count="5"
       color="#22d3ee"
       speed="slow"
-      :opacity="0.18"
+      :opacity="0.12"
       aria-hidden="true"
     />
 
-    <!-- BLOCK 1 — header -->
-    <header class="showcase-header animate-slide-up">
-      <span class="cosmic-badge">TRUNG TÂM ĐIỀU PHỐI</span>
-      <h2 class="cosmic-gradient-text">{{ heading }}</h2>
+    <header class="showcase-header">
+      <span class="showcase-badge">Trung tâm điều phối</span>
+      <h2 class="showcase-heading">{{ heading }}</h2>
       <p class="showcase-sub">{{ subtitle }}</p>
     </header>
 
-    <!-- BLOCK 2 — stat grid -->
     <div class="stat-block">
       <div class="stat-grid" role="group" aria-label="Chỉ số minh hoạ">
-        <div class="stat-tile cosmic-glass animate-slide-up delay-200">
+        <div class="stat-tile">
           <span class="stat-doc stat-value" aria-hidden="true">0</span>
           <span class="stat-tile-label">Tài liệu trong kho</span>
         </div>
-        <div class="stat-tile cosmic-glass animate-slide-up delay-300">
+        <div class="stat-tile">
           <span class="stat-mission stat-value" aria-hidden="true">0</span>
           <span class="stat-tile-label">Nhiệm vụ đã hoàn thành</span>
         </div>
-        <div class="stat-tile cosmic-glass animate-slide-up delay-400">
+        <div class="stat-tile">
           <span class="stat-value-row">
             <span class="stat-streak stat-value" aria-hidden="true">0</span>
             <span class="stat-unit">ngày</span>
           </span>
           <span class="stat-tile-label">Streak dài nhất</span>
         </div>
-        <div class="stat-tile cosmic-glass animate-slide-up delay-500">
+        <div class="stat-tile">
           <span class="stat-member stat-value" aria-hidden="true">0</span>
           <span class="stat-tile-label">Thành viên cộng đồng</span>
         </div>
@@ -131,18 +129,16 @@ onUnmounted(() => {
       <p class="figure-note">Số liệu minh hoạ cho mục tiêu sản phẩm.</p>
     </div>
 
-    <!-- BLOCK 3 — feature checklist -->
     <ul class="feature-list">
       <li v-for="feature in features" :key="feature" class="feature-item">
-        <span class="check glow-cyan" aria-hidden="true">✓</span>
+        <span class="check" aria-hidden="true">✓</span>
         <span class="feature-text">{{ feature }}</span>
       </li>
     </ul>
 
-    <!-- BLOCK 4 — mini leaderboard preview -->
-    <div class="mini-preview cosmic-glass scan-line animate-fade-in delay-300" aria-hidden="true">
+    <div class="mini-preview" aria-hidden="true">
       <div class="mini-preview-head">
-        <span class="mini-preview-title">Bảng xếp hạng tuần (xem trước)</span>
+        <span class="mini-preview-title">Bảng xếp hạng tuần</span>
         <div class="streak-ring">
           <span class="streak-ring-text">36🔥</span>
         </div>
@@ -150,120 +146,41 @@ onUnmounted(() => {
       <ol class="lb-list">
         <li v-for="row in leaderboardRows" :key="row" class="lb-row">{{ row }}</li>
       </ol>
-      <p class="mini-preview-note">Xem trước giao diện — dữ liệu minh hoạ.</p>
     </div>
 
-    <!-- BLOCK 5 — status rail -->
     <div class="status-rail" role="list" aria-label="Trạng thái hệ thống">
       <span class="status-chip" role="listitem">
-        <span class="status-dot pulse-glow-green" aria-hidden="true"></span>
+        <span class="status-dot" aria-hidden="true"></span>
         Hệ thống ổn định
       </span>
       <span class="status-chip" role="listitem">
-        <span class="status-dot pulse-glow-cyan" aria-hidden="true"></span>
+        <span class="status-dot" aria-hidden="true"></span>
         Đồng bộ tức thì
       </span>
       <span class="status-chip" role="listitem">
-        <span class="status-dot pulse-glow-magenta" aria-hidden="true"></span>
+        <span class="status-dot" aria-hidden="true"></span>
         Sẵn sàng cho CLB & gia sư
       </span>
-    </div>
-
-    <!-- BLOCK 6 — testimonial -->
-    <blockquote class="testimonial-card cosmic-glass cosmic-glass-hover">
-      <div class="testimonial-stars glow-cyan" aria-hidden="true">★★★★★</div>
-      <p class="testimonial-quote">
-        GSH giúp CLB mình biến kho đề thi lộn xộn thành lộ trình ôn rõ ràng. Tụi mình thi nhau giữ
-        streak, lớp chưa bao giờ đông vui như vậy.
-      </p>
-      <footer class="testimonial-foot">
-        <span class="testimonial-avatar" aria-hidden="true">MA</span>
-        <cite class="testimonial-cite">— Minh Anh · Chủ nhiệm CLB Tiếng Anh</cite>
-      </footer>
-      <span class="cosmic-badge testimonial-honesty">Câu chuyện minh hoạ</span>
-    </blockquote>
-
-    <!-- BLOCK 7 — community badges -->
-    <div class="community-badges">
-      <div class="community-pills">
-        <span v-for="badge in communityBadges" :key="badge" class="cosmic-badge">{{ badge }}</span>
-      </div>
-      <p class="community-caption">Được xây dựng cho mọi cộng đồng học tập.</p>
     </div>
   </aside>
 </template>
 
 <style scoped>
-/* ── local (non-global) animation primitives ───────────────────────────── */
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.8s ease-out both;
-}
-
-.animate-fade-in {
-  animation: fade-in 1s ease-out both;
-}
-
-.delay-200 {
-  animation-delay: 0.2s;
-}
-.delay-300 {
-  animation-delay: 0.3s;
-}
-.delay-400 {
-  animation-delay: 0.4s;
-}
-.delay-500 {
-  animation-delay: 0.5s;
-}
-
-/* Local pill (matches the global cosmic-badge spec, scoped per instructions). */
-.cosmic-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: oklch(0.82 0.16 195);
-  background: oklch(0.78 0.18 195 / 10%);
-  border: 1px solid oklch(0.78 0.18 195 / 35%);
-}
-
-/* ── root aside ─────────────────────────────────────────────────────────── */
 .showcase {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
   width: 100%;
-  padding: clamp(1.75rem, 3.5vw, 2.75rem);
-  border-radius: 1.5rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 1.25rem;
   overflow: hidden;
-  color: oklch(0.96 0.01 240);
+  color: #E8E8F0;
   isolation: isolate;
+  background: rgba(14, 14, 22, 0.5);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .showcase-particles {
@@ -275,126 +192,142 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-/* ── BLOCK 1 header ─────────────────────────────────────────────────────── */
+/* ── Header ─────────────────────────────────────────────────────────────── */
 .showcase-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-
-.showcase-header h2 {
-  margin: 0;
-  font-size: clamp(1.55rem, 2.6vw, 2.05rem);
-  line-height: 1.18;
-  letter-spacing: -0.01em;
-}
-
-.showcase-sub {
-  margin: 0;
-  color: oklch(0.7 0.03 240);
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-  line-height: 1.7;
-}
-
-/* ── BLOCK 2 stat grid ──────────────────────────────────────────────────── */
-.stat-block {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
+.showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #22D3EE;
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  align-self: flex-start;
+}
+
+.showcase-heading {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 600;
+  color: #E8E8F0;
+  letter-spacing: -0.01em;
+}
+
+.showcase-sub {
+  margin: 0;
+  color: #8B8B9F;
+  font-size: clamp(0.88rem, 1.2vw, 0.95rem);
+  line-height: 1.65;
+}
+
+/* ── Stat grid ──────────────────────────────────────────────────────────── */
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
+  gap: 0.625rem;
 }
 
 .stat-tile {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 1.05rem 1.1rem;
-  border-radius: 1rem;
+  gap: 0.25rem;
+  padding: 0.875rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .stat-value-row {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
 .stat-value {
-  font-size: clamp(1.7rem, 3vw, 2.25rem);
-  font-weight: 800;
+  font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+  font-weight: 700;
   line-height: 1;
-  background: linear-gradient(120deg, oklch(0.82 0.16 195), oklch(0.68 0.22 300));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #E8E8F0;
 }
 
 .stat-unit {
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: oklch(0.84 0.16 85);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5A5A6E;
 }
 
 .stat-tile-label {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   line-height: 1.4;
-  color: oklch(0.7 0.03 240);
+  color: #5A5A6E;
 }
 
 .figure-note {
   margin: 0;
-  font-size: 0.72rem;
-  font-style: italic;
-  color: oklch(0.7 0.03 240 / 75%);
+  font-size: 0.7rem;
+  color: #3A3A4A;
 }
 
-/* ── BLOCK 3 feature checklist ──────────────────────────────────────────── */
+/* ── Feature list ───────────────────────────────────────────────────────── */
 .feature-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.5rem;
 }
 
 .feature-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.7rem;
-  font-size: 0.92rem;
+  gap: 0.625rem;
+  font-size: 0.88rem;
   line-height: 1.5;
-  color: oklch(0.96 0.01 240 / 92%);
+  color: #C0C0D4;
 }
 
 .check {
   flex: none;
   display: grid;
   place-items: center;
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-top: 0.05rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: oklch(0.82 0.16 195);
-  background: oklch(0.82 0.16 195 / 12%);
-  border: 1px solid oklch(0.82 0.16 195 / 40%);
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.1rem;
+  border-radius: 0.375rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #22D3EE;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.15);
 }
 
-/* ── BLOCK 4 mini leaderboard preview ───────────────────────────────────── */
+/* ── Mini leaderboard ───────────────────────────────────────────────────── */
 .mini-preview {
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  padding: 1.15rem 1.25rem;
-  border-radius: 1.1rem;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .mini-preview-head {
@@ -405,11 +338,11 @@ onUnmounted(() => {
 }
 
 .mini-preview-title {
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: oklch(0.82 0.16 195);
+  color: #5A5A6E;
 }
 
 .streak-ring {
@@ -417,29 +350,26 @@ onUnmounted(() => {
   flex: none;
   display: grid;
   place-items: center;
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 999px;
-  background: conic-gradient(
-    oklch(0.82 0.16 195) 0% 80%,
-    oklch(0.18 0.03 280) 80% 100%
-  );
+  background: conic-gradient(#22D3EE 0% 80%, rgba(255, 255, 255, 0.06) 80% 100%);
 }
 
 .streak-ring::before {
   content: '';
   position: absolute;
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 2.1rem;
+  height: 2.1rem;
   border-radius: 999px;
-  background: oklch(0.11 0.024 280);
+  background: #0E0E16;
 }
 
 .streak-ring-text {
   position: relative;
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: oklch(0.96 0.01 240);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #E8E8F0;
 }
 
 .lb-list {
@@ -448,143 +378,58 @@ onUnmounted(() => {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.375rem;
 }
 
 .lb-row {
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.7rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
-  color: oklch(0.96 0.01 240 / 90%);
-  background: oklch(0.16 0.035 280 / 55%);
-  border: 1px solid oklch(0.7 0.1 280 / 14%);
+  color: #8B8B9F;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .lb-row:first-child {
-  border-color: oklch(0.84 0.16 85 / 35%);
-  box-shadow: inset 0 0 18px oklch(0.84 0.16 85 / 10%);
+  border-color: rgba(34, 211, 238, 0.12);
+  color: #C0C0D4;
 }
 
-.mini-preview-note {
-  margin: 0;
-  font-size: 0.7rem;
-  font-style: italic;
-  color: oklch(0.7 0.03 240 / 75%);
-}
-
-/* ── BLOCK 5 status rail ────────────────────────────────────────────────── */
+/* ── Status rail ────────────────────────────────────────────────────────── */
 .status-rail {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .status-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.8rem;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  font-size: 0.78rem;
-  color: oklch(0.96 0.01 240 / 88%);
-  background: oklch(0.16 0.035 280 / 55%);
-  border: 1px solid oklch(0.7 0.1 280 / 16%);
+  font-size: 0.76rem;
+  color: #8B8B9F;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .status-dot {
-  width: 0.55rem;
-  height: 0.55rem;
+  width: 0.45rem;
+  height: 0.45rem;
   border-radius: 999px;
-  background: oklch(0.78 0.16 150);
 }
 
-.status-chip:nth-child(2) .status-dot {
-  background: oklch(0.82 0.16 195);
-}
+.status-chip:nth-child(1) .status-dot { background: #10B981; }
+.status-chip:nth-child(2) .status-dot { background: #22D3EE; }
+.status-chip:nth-child(3) .status-dot { background: #7C3AED; }
 
-.status-chip:nth-child(3) .status-dot {
-  background: oklch(0.68 0.22 330);
-}
-
-/* ── BLOCK 6 testimonial ────────────────────────────────────────────────── */
-.testimonial-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  margin: 0;
-  padding: 1.25rem 1.35rem;
-  border-radius: 1.1rem;
-}
-
-.testimonial-stars {
-  font-size: 0.95rem;
-  letter-spacing: 0.18em;
-  color: oklch(0.84 0.16 85);
-}
-
-.testimonial-quote {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: oklch(0.96 0.01 240 / 94%);
-}
-
-.testimonial-foot {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.testimonial-avatar {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: oklch(0.1 0.02 280);
-  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
-  box-shadow: 0 0 18px oklch(0.78 0.18 195 / 35%);
-}
-
-.testimonial-cite {
-  font-style: normal;
-  font-size: 0.82rem;
-  color: oklch(0.7 0.03 240);
-}
-
-.testimonial-honesty {
-  align-self: flex-start;
-}
-
-/* ── BLOCK 7 community badges ───────────────────────────────────────────── */
-.community-badges {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-
-.community-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-}
-
-.community-caption {
-  margin: 0;
-  font-size: 0.78rem;
-  color: oklch(0.7 0.03 240);
-}
-
-/* ── responsive ─────────────────────────────────────────────────────────── */
+/* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .showcase {
-    padding: 1.5rem 1.25rem;
-    border-radius: 1.25rem;
+    padding: 1.25rem 1rem;
+    border-radius: 1rem;
   }
 
   .stat-grid {
@@ -594,18 +439,7 @@ onUnmounted(() => {
   .mini-preview-head {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-slide-up,
-  .animate-fade-in {
-    animation: none;
-  }
-
-  .scan-line::after {
-    animation: none;
+    gap: 0.5rem;
   }
 }
 </style>

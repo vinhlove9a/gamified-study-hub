@@ -137,16 +137,16 @@ const handleSubmit = async () => {
     <main class="auth-main">
       <div class="auth-split">
         <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title cosmic-gradient-text">Tạo tài khoản mới</h1>
+          <h1 class="auth-title">Tạo tài khoản mới</h1>
           <p class="auth-subtitle">Bắt đầu xây dựng cổng tài liệu học tập cho cộng đồng của bạn.</p>
         </div>
 
-        <section class="auth-card cosmic-glass cosmic-glass-hover animate-slide-up delay-200" aria-label="Form đăng ký">
+        <section class="auth-card" aria-label="Form đăng ký">
           <div class="auth-grid">
             <aside class="setup-panel" aria-label="Lộ trình khởi tạo tài khoản">
-              <p class="setup-title">Lộ trình khởi tạo</p>
+              <p class="panel-title">Lộ trình khởi tạo</p>
               <ul class="setup-list">
                 <li class="setup-item is-current"><span class="dot" aria-hidden="true"></span>Tạo tài khoản</li>
                 <li class="setup-item"><span class="dot" aria-hidden="true"></span>Thiết lập workspace</li>
@@ -244,7 +244,7 @@ const handleSubmit = async () => {
                 <p v-if="errors.acceptedTerms" id="accepted-terms-error" class="field-error" role="alert">{{ errors.acceptedTerms }}</p>
               </div>
 
-              <button type="submit" class="submit-btn cosmic-btn" :disabled="loading" :aria-busy="loading">
+              <button type="submit" class="submit-btn" :disabled="loading" :aria-busy="loading">
                 {{ loading ? 'Đang xử lý...' : 'Tạo tài khoản' }}
               </button>
 
@@ -270,6 +270,11 @@ const handleSubmit = async () => {
 <style scoped>
 .register-page {
   overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 80% 100%, rgba(34, 211, 238, 0.03) 0%, transparent 60%),
+    #09090E;
+  background-attachment: fixed;
 }
 
 .auth-main {
@@ -316,57 +321,73 @@ const handleSubmit = async () => {
   }
 }
 
+/* ── Brand ─────────────────────────────────────────────────────────────── */
 .auth-brand {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  animation: reg-fade-in 0.4s ease-out both;
 }
 
 .brand-name {
   margin: 0;
-  color: oklch(0.82 0.16 195);
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: #6B7280;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .auth-title {
-  margin: 0.35rem 0;
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 700;
+  margin: 0.5rem 0;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #E8E8F0;
+  letter-spacing: -0.01em;
 }
 
 .auth-subtitle {
   margin: 0 auto;
-  color: oklch(0.7 0.03 240 / 85%);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  color: #8B8B9F;
+  font-size: 0.9rem;
+  line-height: 1.6;
   max-width: 42rem;
 }
 
+/* ── Card ──────────────────────────────────────────────────────────────── */
 .auth-card {
-  border-radius: 1.6rem;
-  padding: 1.1rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  background: rgba(14, 14, 22, 0.72);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 24px 48px rgba(0, 0, 0, 0.6);
+  animation: reg-fade-up 0.5s ease-out both;
 }
 
 .auth-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
+/* ── Setup panel ───────────────────────────────────────────────────────── */
 .setup-panel {
-  border-radius: 1rem;
-  border: 1px solid oklch(0.68 0.22 350 / 25%);
-  background: linear-gradient(155deg, oklch(0.18 0.04 280 / 50%), oklch(0.12 0.03 280 / 40%));
-  padding: 0.9rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.25rem;
 }
 
-.setup-title {
-  margin: 0 0 0.7rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: oklch(0.72 0.22 330);
+.panel-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6B7280;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
 }
 
 .setup-list {
@@ -380,209 +401,225 @@ const handleSubmit = async () => {
 .setup-item {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.88rem;
-  color: oklch(0.85 0.02 240);
-  padding: 0.55rem 0.65rem;
-  border: 1px solid oklch(0.7 0.1 280 / 14%);
-  border-radius: 0.75rem;
-  background: oklch(0.13 0.025 280 / 40%);
-  animation: pulse-card 3s ease-in-out infinite;
+  gap: 0.625rem;
+  font-size: 0.85rem;
+  color: #8B8B9F;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.01);
 }
 
-.setup-item:nth-child(2) { animation-delay: 0.2s; }
-.setup-item:nth-child(3) { animation-delay: 0.4s; }
-.setup-item:nth-child(4) { animation-delay: 0.6s; }
-
 .setup-item.is-current {
-  border-color: oklch(0.78 0.18 195 / 45%);
-  box-shadow: 0 0 18px oklch(0.78 0.18 195 / 12%);
+  border-color: rgba(34, 211, 238, 0.2);
+  background: rgba(34, 211, 238, 0.04);
+  color: #C0C0D4;
 }
 
 .dot {
-  width: 0.65rem;
-  height: 0.65rem;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 9999px;
-  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
-  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 18%);
+  background: rgba(255, 255, 255, 0.15);
+  flex: 0 0 auto;
 }
 
+.setup-item.is-current .dot {
+  background: #22D3EE;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+}
+
+/* ── Form ──────────────────────────────────────────────────────────────── */
 .form-stack {
   display: grid;
-  gap: 0.92rem;
+  gap: 0.875rem;
 }
 
 .field-label {
   display: block;
-  margin-bottom: 0.45rem;
-  margin-left: 0.15rem;
-  font-size: 0.87rem;
-  color: oklch(0.85 0.03 220);
-  font-weight: 600;
+  margin-bottom: 0.375rem;
+  font-size: 0.82rem;
+  color: #8B8B9F;
+  font-weight: 500;
 }
 
-/* Cosmic glass field. */
 .field-input {
   width: 100%;
-  border: 1px solid oklch(0.7 0.1 280 / 25%);
-  background: oklch(0.13 0.025 280 / 55%);
-  color: oklch(0.96 0.01 240);
-  border-radius: 0.95rem;
-  padding: 0.72rem 0.95rem;
-  font-size: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #E8E8F0;
+  border-radius: 0.625rem;
+  padding: 0.7rem 0.875rem;
+  font-size: 0.9rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .field-input::placeholder {
-  color: oklch(0.7 0.03 240 / 55%);
+  color: #5A5A6E;
 }
 
 .field-input:hover {
-  border-color: oklch(0.78 0.18 195 / 35%);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .field-input:focus {
   outline: none;
-  border-color: oklch(0.78 0.18 195 / 70%);
-  background: oklch(0.13 0.025 280 / 75%);
-  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%), 0 0 18px oklch(0.78 0.18 195 / 18%);
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), 0 0 20px rgba(34, 211, 238, 0.06);
 }
 
 .field-input--error {
-  border-color: oklch(0.65 0.25 25 / 80%);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .field-error {
-  margin: 0.35rem 0 0;
-  color: oklch(0.72 0.2 20);
-  font-size: 0.8rem;
+  margin: 0.375rem 0 0;
+  color: #EF4444;
+  font-size: 0.78rem;
 }
 
 .strength-text {
-  margin: 0.45rem 0 0;
-  font-size: 0.8rem;
-  color: oklch(0.7 0.03 240 / 85%);
+  margin: 0.375rem 0 0;
+  font-size: 0.78rem;
+  color: #5A5A6E;
 }
 
-.strength-text--weak strong { color: oklch(0.72 0.2 20); }
-.strength-text--medium strong { color: oklch(0.78 0.16 80); }
-.strength-text--strong strong { color: oklch(0.78 0.16 150); }
+.strength-text--weak strong { color: #EF4444; }
+.strength-text--medium strong { color: #F59E0B; }
+.strength-text--strong strong { color: #10B981; }
 
 .terms-label {
   display: flex;
   align-items: flex-start;
-  gap: 0.55rem;
-  color: oklch(0.8 0.03 230);
-  font-size: 0.86rem;
-  line-height: 1.4;
+  gap: 0.5rem;
+  color: #8B8B9F;
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
 
 .terms-checkbox {
   width: 1rem;
   height: 1rem;
-  margin-top: 0.16rem;
-  accent-color: oklch(0.78 0.18 195);
+  margin-top: 0.125rem;
+  accent-color: #22D3EE;
   flex: 0 0 auto;
 }
 
+/* ── Submit button ─────────────────────────────────────────────────────── */
 .submit-btn {
   width: 100%;
-  border-radius: 0.95rem;
-  font-size: 0.95rem;
-  padding: 0.85rem 1rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: linear-gradient(135deg, #22D3EE, #7C3AED);
+  color: #09090E;
+  border-radius: 0.625rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   cursor: pointer;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+  transition: box-shadow 0.2s ease, filter 0.2s ease, transform 0.15s ease;
 }
 
+.submit-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.2);
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Notes & links ─────────────────────────────────────────────────────── */
 .helper-note {
   margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: oklch(0.7 0.03 240 / 75%);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #5A5A6E;
 }
 
 .submit-message {
   margin: 0;
-  border-radius: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  background: oklch(0.78 0.18 195 / 10%);
-  border: 1px solid oklch(0.78 0.18 195 / 25%);
-  color: oklch(0.9 0.05 210);
-  font-size: 0.84rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: rgba(34, 211, 238, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  color: #C0C0D4;
+  font-size: 0.82rem;
 }
 
 .register-row {
   margin: 0;
   text-align: center;
-  color: oklch(0.7 0.03 240 / 85%);
-  font-size: 0.9rem;
+  color: #8B8B9F;
+  font-size: 0.88rem;
 }
 
 .auth-link {
-  color: oklch(0.82 0.16 195);
+  color: #22D3EE;
   text-decoration: none;
-  font-size: 0.87rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.auth-link:hover,
-.auth-link:focus-visible {
-  text-decoration: underline;
-  color: oklch(0.88 0.14 200);
+.auth-link:hover {
+  color: #67E8F9;
 }
 
 .auth-link--strong {
   margin-left: 0.25rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
+/* ── Animations ────────────────────────────────────────────────────────── */
+@keyframes reg-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reg-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {
   .auth-main {
     padding: 2rem;
   }
 
   .auth-card {
-    padding: 1.5rem;
+    padding: 1.75rem;
   }
 
   .auth-grid {
     grid-template-columns: minmax(210px, 240px) 1fr;
-    gap: 1.2rem;
+    gap: 1.5rem;
     align-items: start;
   }
 }
 
 @media (max-width: 420px) {
   .auth-card {
-    padding: 0.9rem;
+    padding: 1rem;
   }
 
   .auth-title {
-    font-size: 1.65rem;
+    font-size: 1.5rem;
   }
 
   .terms-label {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
   }
 }
 
-.animate-slide-up { animation: slide-up 0.8s ease-out both; }
-.animate-bounce-in { animation: bounce-in 0.8s ease-out both; }
-.delay-200 { animation-delay: 0.2s; }
-
-@keyframes pulse-card {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes bounce-in {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .auth-brand,
+  .auth-card {
+    animation: none;
+  }
 }
 </style>

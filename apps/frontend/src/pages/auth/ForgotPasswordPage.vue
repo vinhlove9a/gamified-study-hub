@@ -61,20 +61,16 @@ const handleSubmit = async () => {
 
     <main class="auth-main">
       <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Quên mật khẩu?</h1>
+          <h1 class="auth-title">Quên mật khẩu?</h1>
           <p class="auth-subtitle">Nhập email tài khoản của bạn. Chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu để bạn tiếp tục sử dụng hệ thống.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Form quên mật khẩu">
+        <section class="auth-card" aria-label="Form quên mật khẩu">
           <div class="auth-grid">
             <aside class="recovery-panel" aria-label="Hướng dẫn khôi phục mật khẩu">
-              <div class="mail-visual" aria-hidden="true">
-                <span class="mail-pulse"></span>
-                <span class="mail-body"></span>
-                <span class="mail-flap"></span>
-              </div>
+              <div class="panel-icon" aria-hidden="true">✉</div>
 
               <p class="panel-title">Khôi phục an toàn</p>
 
@@ -113,7 +109,7 @@ const handleSubmit = async () => {
                 <p v-if="errors.email" id="email-error" class="field-error" role="alert">{{ errors.email }}</p>
               </div>
 
-              <button type="submit" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading">
+              <button type="submit" class="submit-btn" :disabled="loading" :aria-busy="loading">
                 {{ loading ? 'Đang xử lý...' : 'Gửi liên kết đặt lại mật khẩu' }}
               </button>
 

@@ -115,20 +115,16 @@ const handleSubmit = async () => {
 
     <main class="auth-main">
       <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Đặt lại mật khẩu</h1>
+          <h1 class="auth-title">Đặt lại mật khẩu</h1>
           <p class="auth-subtitle">Tạo mật khẩu mới để tiếp tục sử dụng Gamified Study Hub một cách an toàn.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Form đặt lại mật khẩu">
+        <section class="auth-card" aria-label="Form đặt lại mật khẩu">
           <div class="auth-grid">
             <aside class="security-panel" aria-label="Quy trình đặt lại mật khẩu an toàn">
-              <div class="lock-visual" aria-hidden="true">
-                <span class="lock-pulse"></span>
-                <span class="lock-body"></span>
-                <span class="lock-shackle"></span>
-              </div>
+              <div class="panel-icon" aria-hidden="true">🔒</div>
 
               <p class="panel-title">Đặt lại an toàn</p>
 
@@ -196,7 +192,7 @@ const handleSubmit = async () => {
                 </li>
               </ul>
 
-              <button type="submit" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading">
+              <button type="submit" class="submit-btn" :disabled="loading" :aria-busy="loading">
                 {{ loading ? 'Đang xử lý...' : 'Đặt lại mật khẩu' }}
               </button>
 

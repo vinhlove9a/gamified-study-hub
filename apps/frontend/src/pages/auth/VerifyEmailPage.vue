@@ -52,21 +52,16 @@ const handleResend = async () => {
 
     <main class="auth-main">
       <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Xác thực email của bạn</h1>
+          <h1 class="auth-title">Xác thực email của bạn</h1>
           <p class="auth-subtitle">Chúng tôi đã gửi một liên kết xác thực đến email đăng ký. Vui lòng kiểm tra hộp thư để hoàn tất quá trình tạo tài khoản.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Xác thực email">
+        <section class="auth-card" aria-label="Xác thực email">
           <div class="auth-grid">
             <aside class="verify-panel" aria-label="Hướng dẫn xác thực email">
-              <div class="mailbox-visual" aria-hidden="true">
-                <span class="delivery-pulse"></span>
-                <span class="mailbox-body"></span>
-                <span class="mailbox-top"></span>
-                <span class="verify-badge">✓</span>
-              </div>
+              <div class="panel-icon" aria-hidden="true">✉</div>
 
               <p class="panel-title">Xác thực tài khoản</p>
 
@@ -78,7 +73,7 @@ const handleResend = async () => {
             </aside>
 
             <div class="form-stack" role="group" aria-label="Hành động xác thực email">
-              <button type="button" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading" @click="handleResend">
+              <button type="button" class="submit-btn" :disabled="loading" :aria-busy="loading" @click="handleResend">
                 {{ loading ? 'Đang xử lý...' : actionLabel }}
               </button>
 

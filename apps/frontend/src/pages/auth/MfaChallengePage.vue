@@ -54,13 +54,13 @@ const handleSubmit = async () => {
 
     <main class="auth-main">
       <div class="auth-shell auth-shell--narrow">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">Xác thực hai lớp</h1>
+          <h1 class="auth-title">Xác thực hai lớp</h1>
           <p class="auth-subtitle">Nhập mã 6 chữ số trong ứng dụng xác thực (Google Authenticator…) hoặc một mã khôi phục.</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Xác thực hai lớp">
+        <section class="auth-card" aria-label="Xác thực hai lớp">
           <form class="form-stack" @submit.prevent="handleSubmit">
             <div>
               <label for="mfa-code" class="field-label">Mã xác thực</label>
@@ -77,7 +77,7 @@ const handleSubmit = async () => {
               />
             </div>
 
-            <button type="submit" class="submit-btn btn-shimmer" :disabled="loading" :aria-busy="loading">
+            <button type="submit" class="submit-btn" :disabled="loading" :aria-busy="loading">
               {{ loading ? 'Đang xác thực…' : 'Xác nhận' }}
             </button>
 

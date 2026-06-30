@@ -1,15 +1,18 @@
 /*
- * Shared cosmic styling for the secondary auth pages (forgot/reset/verify
- * /notice/error/mfa/callback) so they match the deep-space look of the
- * Login & Register screens. Everything is scoped under `.auth-cosmic` to keep
- * these generic class names (.field-input, .auth-card, …) from leaking into
- * the dashboard or anywhere else that uses `.cosmic-page`.
- *
- * Login/Register keep their own component-scoped styles; they do NOT carry the
- * `.auth-cosmic` class, so these rules never touch them.
+ * Deep Workspace auth theme — shared styles for secondary auth pages.
+ * Scoped under .auth-cosmic to prevent leakage into dashboard or landing.
  */
 
-/* ----- Layout ----- */
+/* ── Page background ────────────────────────────────────────────────────── */
+.auth-cosmic {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124, 58, 237, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 80% 100%, rgba(34, 211, 238, 0.03) 0%, transparent 60%),
+    #09090E;
+  background-attachment: fixed;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
 .auth-cosmic .auth-main {
   position: relative;
   z-index: 2;
@@ -25,310 +28,296 @@
   max-width: 56rem;
 }
 
+.auth-cosmic .auth-shell--narrow {
+  max-width: 26rem;
+}
+
+/* ── Brand ──────────────────────────────────────────────────────────────── */
 .auth-cosmic .auth-brand {
   text-align: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  animation: auth-fade-in 0.4s ease-out both;
 }
 
 .auth-cosmic .brand-name {
   margin: 0;
-  color: oklch(0.82 0.16 195);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  color: #6B7280;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .auth-cosmic .auth-title {
-  margin: 0.35rem 0;
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 700;
-  color: oklch(0.96 0.01 240);
-}
-
-/* Animated cosmic gradient heading (reuses the global cosmic-text-shift keyframe). */
-.auth-cosmic .animate-gradient-text {
-  background: linear-gradient(90deg, oklch(0.82 0.16 195), oklch(0.72 0.22 330), oklch(0.7 0.2 290));
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: cosmic-text-shift 8s ease infinite;
+  margin: 0.5rem 0;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #E8E8F0;
+  letter-spacing: -0.01em;
 }
 
 .auth-cosmic .auth-subtitle {
   margin: 0 auto;
-  color: oklch(0.7 0.03 240 / 85%);
-  font-size: 0.92rem;
-  line-height: 1.5;
-  max-width: 44rem;
+  color: #8B8B9F;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 40rem;
 }
 
-/* ----- Card ----- */
+/* ── Card ───────────────────────────────────────────────────────────────── */
 .auth-cosmic .auth-card {
-  border-radius: 1.6rem;
-  padding: 1.1rem;
-  background: linear-gradient(135deg, oklch(0.18 0.04 280 / 45%) 0%, oklch(0.12 0.03 280 / 35%) 100%);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid oklch(0.7 0.1 280 / 15%);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  background: rgba(14, 14, 22, 0.72);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
-    0 0 0 1px oklch(0.7 0.1 280 / 5%) inset,
-    0 8px 32px oklch(0 0 0 / 45%),
-    0 0 28px oklch(0.78 0.18 195 / 6%);
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 24px 48px rgba(0, 0, 0, 0.6);
+  animation: auth-fade-up 0.5s ease-out both;
 }
 
-.auth-cosmic .card-hover {
-  transition: border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.auth-cosmic .card-hover:hover {
-  transform: translateY(-4px);
-  border-color: oklch(0.78 0.18 195 / 35%);
-  box-shadow:
-    0 0 0 1px oklch(0.7 0.1 280 / 8%) inset,
-    0 18px 44px oklch(0 0 0 / 55%),
-    0 0 36px oklch(0.78 0.18 195 / 14%);
-}
-
+/* ── Grid (side panel + form) ───────────────────────────────────────────── */
 .auth-cosmic .auth-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-/* ----- Side panel (recovery / security / verify / notice / error) ----- */
+/* ── Side panels ────────────────────────────────────────────────────────── */
 .auth-cosmic .recovery-panel,
 .auth-cosmic .security-panel,
 .auth-cosmic .verify-panel,
 .auth-cosmic .notice-panel,
 .auth-cosmic .error-panel {
-  border-radius: 1rem;
-  border: 1px solid oklch(0.7 0.1 280 / 18%);
-  background: linear-gradient(155deg, oklch(0.16 0.04 280 / 55%), oklch(0.12 0.03 280 / 45%));
-  padding: 0.95rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.25rem;
 }
 
 .auth-cosmic .panel-title {
-  margin: 0 0 0.7rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: oklch(0.82 0.16 195);
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6B7280;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
 }
 
-.auth-cosmic .step-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.55rem;
-}
-
-.auth-cosmic .step-item {
+/* ── Panel icon (replaces decorative CSS-shape badges) ──────────────────── */
+.auth-cosmic .panel-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.88rem;
-  color: oklch(0.85 0.03 220);
-  padding: 0.55rem 0.65rem;
-  border: 1px solid oklch(0.7 0.1 280 / 16%);
-  border-radius: 0.75rem;
-  background: oklch(0.13 0.025 280 / 45%);
-}
-
-.auth-cosmic .step-index {
-  width: 1.2rem;
-  height: 1.2rem;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  font-size: 0.75rem;
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  color: #22D3EE;
+  font-size: 1rem;
   font-weight: 700;
-  color: oklch(0.08 0.02 280);
-  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
-  flex: 0 0 auto;
 }
 
-/* ----- Decorative icon badges (mail / lock / mailbox / status / warning) ----- */
-.auth-cosmic .mail-visual,
-.auth-cosmic .lock-visual,
-.auth-cosmic .mailbox-visual,
-.auth-cosmic .status-visual,
-.auth-cosmic .warning-visual {
-  position: relative;
-  width: 3.4rem;
-  height: 3.4rem;
-  margin-bottom: 0.85rem;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, oklch(0.82 0.16 195), oklch(0.68 0.22 350));
-  box-shadow: 0 10px 26px oklch(0.78 0.18 195 / 35%), 0 0 22px oklch(0.68 0.22 350 / 25%);
+.auth-cosmic .panel-icon--success {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.15);
+  color: #10B981;
 }
 
-/* Pulsing ring shared by the badges. */
+.auth-cosmic .panel-icon--warning {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+}
+
+.auth-cosmic .panel-icon--locked {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+}
+
+/* Hide legacy CSS-shape spans (kept in DOM for compatibility) */
 .auth-cosmic .mail-pulse,
 .auth-cosmic .lock-pulse,
 .auth-cosmic .delivery-pulse,
 .auth-cosmic .status-ring,
-.auth-cosmic .warning-ring {
-  position: absolute;
-  inset: -0.45rem;
-  border-radius: 1.3rem;
-  border: 2px solid oklch(0.78 0.18 195 / 45%);
-  animation: ring 2s ease-out infinite;
+.auth-cosmic .warning-ring,
+.auth-cosmic .mail-body,
+.auth-cosmic .lock-body,
+.auth-cosmic .mailbox-body,
+.auth-cosmic .mail-flap,
+.auth-cosmic .mailbox-top,
+.auth-cosmic .lock-shackle,
+.auth-cosmic .status-core,
+.auth-cosmic .warning-core {
+  display: none;
 }
 
-/* Glyph badges that carry a text icon. */
+/* Legacy icon symbols — restyled to match .panel-icon */
 .auth-cosmic .status-icon,
 .auth-cosmic .warning-icon,
 .auth-cosmic .verify-badge {
   position: relative;
   z-index: 1;
-  color: oklch(0.08 0.02 280);
-  font-size: 1.3rem;
-  font-weight: 800;
+  color: #22D3EE;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-/* Inner CSS-shape spans of the mail/lock/mailbox badges — kept subtle so the
-   badge reads as a cohesive cosmic chip even without their original artwork. */
-.auth-cosmic .mail-body,
-.auth-cosmic .lock-body,
-.auth-cosmic .mailbox-body {
-  position: absolute;
-  inset: 28%;
-  border-radius: 0.4rem;
-  background: oklch(0.96 0.01 240 / 85%);
+/* ── Step list ──────────────────────────────────────────────────────────── */
+.auth-cosmic .step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
 }
 
-.auth-cosmic .mail-flap,
-.auth-cosmic .mailbox-top,
-.auth-cosmic .lock-shackle {
-  display: none;
+.auth-cosmic .step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.85rem;
+  color: #8B8B9F;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.01);
 }
 
-.auth-cosmic .status-core,
-.auth-cosmic .warning-core {
-  position: absolute;
-  inset: 22%;
-  border-radius: 9999px;
-  background: oklch(0.96 0.01 240 / 18%);
+.auth-cosmic .step-index {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #22D3EE;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  flex: 0 0 auto;
 }
 
-/* ----- Form fields ----- */
+/* ── Form ───────────────────────────────────────────────────────────────── */
 .auth-cosmic .form-stack,
 .auth-cosmic .action-stack {
   display: grid;
-  gap: 0.95rem;
+  gap: 1rem;
 }
 
 .auth-cosmic .field-label {
   display: block;
-  margin-bottom: 0.45rem;
-  margin-left: 0.15rem;
-  font-size: 0.87rem;
-  color: oklch(0.85 0.03 220);
-  font-weight: 600;
+  margin-bottom: 0.375rem;
+  font-size: 0.82rem;
+  color: #8B8B9F;
+  font-weight: 500;
 }
 
 .auth-cosmic .field-input {
   width: 100%;
-  border: 1px solid oklch(0.7 0.1 280 / 25%);
-  background: oklch(0.13 0.025 280 / 55%);
-  color: oklch(0.96 0.01 240);
-  border-radius: 0.95rem;
-  padding: 0.75rem 0.95rem;
-  font-size: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #E8E8F0;
+  border-radius: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.9rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .auth-cosmic .field-input::placeholder {
-  color: oklch(0.7 0.03 240 / 55%);
+  color: #5A5A6E;
 }
 
 .auth-cosmic .field-input:hover {
-  border-color: oklch(0.78 0.18 195 / 35%);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .auth-cosmic .field-input:focus {
   outline: none;
-  border-color: oklch(0.78 0.18 195 / 70%);
-  background: oklch(0.13 0.025 280 / 75%);
-  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%), 0 0 18px oklch(0.78 0.18 195 / 18%);
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), 0 0 20px rgba(34, 211, 238, 0.06);
 }
 
 .auth-cosmic .field-input--error {
-  border-color: oklch(0.65 0.25 25 / 80%);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .auth-cosmic .field-error {
-  margin: 0.35rem 0 0;
-  color: oklch(0.72 0.2 20);
-  font-size: 0.8rem;
+  margin: 0.375rem 0 0;
+  color: #EF4444;
+  font-size: 0.78rem;
 }
 
-/* Password strength + requirement checklist (reset page). */
+/* ── Password strength ──────────────────────────────────────────────────── */
 .auth-cosmic .strength-text {
-  margin: 0.4rem 0 0;
-  font-size: 0.8rem;
-  color: oklch(0.7 0.03 240 / 85%);
+  margin: 0.375rem 0 0;
+  font-size: 0.78rem;
+  color: #5A5A6E;
 }
 
-.auth-cosmic .strength-text--weak strong { color: oklch(0.72 0.2 20); }
-.auth-cosmic .strength-text--medium strong { color: oklch(0.84 0.16 85); }
-.auth-cosmic .strength-text--strong strong { color: oklch(0.8 0.17 150); }
+.auth-cosmic .strength-text--weak strong { color: #EF4444; }
+.auth-cosmic .strength-text--medium strong { color: #F59E0B; }
+.auth-cosmic .strength-text--strong strong { color: #10B981; }
 
+/* ── Requirement checklist ──────────────────────────────────────────────── */
 .auth-cosmic .requirement-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.4rem;
+  gap: 0.375rem;
 }
 
 .auth-cosmic .requirement-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.83rem;
-  color: oklch(0.78 0.03 230);
+  font-size: 0.8rem;
+  color: #5A5A6E;
 }
 
 .auth-cosmic .requirement-state {
-  color: oklch(0.82 0.16 195);
-  font-weight: 700;
+  color: #22D3EE;
+  font-weight: 600;
 }
 
-/* ----- Buttons ----- */
+/* ── Buttons ────────────────────────────────────────────────────────────── */
 .auth-cosmic .submit-btn {
   display: block;
   width: 100%;
   text-align: center;
   text-decoration: none;
-  border: 1px solid oklch(0.78 0.18 195 / 50%);
-  background: linear-gradient(135deg, oklch(0.78 0.18 195 / 90%), oklch(0.68 0.22 350 / 90%));
-  color: oklch(0.08 0.02 280);
-  border-radius: 0.95rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 0.85rem 1rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: linear-gradient(135deg, #22D3EE, #7C3AED);
+  color: #09090E;
+  border-radius: 0.625rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
   cursor: pointer;
-  box-shadow: 0 0 24px oklch(0.78 0.18 195 / 35%), inset 0 0 0 1px oklch(0.96 0.01 240 / 10%);
-  transition: box-shadow 0.3s ease, transform 0.2s ease, filter 0.3s ease;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+  transition: box-shadow 0.2s ease, filter 0.2s ease, transform 0.15s ease;
 }
 
 .auth-cosmic .submit-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.2);
   transform: translateY(-1px);
-  filter: brightness(1.08);
-  box-shadow: 0 0 36px oklch(0.78 0.18 195 / 55%), 0 0 48px oklch(0.68 0.22 350 / 30%);
+}
+
+.auth-cosmic .submit-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .auth-cosmic .submit-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -338,109 +327,103 @@
 }
 
 .auth-cosmic .btn-shimmer::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(to right, transparent 0%, oklch(0.98 0.01 240 / 30%) 50%, transparent 100%);
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite;
+  display: none;
 }
 
+/* ── Secondary buttons ──────────────────────────────────────────────────── */
 .auth-cosmic .secondary-btn,
 .auth-cosmic .secondary-link {
   display: block;
   width: 100%;
   text-align: center;
   text-decoration: none;
-  border: 1px solid oklch(0.7 0.1 280 / 25%);
-  background: oklch(0.13 0.025 280 / 45%);
-  color: oklch(0.92 0.02 240);
-  border-radius: 0.95rem;
-  font-size: 0.92rem;
-  font-weight: 600;
-  padding: 0.78rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #C0C0D4;
+  border-radius: 0.625rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .auth-cosmic .secondary-btn:hover:not(:disabled),
 .auth-cosmic .secondary-link:hover {
-  border-color: oklch(0.78 0.18 195 / 45%);
-  background: oklch(0.78 0.18 195 / 10%);
-  color: oklch(0.9 0.12 200);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #E8E8F0;
 }
 
 .auth-cosmic .secondary-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* ----- Notes / messages / links ----- */
+/* ── Notes & messages ───────────────────────────────────────────────────── */
 .auth-cosmic .helper-note,
 .auth-cosmic .note-text {
   margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: oklch(0.7 0.03 240 / 82%);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #5A5A6E;
 }
 
 .auth-cosmic .submit-message {
   margin: 0;
-  border-radius: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  background: oklch(0.78 0.18 195 / 10%);
-  border: 1px solid oklch(0.78 0.18 195 / 25%);
-  color: oklch(0.9 0.05 210);
-  font-size: 0.84rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: rgba(34, 211, 238, 0.05);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  color: #C0C0D4;
+  font-size: 0.82rem;
 }
 
 .auth-cosmic .resend-note {
   margin: 0;
-  font-size: 0.8rem;
-  color: oklch(0.7 0.03 240 / 75%);
+  font-size: 0.78rem;
+  color: #5A5A6E;
 }
 
+/* ── Links ──────────────────────────────────────────────────────────────── */
 .auth-cosmic .link-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.375rem;
   flex-wrap: wrap;
 }
 
 .auth-cosmic .link-divider {
-  color: oklch(0.78 0.18 195);
+  color: #3A3A4A;
 }
 
 .auth-cosmic .auth-link {
-  color: oklch(0.82 0.16 195);
+  color: #22D3EE;
   text-decoration: none;
-  font-size: 0.87rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .auth-cosmic .auth-link:hover,
 .auth-cosmic .auth-link:focus-visible {
-  text-decoration: underline;
-  color: oklch(0.88 0.14 200);
+  color: #67E8F9;
 }
 
 .auth-cosmic .auth-link--strong {
-  font-weight: 700;
+  font-weight: 600;
 }
 
-/* ----- MFA code input ----- */
+/* ── MFA code input ─────────────────────────────────────────────────────── */
 .auth-cosmic .code-input {
   margin-top: 0.25rem;
-  padding: 0.8rem 1rem;
-  border-radius: 0.95rem;
-  border: 1px solid oklch(0.7 0.1 280 / 25%);
-  background: oklch(0.13 0.025 280 / 55%);
-  color: oklch(0.96 0.01 240);
-  font-size: 1.3rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #E8E8F0;
+  font-size: 1.25rem;
   letter-spacing: 0.3rem;
   text-align: center;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -448,79 +431,71 @@
 
 .auth-cosmic .code-input:focus {
   outline: none;
-  border-color: oklch(0.78 0.18 195 / 70%);
-  box-shadow: 0 0 0 3px oklch(0.78 0.18 195 / 22%);
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), 0 0 20px rgba(34, 211, 238, 0.06);
 }
 
 .auth-cosmic .hint {
   margin: 0;
-  color: oklch(0.7 0.03 240 / 85%);
+  color: #8B8B9F;
   font-size: 0.85rem;
   line-height: 1.5;
 }
 
-/* ----- Callback spinner ----- */
+/* ── Callback spinner ───────────────────────────────────────────────────── */
 .auth-cosmic .callback-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 2rem 2.5rem;
+  padding: 2.5rem;
   text-align: center;
 }
 
 .auth-cosmic .spinner {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 9999px;
-  border: 3px solid oklch(0.78 0.18 195 / 22%);
-  border-top-color: oklch(0.82 0.16 195);
-  animation: auth-spin 0.9s linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-top-color: #22D3EE;
+  animation: auth-spin 0.8s linear infinite;
 }
 
-/* ----- Animations ----- */
-.auth-cosmic .animate-slide-up { animation: auth-slide-up 0.8s ease-out both; }
-.auth-cosmic .animate-bounce-in { animation: auth-bounce-in 0.8s ease-out both; }
-.auth-cosmic .delay-200 { animation-delay: 0.2s; }
-
-@keyframes auth-slide-up {
-  from { opacity: 0; transform: translateY(40px); }
+/* ── Animations ─────────────────────────────────────────────────────────── */
+@keyframes auth-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes auth-bounce-in {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); opacity: 1; }
+@keyframes auth-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes auth-spin {
   to { transform: rotate(360deg); }
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(30deg); }
-  100% { transform: translateX(100%) rotate(30deg); }
-}
-
-@keyframes ring {
-  from { transform: scale(0.85); opacity: 1; }
-  to { transform: scale(1.5); opacity: 0; }
-}
-
-/* ----- Responsive ----- */
+/* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {
   .auth-cosmic .auth-main { padding: 2rem; }
-  .auth-cosmic .auth-card { padding: 1.5rem; }
+  .auth-cosmic .auth-card { padding: 2rem; }
   .auth-cosmic .auth-grid {
     grid-template-columns: minmax(220px, 250px) 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
     align-items: start;
   }
 }
 
 @media (max-width: 420px) {
-  .auth-cosmic .auth-card { padding: 0.9rem; }
-  .auth-cosmic .auth-title { font-size: 1.7rem; }
+  .auth-cosmic .auth-card { padding: 1.25rem; }
+  .auth-cosmic .auth-title { font-size: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-cosmic .auth-card,
+  .auth-cosmic .auth-brand {
+    animation: none;
+  }
 }

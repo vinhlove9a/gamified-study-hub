@@ -102,20 +102,16 @@ const handleSecondaryAction = async () => {
 
     <main class="auth-main">
       <div class="auth-shell">
-        <div class="auth-brand animate-bounce-in">
+        <div class="auth-brand">
           <p class="brand-name">Gamified Study Hub</p>
-          <h1 class="auth-title animate-gradient-text">{{ errorConfig.title }}</h1>
+          <h1 class="auth-title">{{ errorConfig.title }}</h1>
           <p class="auth-subtitle">{{ errorConfig.message }}</p>
         </div>
 
-        <section class="auth-card card-hover animate-slide-up delay-200" aria-label="Thông báo lỗi xác thực">
+        <section class="auth-card" aria-label="Thông báo lỗi xác thực">
           <div class="auth-grid">
             <aside class="error-panel" aria-label="Hướng dẫn khôi phục">
-              <div class="warning-visual" aria-hidden="true">
-                <span class="warning-ring"></span>
-                <span class="warning-core" :class="{ 'warning-core--locked': errorConfig.iconType === 'locked' }"></span>
-                <span class="warning-icon">{{ errorConfig.iconSymbol }}</span>
-              </div>
+              <div class="panel-icon" :class="{ 'panel-icon--locked': errorConfig.iconType === 'locked', 'panel-icon--warning': errorConfig.iconType === 'warning' }" aria-hidden="true">{{ errorConfig.iconSymbol }}</div>
 
               <p class="panel-title">Khôi phục truy cập</p>
 
@@ -127,7 +123,7 @@ const handleSecondaryAction = async () => {
             </aside>
 
             <div class="action-stack" role="group" aria-label="Hành động khôi phục">
-              <RouterLink to="/auth/login" class="submit-btn btn-shimmer">{{ errorConfig.primaryLabel }}</RouterLink>
+              <RouterLink to="/auth/login" class="submit-btn">{{ errorConfig.primaryLabel }}</RouterLink>
 
               <RouterLink
                 v-if="errorConfig.secondary.mode === 'link'"
