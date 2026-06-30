@@ -425,7 +425,7 @@ onUnmounted(() => {
 
     <!-- ── Editor drawer ───────────────────────────────────────────────────── -->
     <Transition name="drawer">
-      <div v-if="editingNote" class="fixed inset-0 z-40 flex justify-end">
+      <div v-if="editingNote" class="fixed inset-0 z-40 flex justify-end !mt-0">
         <button
           type="button"
           class="absolute inset-0 bg-black/60 backdrop-blur-sm"

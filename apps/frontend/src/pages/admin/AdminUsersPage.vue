@@ -622,7 +622,7 @@ const drawerActivityTone: Record<Accent, string> = {
     >
       <div
         v-if="drawerUser"
-        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm !mt-0"
         @click="closeDrawer"
       />
     </transition>
@@ -637,7 +637,7 @@ const drawerActivityTone: Record<Accent, string> = {
     >
       <aside
         v-if="drawerUser"
-        class="glass-panel cosmic-scroll fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-white/[0.08]"
+        class="glass-panel cosmic-scroll fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-white/[0.08] !mt-0"
       >
         <!-- Drawer header -->
         <div class="flex items-start justify-between gap-3 border-b border-white/[0.06] p-5">

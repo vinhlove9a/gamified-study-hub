@@ -432,7 +432,7 @@ onUnmounted(() => {
 
     <!-- ── Detail drawer ─────────────────────────────────────────────────────── -->
     <Transition name="drawer">
-      <div v-if="detailGroup" class="fixed inset-0 z-40 flex justify-end">
+      <div v-if="detailGroup" class="fixed inset-0 z-40 flex justify-end !mt-0">
         <button
           type="button"
           class="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -589,7 +589,7 @@ onUnmounted(() => {
 
     <!-- ── Create modal ──────────────────────────────────────────────────────── -->
     <Transition name="modal">
-      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 !mt-0">
         <button
           type="button"
           class="absolute inset-0 bg-black/60 backdrop-blur-sm"

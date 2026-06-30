@@ -453,7 +453,7 @@ onUnmounted(() => {
 
     <!-- ── Compare modal ─────────────────────────────────────────────────────── -->
     <Transition name="modal">
-      <div v-if="compareFriend" class="fixed inset-0 z-40 flex items-center justify-center p-4">
+      <div v-if="compareFriend" class="fixed inset-0 z-40 flex items-center justify-center p-4 !mt-0">
         <button
           type="button"
           class="absolute inset-0 bg-black/60 backdrop-blur-sm"

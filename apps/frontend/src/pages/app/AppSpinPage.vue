@@ -394,7 +394,7 @@ onUnmounted(() => {
     <Transition name="win-pop">
       <div
         v-if="showModal && winner"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 !mt-0"
       >
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeModal" />
         <!-- Confetti -->
