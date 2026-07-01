@@ -62,6 +62,21 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         auditService.record(AuthEventType.OAUTH_LOGIN, user.getId(), RequestMetadata.from(request),
                 "provider=" + PROVIDER);
 
-        response.sendRedirect(frontendOrigin + "/auth/callback");
+        String targetOrigin = frontendOrigin;
+        if (frontendOrigin.contains(",")) {
+            String[] origins = frontendOrigin.split(",");
+            targetOrigin = origins[0]; // default fallback
+            String requestHost = request.getHeader("Host");
+            if (requestHost != null) {
+                for (String origin : origins) {
+                    String cleanOrigin = origin.replace("http://", "").replace("https://", "");
+                    if (cleanOrigin.equalsIgnoreCase(requestHost.trim())) {
+                        targetOrigin = origin;
+                        break;
+                    }
+                }
+            }
+        }
+        response.sendRedirect(targetOrigin + "/auth/callback");
     }
 }
