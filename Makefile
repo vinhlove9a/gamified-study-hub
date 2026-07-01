@@ -30,7 +30,7 @@ backend-run:
 	@cd apps/backend && mvn spring-boot:run
 
 backend-test:
-	@cd apps/backend && mvn test
+	@cd apps/backend && mvn test -Dnet.bytebuddy.experimental=true
 
 frontend-dev:
 	@cd apps/frontend && npm run dev
