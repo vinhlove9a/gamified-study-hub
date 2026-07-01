@@ -16,8 +16,9 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // Cookie-based auth requires credentialed CORS, which forbids "*" — the
         // origin must be the explicit frontend origin.
+        String[] origins = frontendOrigin.split(",");
         registry.addMapping(AppConstants.API_PREFIX + "/**")
-                .allowedOrigins(frontendOrigin)
+                .allowedOrigins(origins)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With", "X-XSRF-TOKEN")
                 .allowCredentials(true);
