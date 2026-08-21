@@ -19,7 +19,7 @@ withDefaults(
     /** Remove inner padding when the body manages its own (e.g. a full-bleed table). */
     flush?: boolean;
   }>(),
-  { accent: 'cyan', glow: 'none', flush: false }
+  { title: '', subtitle: '', icon: '', accent: 'cyan', glow: 'none', flush: false }
 );
 
 const accentText: Record<Accent, string> = {
