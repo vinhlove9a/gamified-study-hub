@@ -70,6 +70,9 @@ jobs:
     name: Deploy to EC2
     needs: build-and-push
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -90,7 +93,9 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
           GHCR_USER: ${{ github.actor }}
-          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          # Use the run-scoped GITHUB_TOKEN (packages: read granted above) instead
+          # of a manual classic PAT — it never expires, so deploy auth can't rot.
+          GHCR_PAT: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
