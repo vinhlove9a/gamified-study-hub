@@ -72,3 +72,7 @@ app:
       max-attempts: ${AUTH_LOCKOUT_MAX_ATTEMPTS:5}
       base-lock-seconds: ${AUTH_LOCKOUT_BASE_SECONDS:60}
       max-tier: ${AUTH_LOCKOUT_MAX_TIER:5}
+    email-ratelimit:
+      ip-per-minute: ${AUTH_EMAIL_RL_IP_PER_MIN:5}
+      per-email-per-hour: ${AUTH_EMAIL_RL_PER_EMAIL:3}
+      email-cooldown-seconds: ${AUTH_EMAIL_RL_COOLDOWN:60}

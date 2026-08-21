@@ -57,6 +57,9 @@ class AuthServiceTests {
     private com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter loginRateLimiter;
 
     @Mock
+    private com.gamifiedstudyhub.backend.auth.ratelimit.EmailRateLimiter emailRateLimiter;
+
+    @Mock
     private com.gamifiedstudyhub.backend.audit.service.AuthAuditService auditService;
 
     @Mock
@@ -88,6 +91,7 @@ class AuthServiceTests {
                 authTokenService,
                 authorityService,
                 loginRateLimiter,
+                emailRateLimiter,
                 auditService,
                 emailService,
                 mfaService
@@ -190,7 +194,7 @@ class AuthServiceTests {
         when(authTokenService.createPasswordResetToken(user))
                 .thenReturn(new AuthTokenIssueResult("raw-token", "hash", java.time.Instant.now()));
 
-        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest(" test@example.com "));
+        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest(" test@example.com "), META);
 
         assertEquals(
                 "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn.",
@@ -204,7 +208,7 @@ class AuthServiceTests {
         when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("unknown@example.com"))
                 .thenReturn(Optional.empty());
 
-        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest("unknown@example.com"));
+        AuthMessageResponse response = authService.forgotPassword(new ForgotPasswordRequest("unknown@example.com"), META);
 
         assertEquals(
                 "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu sẽ được gửi đến email của bạn.",
@@ -225,7 +229,7 @@ class AuthServiceTests {
         when(authTokenService.createEmailVerificationToken(user))
                 .thenReturn(new AuthTokenIssueResult("raw-token", "hash", java.time.Instant.now()));
 
-        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"));
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"), META);
 
         assertEquals(
                 "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",
@@ -244,7 +248,7 @@ class AuthServiceTests {
         when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("test@example.com"))
                 .thenReturn(Optional.of(user));
 
-        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"));
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("test@example.com"), META);
 
         assertEquals(
                 "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",
@@ -258,7 +262,7 @@ class AuthServiceTests {
         when(userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull("unknown@example.com"))
                 .thenReturn(Optional.empty());
 
-        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("unknown@example.com"));
+        AuthMessageResponse response = authService.resendVerification(new ResendVerificationRequest("unknown@example.com"), META);
 
         assertEquals(
                 "Nếu email tồn tại và chưa được xác thực, liên kết xác thực mới sẽ được gửi đến email của bạn.",

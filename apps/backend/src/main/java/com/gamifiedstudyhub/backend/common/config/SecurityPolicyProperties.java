@@ -8,6 +8,7 @@ public class SecurityPolicyProperties {
 
     private final RateLimit ratelimit = new RateLimit();
     private final Lockout lockout = new Lockout();
+    private final EmailRateLimit emailRatelimit = new EmailRateLimit();
 
     public RateLimit getRatelimit() {
         return ratelimit;
@@ -15,6 +16,10 @@ public class SecurityPolicyProperties {
 
     public Lockout getLockout() {
         return lockout;
+    }
+
+    public EmailRateLimit getEmailRatelimit() {
+        return emailRatelimit;
     }
 
     public static class RateLimit {
@@ -47,6 +52,40 @@ public class SecurityPolicyProperties {
 
         public void setAccountWindowSeconds(long accountWindowSeconds) {
             this.accountWindowSeconds = accountWindowSeconds;
+        }
+    }
+
+    /** Throttling for endpoints that trigger an outbound email (forgot-password, resend-verification). */
+    public static class EmailRateLimit {
+        /** Max email-triggering requests per IP per minute. */
+        private int ipPerMinute = 5;
+        /** Max email-triggering requests for a single address per hour. */
+        private int perEmailPerHour = 3;
+        /** Minimum gap between two email-triggering requests for the same address. */
+        private long emailCooldownSeconds = 60;
+
+        public int getIpPerMinute() {
+            return ipPerMinute;
+        }
+
+        public void setIpPerMinute(int ipPerMinute) {
+            this.ipPerMinute = ipPerMinute;
+        }
+
+        public int getPerEmailPerHour() {
+            return perEmailPerHour;
+        }
+
+        public void setPerEmailPerHour(int perEmailPerHour) {
+            this.perEmailPerHour = perEmailPerHour;
+        }
+
+        public long getEmailCooldownSeconds() {
+            return emailCooldownSeconds;
+        }
+
+        public void setEmailCooldownSeconds(long emailCooldownSeconds) {
+            this.emailCooldownSeconds = emailCooldownSeconds;
         }
     }
 

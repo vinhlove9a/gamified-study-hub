@@ -23,6 +23,7 @@ import com.gamifiedstudyhub.backend.auth.security.RestAccessDeniedHandler;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.auth.service.AuthSessionService;
 import com.gamifiedstudyhub.backend.common.config.SecurityConfig;
+import com.gamifiedstudyhub.backend.common.web.RequestMetadata;
 import com.gamifiedstudyhub.backend.identity.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginFailureHandler;
 import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginSuccessHandler;
@@ -68,7 +69,7 @@ class AuthControllerTests {
 
     @Test
     void forgotPassword_shouldReturnSuccessForValidEmail() throws Exception {
-        when(authService.forgotPassword(any(ForgotPasswordRequest.class)))
+        when(authService.forgotPassword(any(ForgotPasswordRequest.class), any(RequestMetadata.class)))
                 .thenReturn(new AuthMessageResponse("forgot-password-accepted"));
 
         mockMvc.perform(post("/api/v1/auth/forgot-password")
@@ -78,7 +79,7 @@ class AuthControllerTests {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.message").value("forgot-password-accepted"));
 
-        verify(authService).forgotPassword(any(ForgotPasswordRequest.class));
+        verify(authService).forgotPassword(any(ForgotPasswordRequest.class), any(RequestMetadata.class));
     }
 
     @Test
@@ -113,7 +114,7 @@ class AuthControllerTests {
 
     @Test
     void resendVerification_shouldReturnSuccessForValidEmail() throws Exception {
-        when(authService.resendVerification(any(ResendVerificationRequest.class)))
+        when(authService.resendVerification(any(ResendVerificationRequest.class), any(RequestMetadata.class)))
                 .thenReturn(new AuthMessageResponse("resend-accepted"));
 
         mockMvc.perform(post("/api/v1/auth/resend-verification")
@@ -123,7 +124,7 @@ class AuthControllerTests {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.message").value("resend-accepted"));
 
-        verify(authService).resendVerification(any(ResendVerificationRequest.class));
+        verify(authService).resendVerification(any(ResendVerificationRequest.class), any(RequestMetadata.class));
     }
 
     @Test

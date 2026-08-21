@@ -14,6 +14,7 @@ import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
 import com.gamifiedstudyhub.backend.audit.AuthEventType;
 import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
+import com.gamifiedstudyhub.backend.auth.ratelimit.EmailRateLimiter;
 import com.gamifiedstudyhub.backend.auth.ratelimit.LoginRateLimiter;
 import com.gamifiedstudyhub.backend.authz.service.AuthorityService;
 import com.gamifiedstudyhub.backend.email.EmailService;
@@ -49,6 +50,7 @@ public class AuthService {
     private final AuthTokenService authTokenService;
     private final AuthorityService authorityService;
     private final LoginRateLimiter loginRateLimiter;
+    private final EmailRateLimiter emailRateLimiter;
     private final AuthAuditService auditService;
     private final EmailService emailService;
     private final MfaService mfaService;
@@ -62,6 +64,7 @@ public class AuthService {
             AuthTokenService authTokenService,
             AuthorityService authorityService,
             LoginRateLimiter loginRateLimiter,
+            EmailRateLimiter emailRateLimiter,
             AuthAuditService auditService,
             EmailService emailService,
             MfaService mfaService
@@ -74,6 +77,7 @@ public class AuthService {
         this.authTokenService = authTokenService;
         this.authorityService = authorityService;
         this.loginRateLimiter = loginRateLimiter;
+        this.emailRateLimiter = emailRateLimiter;
         this.auditService = auditService;
         this.emailService = emailService;
         this.mfaService = mfaService;
@@ -197,8 +201,12 @@ public class AuthService {
         return authMapper.toUserSummary(customUserDetails.getUser(), authorities);
     }
 
-    public AuthMessageResponse forgotPassword(ForgotPasswordRequest request) {
+    public AuthMessageResponse forgotPassword(ForgotPasswordRequest request, RequestMetadata meta) {
         String email = normalizeEmail(request.email());
+
+        // Throttle BEFORE the lookup so the limit applies regardless of whether the
+        // address exists (prevents inbox bombing / enumeration). Throws 429 if blocked.
+        emailRateLimiter.assertAllowed(meta.ip(), email);
 
         userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
                 .filter(user -> !UserStatus.DISABLED.equals(user.getStatus()))
@@ -234,8 +242,12 @@ public class AuthService {
         return new AuthMessageResponse("Email đã được xác thực thành công.");
     }
 
-    public AuthMessageResponse resendVerification(ResendVerificationRequest request) {
+    public AuthMessageResponse resendVerification(ResendVerificationRequest request, RequestMetadata meta) {
         String email = normalizeEmail(request.email());
+
+        // Throttle BEFORE the lookup so the limit applies regardless of whether the
+        // address exists (prevents inbox bombing / enumeration). Throws 429 if blocked.
+        emailRateLimiter.assertAllowed(meta.ip(), email);
 
         userRepository.findByEmailIgnoreCaseAndDeletedAtIsNull(email)
                 .filter(user -> !user.isEmailVerified())

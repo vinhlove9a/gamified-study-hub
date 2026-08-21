@@ -96,8 +96,11 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     @Operation(summary = "Request password reset instructions", security = {})
-    public ApiResponse<AuthMessageResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        AuthMessageResponse response = authService.forgotPassword(request);
+    public ApiResponse<AuthMessageResponse> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        AuthMessageResponse response = authService.forgotPassword(request, RequestMetadata.from(httpRequest));
         return ApiResponse.success("Forgot password request accepted", response);
     }
 
@@ -118,9 +121,10 @@ public class AuthController {
     @PostMapping("/resend-verification")
     @Operation(summary = "Request a new email verification link", security = {})
     public ApiResponse<AuthMessageResponse> resendVerification(
-            @Valid @RequestBody ResendVerificationRequest request
+            @Valid @RequestBody ResendVerificationRequest request,
+            HttpServletRequest httpRequest
     ) {
-        AuthMessageResponse response = authService.resendVerification(request);
+        AuthMessageResponse response = authService.resendVerification(request, RequestMetadata.from(httpRequest));
         return ApiResponse.success("Resend verification request accepted", response);
     }
 
