@@ -1,10 +1,11 @@
 SHELL := /bin/bash
 
-.PHONY: help dev-up dev-down dev-logs dev-rebuild backend-run backend-test frontend-dev frontend-build docker-config
+.PHONY: help dev-up dev-down dev-logs dev-rebuild backend-run backend-test frontend-dev frontend-build docker-config \
+	infra-up infra-down obs-up obs-down
 
 help:
 	@echo "Available commands:"
-	@echo "  make dev-up         - Start all services with Docker Compose"
+	@echo "  make dev-up         - Start core services with Docker Compose"
 	@echo "  make dev-down       - Stop all services"
 	@echo "  make dev-logs       - Tail service logs"
 	@echo "  make dev-rebuild    - Rebuild and restart services"
@@ -13,6 +14,10 @@ help:
 	@echo "  make frontend-dev   - Run frontend dev server locally"
 	@echo "  make frontend-build - Build frontend production bundle"
 	@echo "  make docker-config  - Validate merged Docker Compose config"
+	@echo "  make infra-up       - Start ALL optional integrations (mongo/es/kafka/observability)"
+	@echo "  make infra-down     - Stop the optional integrations"
+	@echo "  make obs-up         - Start only the observability stack (prometheus/grafana/loki/tempo)"
+	@echo "  make obs-down       - Stop the observability stack"
 
 dev-up:
 	@./infra/scripts/dev-up.sh
@@ -40,3 +45,15 @@ frontend-build:
 
 docker-config:
 	@docker compose config
+
+infra-up:
+	@docker compose --profile full up -d
+
+infra-down:
+	@docker compose --profile full down
+
+obs-up:
+	@docker compose --profile observability up -d
+
+obs-down:
+	@docker compose --profile observability down

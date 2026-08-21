@@ -198,7 +198,11 @@ const selectedCount = computed(() => selected.value.size);
 
 function toggleRow(id: number): void {
   const next = new Set(selected.value);
-  next.has(id) ? next.delete(id) : next.add(id);
+  if (next.has(id)) {
+    next.delete(id);
+  } else {
+    next.add(id);
+  }
   selected.value = next;
 }
 const pageIds = computed(() => paged.value.map((u) => u.id));

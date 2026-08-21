@@ -55,8 +55,6 @@ const leaderboardRows = [
   '03 · CLB Tiếng Anh · 4.190 coin'
 ];
 
-const communityBadges = ['CLB Đại học', 'Nhóm luyện thi', 'Lớp gia sư', 'Trung tâm', 'Tự học'];
-
 onMounted(() => {
   if (!gsap) return;
 
