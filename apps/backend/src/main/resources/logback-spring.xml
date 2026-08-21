@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Logging setup for the backend.
+
+    * dev/local  -> human-readable console, trace-correlated ([app,traceId,spanId]).
+    * prod       -> one-line structured JSON (LogstashEncoder), ready for Loki/ELK.
+
+  Trace/span IDs come from Micrometer Tracing, which injects them into the MDC
+  whenever a span is active. Force JSON in any profile with LOG_APPENDER=JSON.
+-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="gsh-backend"/>
+    <property name="APP_ENV" value="${APP_ENV:-local}"/>
+
+    <!-- Human-readable console with trace correlation. -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%thread] [${appName},%X{traceId:-},%X{spanId:-}] %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Structured JSON (one event per line) for log aggregation. MDC (incl. traceId/spanId) is included by default. -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"application":"${appName}","environment":"${APP_ENV}"}</customFields>
+        </encoder>
+    </appender>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="${LOG_APPENDER:-JSON}"/>
+        </root>
+    </springProfile>
+    <springProfile name="!prod">
+        <root level="INFO">
+            <appender-ref ref="${LOG_APPENDER:-CONSOLE}"/>
+        </root>
+    </springProfile>
+</configuration>

@@ -17,6 +17,41 @@ spring:
       # disable repo scanning so it doesn't try to adopt the JPA repositories.
       repositories:
         enabled: false
+    mongodb:
+      # Connection is lazy: the app boots even when MongoDB is not running.
+      # Enable the health probe + real usage via app.integrations.mongodb.enabled.
+      uri: ${MONGODB_URI:mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/${MONGODB_DB:gamified_study_hub}}
+      auto-index-creation: true
+  elasticsearch:
+    # Also lazy — no connection attempt until a repository/template is used.
+    uris: ${ELASTICSEARCH_URIS:http://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}}
+    username: ${ELASTICSEARCH_USERNAME:}
+    password: ${ELASTICSEARCH_PASSWORD:}
+    connection-timeout: 2s
+    socket-timeout: 5s
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    client-id: ${spring.application.name}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:gsh-backend}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.gamifiedstudyhub.backend.*
+    listener:
+      # Listener containers do NOT start (and thus never dial the broker) unless
+      # messaging is explicitly enabled — keeps startup clean with no broker.
+      auto-startup: ${APP_KAFKA_ENABLED:false}
+      missing-topics-fatal: false
   mail:
     host: ${MAIL_HOST:}
     port: ${MAIL_PORT:587}
@@ -39,14 +74,54 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       probes:
         enabled: true
       show-details: never
+  health:
+    # Optional backing stores must not drag readiness DOWN when they are off.
+    # Flip these on together with the matching app.integrations.*.enabled flag.
+    mongo:
+      enabled: ${APP_MONGO_ENABLED:false}
+    elasticsearch:
+      enabled: ${APP_ES_ENABLED:false}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      # Every meter is tagged with the app + environment for multi-instance dashboards.
+      application: ${spring.application.name}
+      environment: ${APP_ENV:local}
+  tracing:
+    # Default 0.0 → no spans are produced or exported, so a missing OTLP collector
+    # is a no-op. Set APP_TRACING_SAMPLING=1.0 (dev) to trace everything.
+    sampling:
+      probability: ${APP_TRACING_SAMPLING:0.0}
+  otlp:
+    tracing:
+      endpoint: ${OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
 
 app:
+  # Feature flags for optional platform integrations. Default OFF so the current
+  # (prod-lean) deployment stays light; flip a flag + point at a running service
+  # to activate. See docs/architecture/platform-integrations.md.
+  integrations:
+    mongodb:
+      enabled: ${APP_MONGO_ENABLED:false}
+    elasticsearch:
+      enabled: ${APP_ES_ENABLED:false}
+    kafka:
+      enabled: ${APP_KAFKA_ENABLED:false}
+  # Optional product features. The `activity` feed is a reference feature that
+  # exercises MongoDB + Kafka + Elasticsearch together; enabling it requires those
+  # three integrations to be on as well.
+  features:
+    activity:
+      enabled: ${APP_FEATURE_ACTIVITY_ENABLED:false}
   jwt:
     secret: ${JWT_SECRET}
     access-token-expiration-minutes: ${JWT_ACCESS_TOKEN_EXPIRATION_MINUTES:60}
