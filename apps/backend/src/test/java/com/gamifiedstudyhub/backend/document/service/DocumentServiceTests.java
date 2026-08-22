@@ -2,11 +2,14 @@ package com.gamifiedstudyhub.backend.document.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gamifiedstudyhub.backend.authz.WorkspaceGuard;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
+import com.gamifiedstudyhub.backend.common.exception.ForbiddenException;
 import com.gamifiedstudyhub.backend.document.dto.DocumentSummaryResponse;
 import com.gamifiedstudyhub.backend.document.entity.Document;
 import com.gamifiedstudyhub.backend.document.mapper.DocumentMapper;
@@ -35,6 +38,9 @@ class DocumentServiceTests {
     @Mock
     private TagRepository tagRepository;
 
+    @Mock
+    private WorkspaceGuard workspaceGuard;
+
     private DocumentService documentService;
 
     @BeforeEach
@@ -43,7 +49,8 @@ class DocumentServiceTests {
                 documentRepository,
                 documentTagRelationRepository,
                 tagRepository,
-                new DocumentMapper()
+                new DocumentMapper(),
+                workspaceGuard
         );
     }
 
@@ -57,6 +64,7 @@ class DocumentServiceTests {
         document.setTitle("Document A");
         document.setSlug("document-a");
 
+        when(workspaceGuard.isMember(workspaceId)).thenReturn(true);
         when(documentRepository.findByWorkspaceIdAndDeletedAtIsNullOrderByCreatedAtDesc(workspaceId))
                 .thenReturn(List.of(document));
 
@@ -68,6 +76,16 @@ class DocumentServiceTests {
     }
 
     @Test
+    void listDocuments_shouldThrowForbiddenWhenNotWorkspaceMember() {
+        UUID workspaceId = UUID.randomUUID();
+        when(workspaceGuard.isMember(workspaceId)).thenReturn(false);
+
+        assertThrows(ForbiddenException.class, () -> documentService.listDocuments(workspaceId, null));
+
+        verify(documentRepository, never()).findByWorkspaceIdAndDeletedAtIsNullOrderByCreatedAtDesc(workspaceId);
+    }
+
+    @Test
     void getDocument_shouldThrowBusinessExceptionWhenDocumentDoesNotExist() {
         UUID documentId = UUID.randomUUID();
         when(documentRepository.findByIdAndDeletedAtIsNull(documentId)).thenReturn(Optional.empty());
@@ -75,5 +93,22 @@ class DocumentServiceTests {
         BusinessException exception = assertThrows(BusinessException.class, () -> documentService.getDocument(documentId));
 
         assertEquals(ErrorCodes.DOCUMENT_NOT_FOUND, exception.getCode());
+    }
+
+    @Test
+    void getDocument_shouldThrowForbiddenWhenNotWorkspaceMember() {
+        UUID documentId = UUID.randomUUID();
+        UUID workspaceId = UUID.randomUUID();
+
+        Document document = new Document();
+        ReflectionTestUtils.setField(document, "id", documentId);
+        document.setWorkspaceId(workspaceId);
+
+        when(documentRepository.findByIdAndDeletedAtIsNull(documentId)).thenReturn(Optional.of(document));
+        when(workspaceGuard.isMember(workspaceId)).thenReturn(false);
+
+        assertThrows(ForbiddenException.class, () -> documentService.getDocument(documentId));
+
+        verify(documentTagRelationRepository, never()).findByIdDocumentId(documentId);
     }
 }

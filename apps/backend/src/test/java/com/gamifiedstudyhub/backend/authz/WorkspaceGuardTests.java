@@ -92,4 +92,40 @@ class WorkspaceGuardTests {
                 .thenReturn(Optional.of(member("ADMIN", "ACTIVE")));
         assertFalse(workspaceGuard.hasRole(workspaceId, "ADMIN"));
     }
+
+    @Test
+    void isMember_activeMemberOfAnyRole_isAllowed() {
+        authenticateAs("ROLE_USER");
+        when(workspaceMemberRepository.findByWorkspaceIdAndUserIdAndDeletedAtIsNull(workspaceId, userId))
+                .thenReturn(Optional.of(member("STUDENT", "ACTIVE")));
+        assertTrue(workspaceGuard.isMember(workspaceId));
+    }
+
+    @Test
+    void isMember_inactiveMembership_isDenied() {
+        authenticateAs("ROLE_USER");
+        when(workspaceMemberRepository.findByWorkspaceIdAndUserIdAndDeletedAtIsNull(workspaceId, userId))
+                .thenReturn(Optional.of(member("ADMIN", "INVITED")));
+        assertFalse(workspaceGuard.isMember(workspaceId));
+    }
+
+    @Test
+    void isMember_nonMember_isDenied() {
+        authenticateAs("ROLE_USER");
+        when(workspaceMemberRepository.findByWorkspaceIdAndUserIdAndDeletedAtIsNull(workspaceId, userId))
+                .thenReturn(Optional.empty());
+        assertFalse(workspaceGuard.isMember(workspaceId));
+    }
+
+    @Test
+    void isMember_platformAdmin_bypassesCheck() {
+        authenticateAs("ROLE_ADMIN");
+        assertTrue(workspaceGuard.isMember(workspaceId));
+    }
+
+    @Test
+    void isMember_unauthenticated_isDenied() {
+        workspaceGuard = new WorkspaceGuard(workspaceMemberRepository);
+        assertFalse(workspaceGuard.isMember(workspaceId));
+    }
 }
