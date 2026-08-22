@@ -22,8 +22,50 @@ env:
   FRONTEND_IMAGE: ghcr.io/vinhlove9a/gsh-frontend
 
 jobs:
+  # Gate the deploy on the same checks CI runs on PRs. Pushing straight to main
+  # (or a manual dispatch) must not ship a broken build to prod, so backend tests
+  # and the frontend lint/typecheck/build run before any image is built.
+  test:
+    name: Test (deploy gate)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Backend tests
+        working-directory: apps/backend
+        run: mvn -B -ntp -Dnet.bytebuddy.experimental=true test
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: apps/frontend
+        run: npm ci
+
+      - name: Frontend lint
+        working-directory: apps/frontend
+        run: npm run lint
+
+      # `npm run build` runs `vue-tsc --noEmit` (typecheck) then `vite build`.
+      - name: Frontend typecheck & build
+        working-directory: apps/frontend
+        run: npm run build
+
   build-and-push:
     name: Build & push images
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read

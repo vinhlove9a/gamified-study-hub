@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthCookieFactory {
 
+    /** Short-lived httpOnly cookie carrying the MFA challenge across the OAuth redirect. */
+    public static final String MFA_CHALLENGE_COOKIE = "mfa_challenge";
+
     private final CookieProperties props;
 
     public AuthCookieFactory(CookieProperties props) {
@@ -28,6 +31,14 @@ public class AuthCookieFactory {
 
     public ResponseCookie clearRefreshCookie() {
         return base(props.getRefreshName(), "", props.getRefreshPath(), Duration.ZERO).build();
+    }
+
+    public ResponseCookie mfaChallengeCookie(String value, Duration maxAge) {
+        return base(MFA_CHALLENGE_COOKIE, value, "/", maxAge).build();
+    }
+
+    public ResponseCookie clearMfaChallengeCookie() {
+        return base(MFA_CHALLENGE_COOKIE, "", "/", Duration.ZERO).build();
     }
 
     private ResponseCookie.ResponseCookieBuilder base(String name, String value, String path, Duration maxAge) {

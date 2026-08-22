@@ -20,7 +20,37 @@
     <properties>
         <java.version>21</java.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <!-- Not managed by the Spring Boot BOM; pin explicitly. 8.x targets Logback 1.3+/Jackson 2.14+. -->
+        <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
+        <!-- Pre-wired modern stack (not managed by the Boot BOM; pin explicitly). All gated OFF. -->
+        <redisson.version>3.37.0</redisson.version>
+        <shedlock.version>5.16.0</shedlock.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <spring-cloud-aws.version>3.2.1</spring-cloud-aws.version>
+        <spring-modulith.version>1.2.5</spring-modulith.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Manages AWS SDK v2 module versions (S3, Secrets Manager) as one source of truth. -->
+            <dependency>
+                <groupId>io.awspring.cloud</groupId>
+                <artifactId>spring-cloud-aws-dependencies</artifactId>
+                <version>${spring-cloud-aws.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${spring-modulith.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -42,6 +72,54 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- ============================================================= -->
+        <!-- Platform integrations (see docs/architecture/platform-integrations.md).  -->
+        <!-- All are gated by app.integrations.* / management flags so the app boots -->
+        <!-- fine when the backing services are not running (default: prod-lean).    -->
+        <!-- ============================================================= -->
+
+        <!-- NoSQL: MongoDB document store -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <!-- Full-text search: Elasticsearch -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!-- Messaging: Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Observability: metrics (Prometheus scrape endpoint via actuator) -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <!-- Observability: distributed tracing (OpenTelemetry bridge + OTLP exporter) -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <!-- Observability: @Observed aspect support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- Structured JSON logging (trace-correlated) -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -105,6 +183,101 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ============================================================= -->
+        <!-- Pre-wired "modern stack" — all inert/gated OFF by default so the -->
+        <!-- 1GB prod box stays lean; flip a flag to activate (see            -->
+        <!-- docs/architecture/prewired-stack.md).                            -->
+        <!-- ============================================================= -->
+
+        <!-- Caching: Spring Cache abstraction + Caffeine (local) / Redis (distributed).
+             Inert until @EnableCaching (app.cache.enabled=true). -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+        <!-- Distributed locks + atomic ops (coin-ledger idempotency, Phase 3).
+             RedissonClient bean created only when app.redisson.enabled=true. -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+
+        <!-- Scheduled jobs with single-node locking. @Scheduled + LockProvider wired
+             only when app.scheduling.enabled=true. -->
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>${shedlock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-redis-spring</artifactId>
+            <version>${shedlock.version}</version>
+        </dependency>
+
+        <!-- Resilience: retry / circuit-breaker / bulkhead / rate-limiter.
+             Passive until a method is annotated (@Retry, @CircuitBreaker, ...). -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
+        <!-- Realtime: WebSocket/STOMP (leaderboard, notifications).
+             No endpoints registered unless app.websocket.enabled=true. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- Object storage: AWS SDK v2 S3 (also targets Cloudflare R2 / MinIO via an
+             endpoint override). S3 client bean created only when app.storage.provider=s3;
+             the default LocalStorageService needs no cloud creds. -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+        </dependency>
+
+        <!-- Secrets manager: activates ONLY via spring.config.import=aws-secretsmanager:...
+             otherwise completely inert (no eager AWS calls at boot). -->
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-secrets-manager</artifactId>
+        </dependency>
+
+        <!-- Bean mapping (MapStruct). The processor + Lombok binding sit on the compile
+             classpath (provided) so javac auto-discovers them alongside Lombok — the same
+             mechanism already in use. Existing hand-written mappers keep working unchanged. -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Modular-monolith tooling: package-boundary docs + verification (opt-in test). -->
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -115,6 +288,49 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Integration testing against real services (Docker). Tagged @Tag("integration")
+             and excluded from the default `mvn test`; run with `mvn -Pintegration test`. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -123,6 +339,33 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!-- Keep the default `mvn test` offline + fast: skip anything tagged
+                 "integration" (Testcontainers, Modulith verify). Opt in via -Pintegration. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludedGroups>integration</excludedGroups>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- `mvn -Pintegration test` runs the Docker-backed / boundary-verification tests too. -->
+        <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludedGroups combine.self="override"/>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

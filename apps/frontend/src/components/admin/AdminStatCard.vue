@@ -27,7 +27,7 @@ const props = withDefaults(
     trendLabel?: string;
     sparkline?: number[];
   }>(),
-  { accent: 'cyan', prefix: '', suffix: '', unit: '', decimals: 0 }
+  { accent: 'cyan', prefix: '', suffix: '', unit: '', decimals: 0, trend: undefined, trendLabel: undefined, sparkline: undefined }
 );
 
 const accentText: Record<Accent, string> = {

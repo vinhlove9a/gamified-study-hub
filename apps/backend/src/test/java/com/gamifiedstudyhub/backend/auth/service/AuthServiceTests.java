@@ -12,11 +12,13 @@ import static org.mockito.Mockito.when;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
 import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ChangePasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
+import com.gamifiedstudyhub.backend.auth.dto.UpdateProfileRequest;
 import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.entity.EmailVerificationToken;
 import com.gamifiedstudyhub.backend.auth.entity.PasswordResetToken;
@@ -68,6 +70,9 @@ class AuthServiceTests {
     @Mock
     private com.gamifiedstudyhub.backend.mfa.MfaService mfaService;
 
+    @Mock
+    private com.gamifiedstudyhub.backend.auth.token.RefreshTokenService refreshTokenService;
+
     private static final com.gamifiedstudyhub.backend.common.web.RequestMetadata META =
             new com.gamifiedstudyhub.backend.common.web.RequestMetadata("127.0.0.1", "JUnit");
 
@@ -94,7 +99,8 @@ class AuthServiceTests {
                 emailRateLimiter,
                 auditService,
                 emailService,
-                mfaService
+                mfaService,
+                refreshTokenService
         );
     }
 
@@ -314,6 +320,106 @@ class AuthServiceTests {
         assertEquals("Email đã được xác thực thành công.", response.message());
         assertTrue(user.isEmailVerified());
         assertNotNull(user.getEmailVerifiedAt());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void resetPassword_shouldRevokeAllSessions() {
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", UUID.randomUUID());
+        user.setPasswordHash(passwordEncoder.encode("oldPassword123"));
+
+        PasswordResetToken token = new PasswordResetToken();
+        token.setUser(user);
+        when(authTokenService.consumePasswordResetToken("valid-token")).thenReturn(token);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        authService.resetPassword(new ResetPasswordRequest("valid-token", "NewPassword123"));
+
+        verify(refreshTokenService).revokeAllForUser(user.getId());
+    }
+
+    @Test
+    void changePassword_shouldUpdateHashAndRevokeSessions() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", userId);
+        user.setPasswordHash(passwordEncoder.encode("oldPassword123"));
+
+        when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        AuthResponse response = authService.changePassword(
+                userId, new ChangePasswordRequest("oldPassword123", "NewPassword123"));
+
+        assertTrue(passwordEncoder.matches("NewPassword123", user.getPasswordHash()));
+        assertTrue(jwtService.isAccessTokenValid(response.accessToken()));
+        verify(refreshTokenService).revokeAllForUser(userId);
+    }
+
+    @Test
+    void changePassword_shouldRejectWrongCurrentPassword() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", userId);
+        user.setPasswordHash(passwordEncoder.encode("oldPassword123"));
+
+        when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> authService.changePassword(userId, new ChangePasswordRequest("wrongCurrent1", "NewPassword123")));
+
+        assertEquals(ErrorCodes.INVALID_CREDENTIALS, exception.getCode());
+        verify(refreshTokenService, never()).revokeAllForUser(any(UUID.class));
+    }
+
+    @Test
+    void changePassword_shouldRejectReusingSamePassword() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", userId);
+        user.setPasswordHash(passwordEncoder.encode("SamePassword123"));
+
+        when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> authService.changePassword(userId, new ChangePasswordRequest("SamePassword123", "SamePassword123")));
+
+        assertEquals(ErrorCodes.AUTH_PASSWORD_WEAK, exception.getCode());
+    }
+
+    @Test
+    void changePassword_shouldRejectAccountWithoutPassword() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", userId);
+        user.setPasswordHash(null); // OAuth-only account
+
+        when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> authService.changePassword(userId, new ChangePasswordRequest("whatever1", "NewPassword123")));
+
+        assertEquals(ErrorCodes.BAD_REQUEST, exception.getCode());
+    }
+
+    @Test
+    void updateProfile_shouldUpdateProvidedFieldsOnly() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", userId);
+        user.setFullName("Old Name");
+        user.setAvatarUrl("old-avatar");
+        user.setEmail("profile@example.com");
+        user.setStatus(UserStatus.ACTIVE);
+
+        when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        authService.updateProfile(userId, new UpdateProfileRequest("  New Name  ", null));
+
+        assertEquals("New Name", user.getFullName());
+        assertEquals("old-avatar", user.getAvatarUrl()); // null field left unchanged
         verify(userRepository).save(user);
     }
 }

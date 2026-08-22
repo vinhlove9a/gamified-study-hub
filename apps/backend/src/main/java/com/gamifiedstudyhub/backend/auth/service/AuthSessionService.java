@@ -109,6 +109,15 @@ public class AuthSessionService {
         auditService.record(AuthEventType.LOGOUT, userId, meta);
     }
 
+    /** Revoke every refresh session for the user (all devices) and clear this response's cookies. */
+    public void logoutAll(HttpServletResponse response, UUID userId, RequestMetadata meta) {
+        if (userId != null) {
+            refreshTokenService.revokeAllForUser(userId);
+        }
+        clearCookies(response);
+        auditService.record(AuthEventType.LOGOUT_ALL, userId, meta);
+    }
+
     private void issueRotated(HttpServletResponse response, String accessToken, String refreshCookieValue) {
         Duration accessMaxAge = Duration.ofMinutes(jwtProperties.getAccessTokenExpirationMinutes());
         response.addHeader(HttpHeaders.SET_COOKIE,

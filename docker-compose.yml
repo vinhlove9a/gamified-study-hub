@@ -79,6 +79,16 @@ services:
       REDIS_HOST: ${REDIS_HOST:-redis}
       REDIS_PORT: ${REDIS_PORT:-6379}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      # --- Optional platform integrations (default OFF; see infra profiles below) ---
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/gamified_study_hub}
+      ELASTICSEARCH_URIS: ${ELASTICSEARCH_URIS:-http://elasticsearch:9200}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-kafka:9092}
+      OTLP_TRACES_ENDPOINT: ${OTLP_TRACES_ENDPOINT:-http://otel-collector:4318/v1/traces}
+      APP_MONGO_ENABLED: ${APP_MONGO_ENABLED:-false}
+      APP_ES_ENABLED: ${APP_ES_ENABLED:-false}
+      APP_KAFKA_ENABLED: ${APP_KAFKA_ENABLED:-false}
+      APP_TRACING_SAMPLING: ${APP_TRACING_SAMPLING:-0.0}
+      APP_FEATURE_ACTIVITY_ENABLED: ${APP_FEATURE_ACTIVITY_ENABLED:-false}
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     depends_on:
@@ -124,9 +134,211 @@ services:
     networks:
       - gsh-network
 
+  # ==================================================================
+  # Optional platform integrations. None start with a plain `docker compose up`;
+  # opt in per stack with a profile (a service may belong to several):
+  #   docker compose --profile nosql up -d           # MongoDB
+  #   docker compose --profile search up -d           # Elasticsearch
+  #   docker compose --profile messaging up -d        # Kafka + Kafka UI
+  #   docker compose --profile observability up -d     # Prometheus/Grafana/Loki/Tempo/OTel
+  #   docker compose --profile full up -d              # everything above
+  # Turning a stack ON also means flipping the matching APP_*_ENABLED flag in .env.
+  # See docs/architecture/platform-integrations.md.
+  # ==================================================================
+
+  mongodb:
+    image: mongo:7
+    container_name: gsh-mongodb
+    profiles: ["nosql", "full"]
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DB:-gamified_study_hub}
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - gsh-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: gsh-elasticsearch
+    profiles: ["search", "full"]
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      # Local dev only — cap the heap so it fits a laptop. Never use these limits in prod.
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - gsh-network
+
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: gsh-kafka
+    profiles: ["messaging", "full"]
+    restart: unless-stopped
+    environment:
+      # KRaft single-node (no ZooKeeper).
+      KAFKA_NODE_ID: "1"
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      # PLAINTEXT (kafka:9092) for containers; EXTERNAL (localhost:9094) for host apps
+      # such as `make backend-run`.
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    ports:
+      - "${KAFKA_EXTERNAL_PORT:-9094}:9094"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - gsh-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: gsh-kafka-ui
+    profiles: ["messaging", "full"]
+    restart: unless-stopped
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: "true"
+    ports:
+      - "${KAFKA_UI_PORT:-8085}:8080"
+    depends_on:
+      - kafka
+    networks:
+      - gsh-network
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: gsh-prometheus
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    volumes:
+      - ./infra/observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    networks:
+      - gsh-network
+
+  tempo:
+    image: grafana/tempo:2.6.0
+    container_name: gsh-tempo
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./infra/observability/tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    ports:
+      - "3200:3200"
+    networks:
+      - gsh-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.109.0
+    container_name: gsh-otel-collector
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./infra/observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - tempo
+    networks:
+      - gsh-network
+
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: gsh-loki
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/loki-config.yaml"]
+    volumes:
+      - ./infra/observability/loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki_data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - gsh-network
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: gsh-promtail
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    command: ["-config.file=/etc/promtail/promtail-config.yaml"]
+    volumes:
+      - ./infra/observability/promtail/promtail-config.yaml:/etc/promtail/promtail-config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - loki
+    networks:
+      - gsh-network
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: gsh-grafana
+    profiles: ["observability", "full"]
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - ./infra/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    networks:
+      - gsh-network
+
 volumes:
   postgres_data:
   redis_data:
+  mongodb_data:
+  elasticsearch_data:
+  kafka_data:
+  prometheus_data:
+  tempo_data:
+  loki_data:
+  grafana_data:
 
 networks:
   gsh-network:

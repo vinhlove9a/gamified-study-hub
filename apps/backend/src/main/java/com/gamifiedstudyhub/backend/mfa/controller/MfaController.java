@@ -3,6 +3,7 @@ package com.gamifiedstudyhub.backend.mfa.controller;
 import com.gamifiedstudyhub.backend.audit.AuthEventType;
 import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
+import com.gamifiedstudyhub.backend.auth.security.AuthCookieFactory;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.service.AuthService;
 import com.gamifiedstudyhub.backend.auth.service.AuthSessionService;
@@ -18,11 +19,13 @@ import com.gamifiedstudyhub.backend.mfa.dto.MfaDtos;
 import com.gamifiedstudyhub.backend.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,19 +45,22 @@ public class MfaController {
     private final AuthService authService;
     private final AuthSessionService authSessionService;
     private final AuthAuditService auditService;
+    private final AuthCookieFactory cookieFactory;
 
     public MfaController(
             MfaService mfaService,
             MfaChallengeService mfaChallengeService,
             AuthService authService,
             AuthSessionService authSessionService,
-            AuthAuditService auditService
+            AuthAuditService auditService,
+            AuthCookieFactory cookieFactory
     ) {
         this.mfaService = mfaService;
         this.mfaChallengeService = mfaChallengeService;
         this.authService = authService;
         this.authSessionService = authSessionService;
         this.auditService = auditService;
+        this.cookieFactory = cookieFactory;
     }
 
     /** Step-up verification during login (no session yet — uses the MFA challenge token). */
@@ -66,7 +72,13 @@ public class MfaController {
             HttpServletResponse httpResponse
     ) {
         RequestMetadata meta = RequestMetadata.from(httpRequest);
-        UUID userId = mfaChallengeService.consume(request.mfaToken());
+        // Password logins pass the challenge in the body; the OAuth flow carries it in the
+        // httpOnly mfa_challenge cookie (kept out of the URL).
+        String challengeToken = request.mfaToken();
+        if (challengeToken == null || challengeToken.isBlank()) {
+            challengeToken = readCookie(httpRequest, AuthCookieFactory.MFA_CHALLENGE_COOKIE);
+        }
+        UUID userId = mfaChallengeService.consume(challengeToken);
         if (userId == null) {
             throw new BusinessException(ErrorCodes.AUTH_MFA_CHALLENGE_INVALID,
                     "MFA challenge is invalid or expired", HttpStatus.UNAUTHORIZED);
@@ -77,9 +89,23 @@ public class MfaController {
                     "Invalid authentication code", HttpStatus.UNAUTHORIZED);
         }
         auditService.record(AuthEventType.MFA_VERIFIED, userId, meta);
+        // Consume the OAuth challenge cookie (no-op for password logins).
+        httpResponse.addHeader(HttpHeaders.SET_COOKIE, cookieFactory.clearMfaChallengeCookie().toString());
         AuthResponse response = authService.completeLogin(userId, meta);
         authSessionService.issueSession(httpResponse, response.user().id(), response.accessToken());
         return ApiResponse.success("Login successful", response);
+    }
+
+    private String readCookie(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if (name.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     @GetMapping("/status")

@@ -88,11 +88,28 @@ export const authApi = {
   me() {
     return request<UserSummary>('/api/v1/auth/me');
   },
+  updateProfile(payload: { fullName?: string; avatarUrl?: string }) {
+    return request<UserSummary>('/api/v1/auth/me', {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
+  },
+  changePassword(payload: { currentPassword: string; newPassword: string }) {
+    return request<null>('/api/v1/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
   logout() {
     return request<null>('/api/v1/auth/logout', { method: 'POST' }, { skipRefresh: true });
   },
+  logoutAll() {
+    return request<null>('/api/v1/auth/logout-all', { method: 'POST' }, { skipRefresh: true });
+  },
   // --- MFA (TOTP) ---
-  mfaVerify(payload: { mfaToken: string; code: string }) {
+  // mfaToken is omitted for the OAuth flow, where the challenge travels in an
+  // httpOnly cookie instead of the request body.
+  mfaVerify(payload: { mfaToken?: string; code: string }) {
     return request<AuthResponse>('/api/v1/auth/mfa/verify', {
       method: 'POST',
       body: JSON.stringify(payload)

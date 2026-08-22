@@ -7,6 +7,27 @@ spring:
     open-in-view: false
   mvc:
     throw-exception-if-no-handler-found: true
+    problemdetails:
+      # RFC 7807 support is available but OFF: the app returns the custom
+      # {success,message,data} / {code,message,fieldErrors} envelope the frontend
+      # expects (GlobalExceptionHandler). Flip to true only if you also migrate that
+      # contract, otherwise you break the SPA's error parsing.
+      enabled: false
+  servlet:
+    multipart:
+      # Bound uploads at every tier (pair with a Caddy/nginx body limit). Applies once
+      # a multipart upload endpoint exists (Phase 2).
+      max-file-size: ${APP_UPLOAD_MAX_FILE_SIZE:25MB}
+      max-request-size: ${APP_UPLOAD_MAX_REQUEST_SIZE:30MB}
+  cloud:
+    aws:
+      # AWS Secrets Manager is pre-wired but OFF by default: leaving it enabled would make
+      # the SDK try to resolve an AWS region at boot and fail on a box with no AWS config.
+      # To use it: set this true, provide a region (spring.cloud.aws.region.static or the
+      # AWS_REGION env), and add e.g. spring.config.import=aws-secretsmanager:/gsh/prod.
+      # The config-import path itself is unaffected by this flag.
+      secretsmanager:
+        enabled: ${APP_SECRETS_MANAGER_ENABLED:false}
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -17,6 +38,41 @@ spring:
       # disable repo scanning so it doesn't try to adopt the JPA repositories.
       repositories:
         enabled: false
+    mongodb:
+      # Connection is lazy: the app boots even when MongoDB is not running.
+      # Enable the health probe + real usage via app.integrations.mongodb.enabled.
+      uri: ${MONGODB_URI:mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/${MONGODB_DB:gamified_study_hub}}
+      auto-index-creation: true
+  elasticsearch:
+    # Also lazy — no connection attempt until a repository/template is used.
+    uris: ${ELASTICSEARCH_URIS:http://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}}
+    username: ${ELASTICSEARCH_USERNAME:}
+    password: ${ELASTICSEARCH_PASSWORD:}
+    connection-timeout: 2s
+    socket-timeout: 5s
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    client-id: ${spring.application.name}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:gsh-backend}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.gamifiedstudyhub.backend.*
+    listener:
+      # Listener containers do NOT start (and thus never dial the broker) unless
+      # messaging is explicitly enabled — keeps startup clean with no broker.
+      auto-startup: ${APP_KAFKA_ENABLED:false}
+      missing-topics-fatal: false
   mail:
     host: ${MAIL_HOST:}
     port: ${MAIL_PORT:587}
@@ -39,14 +95,82 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       probes:
         enabled: true
       show-details: never
+  health:
+    # Optional backing stores must not drag readiness DOWN when they are off.
+    # Flip these on together with the matching app.integrations.*.enabled flag.
+    mongo:
+      enabled: ${APP_MONGO_ENABLED:false}
+    elasticsearch:
+      enabled: ${APP_ES_ENABLED:false}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      # Every meter is tagged with the app + environment for multi-instance dashboards.
+      application: ${spring.application.name}
+      environment: ${APP_ENV:local}
+  tracing:
+    # Default 0.0 → no spans are produced or exported, so a missing OTLP collector
+    # is a no-op. Set APP_TRACING_SAMPLING=1.0 (dev) to trace everything.
+    sampling:
+      probability: ${APP_TRACING_SAMPLING:0.0}
+  otlp:
+    tracing:
+      endpoint: ${OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
 
 app:
+  # Feature flags for optional platform integrations. Default OFF so the current
+  # (prod-lean) deployment stays light; flip a flag + point at a running service
+  # to activate. See docs/architecture/platform-integrations.md.
+  integrations:
+    mongodb:
+      enabled: ${APP_MONGO_ENABLED:false}
+    elasticsearch:
+      enabled: ${APP_ES_ENABLED:false}
+    kafka:
+      enabled: ${APP_KAFKA_ENABLED:false}
+  # Optional product features. The `activity` feed is a reference feature that
+  # exercises MongoDB + Kafka + Elasticsearch together; enabling it requires those
+  # three integrations to be on as well.
+  features:
+    activity:
+      enabled: ${APP_FEATURE_ACTIVITY_ENABLED:false}
+  # Pre-wired "modern stack" — all OFF by default (prod-lean). See
+  # docs/architecture/prewired-stack.md. Flip a flag to activate.
+  storage:
+    # local (default, filesystem, zero-config) | s3 (AWS S3 / Cloudflare R2 / MinIO)
+    provider: ${APP_STORAGE_PROVIDER:local}
+    local:
+      base-path: ${APP_STORAGE_LOCAL_PATH:./data/storage}
+    s3:
+      bucket: ${APP_STORAGE_S3_BUCKET:}
+      region: ${APP_STORAGE_S3_REGION:auto}
+      endpoint: ${APP_STORAGE_S3_ENDPOINT:}
+      access-key: ${APP_STORAGE_S3_ACCESS_KEY:}
+      secret-key: ${APP_STORAGE_S3_SECRET_KEY:}
+      path-style-access: ${APP_STORAGE_S3_PATH_STYLE:true}
+      presign-ttl: ${APP_STORAGE_S3_PRESIGN_TTL:PT15M}
+  cache:
+    enabled: ${APP_CACHE_ENABLED:false}
+    provider: ${APP_CACHE_PROVIDER:caffeine} # caffeine (in-process) | redis (distributed)
+  redisson:
+    enabled: ${APP_REDISSON_ENABLED:false}
+  scheduling:
+    enabled: ${APP_SCHEDULING_ENABLED:false}
+  idempotency:
+    enabled: ${APP_IDEMPOTENCY_ENABLED:false}
+    ttl-seconds: ${APP_IDEMPOTENCY_TTL:86400}
+  websocket:
+    enabled: ${APP_WEBSOCKET_ENABLED:false}
+    allowed-origins: ${APP_WEBSOCKET_ALLOWED_ORIGINS:*}
   jwt:
     secret: ${JWT_SECRET}
     access-token-expiration-minutes: ${JWT_ACCESS_TOKEN_EXPIRATION_MINUTES:60}
@@ -76,3 +200,25 @@ app:
       ip-per-minute: ${AUTH_EMAIL_RL_IP_PER_MIN:5}
       per-email-per-hour: ${AUTH_EMAIL_RL_PER_EMAIL:3}
       email-cooldown-seconds: ${AUTH_EMAIL_RL_COOLDOWN:60}
+
+# Resilience4j is passive: these are ready-to-use named instances, but they only take
+# effect on methods annotated @Retry/@CircuitBreaker/@Bulkhead(name = "..."). Sample
+# instances for the outbound integrations most likely to fail (email, object storage).
+resilience4j:
+  retry:
+    instances:
+      email:
+        max-attempts: 3
+        wait-duration: 1s
+        retry-exceptions:
+          - org.springframework.mail.MailException
+      storage:
+        max-attempts: 3
+        wait-duration: 500ms
+  circuitbreaker:
+    instances:
+      storage:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3

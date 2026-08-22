@@ -11,6 +11,7 @@ import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginFailureHandler;
 import com.gamifiedstudyhub.backend.identity.oauth.OAuth2LoginSuccessHandler;
 import com.gamifiedstudyhub.backend.mfa.MfaProperties;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -115,7 +114,10 @@ public class SecurityConfig {
                                 "/api/v1/auth/resend-verification",
                                 "/api/v1/auth/mfa/verify"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                        // Read-only observability endpoints for in-cluster scraping
+                        // (health probes + Prometheus). Not routed publicly by the
+                        // reverse proxy; restrict at the network layer in prod.
+                        .requestMatchers(EndpointRequest.to("health", "info", "prometheus")).permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         // OAuth2 social-login endpoints (top-level redirects, not /api).
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
@@ -138,10 +140,5 @@ public class SecurityConfig {
         }
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
