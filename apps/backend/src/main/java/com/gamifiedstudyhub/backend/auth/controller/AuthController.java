@@ -2,11 +2,13 @@ package com.gamifiedstudyhub.backend.auth.controller;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
 import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ChangePasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
+import com.gamifiedstudyhub.backend.auth.dto.UpdateProfileRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
 import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
@@ -28,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -133,6 +136,35 @@ public class AuthController {
     public ApiResponse<UserSummaryResponse> me() {
         UserSummaryResponse response = authService.getCurrentUser();
         return ApiResponse.success("Current user retrieved", response);
+    }
+
+    @PutMapping("/me")
+    @Operation(summary = "Update current user's profile", security = @SecurityRequirement(name = "bearerAuth"))
+    public ApiResponse<UserSummaryResponse> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
+        UserSummaryResponse response = authService.updateProfile(currentUserId(), request);
+        return ApiResponse.success("Profile updated", response);
+    }
+
+    @PostMapping("/change-password")
+    @Operation(summary = "Change password (revokes all other sessions)",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    public ApiResponse<Void> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            HttpServletResponse httpResponse
+    ) {
+        UUID userId = currentUserId();
+        AuthResponse response = authService.changePassword(userId, request);
+        // changePassword revoked every session; mint a fresh one so this device stays logged in.
+        authSessionService.issueSession(httpResponse, userId, response.accessToken());
+        return ApiResponse.success("Password changed", null);
+    }
+
+    @PostMapping("/logout-all")
+    @Operation(summary = "Log out of all devices (revoke every session)",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    public ApiResponse<Void> logoutAll(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        authSessionService.logoutAll(httpResponse, currentUserId(), RequestMetadata.from(httpRequest));
+        return ApiResponse.success("Logged out of all devices", null);
     }
 
     private UUID currentUserId() {

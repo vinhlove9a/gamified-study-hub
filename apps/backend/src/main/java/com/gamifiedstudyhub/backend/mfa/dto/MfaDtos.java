@@ -18,7 +18,11 @@ public final class MfaDtos {
     public record VerifyEnrollResponse(List<String> recoveryCodes) {
     }
 
-    public record MfaVerifyRequest(@NotBlank String mfaToken, @NotBlank String code) {
+    /**
+     * {@code mfaToken} is optional: password logins send it in the body, whereas the
+     * OAuth flow carries the challenge in the {@code mfa_challenge} httpOnly cookie instead.
+     */
+    public record MfaVerifyRequest(String mfaToken, @NotBlank String code) {
     }
 
     public record DisableRequest(@NotBlank String code) {

@@ -1,7 +1,9 @@
 package com.gamifiedstudyhub.backend.document.service;
 
+import com.gamifiedstudyhub.backend.authz.WorkspaceGuard;
 import com.gamifiedstudyhub.backend.common.constant.ErrorCodes;
 import com.gamifiedstudyhub.backend.common.exception.BusinessException;
+import com.gamifiedstudyhub.backend.common.exception.ForbiddenException;
 import com.gamifiedstudyhub.backend.document.dto.DocumentDetailResponse;
 import com.gamifiedstudyhub.backend.document.dto.DocumentSummaryResponse;
 import com.gamifiedstudyhub.backend.document.dto.TagResponse;
@@ -28,20 +30,25 @@ public class DocumentService {
     private final DocumentTagRelationRepository documentTagRelationRepository;
     private final TagRepository tagRepository;
     private final DocumentMapper documentMapper;
+    private final WorkspaceGuard workspaceGuard;
 
     public DocumentService(
             DocumentRepository documentRepository,
             DocumentTagRelationRepository documentTagRelationRepository,
             TagRepository tagRepository,
-            DocumentMapper documentMapper
+            DocumentMapper documentMapper,
+            WorkspaceGuard workspaceGuard
     ) {
         this.documentRepository = documentRepository;
         this.documentTagRelationRepository = documentTagRelationRepository;
         this.tagRepository = tagRepository;
         this.documentMapper = documentMapper;
+        this.workspaceGuard = workspaceGuard;
     }
 
     public List<DocumentSummaryResponse> listDocuments(UUID workspaceId, String keyword) {
+        requireWorkspaceMembership(workspaceId);
+
         List<Document> documents;
         if (keyword == null || keyword.isBlank()) {
             documents = documentRepository.findByWorkspaceIdAndDeletedAtIsNullOrderByCreatedAtDesc(workspaceId);
@@ -65,6 +72,8 @@ public class DocumentService {
                         HttpStatus.NOT_FOUND
                 ));
 
+        requireWorkspaceMembership(document.getWorkspaceId());
+
         List<DocumentTagRelation> relations = documentTagRelationRepository.findByIdDocumentId(documentId);
         Set<UUID> tagIds = relations.stream()
                 .map(relation -> relation.getId().getTagId())
@@ -78,5 +87,17 @@ public class DocumentService {
                         .toList();
 
         return documentMapper.toDetail(document, tags);
+    }
+
+    /**
+     * Documents are workspace-scoped: only active members of the owning workspace
+     * (or platform admins) may read them. This is the baseline access check that
+     * closes cross-workspace access; finer per-document visibility (FREE/VIP/PRIVATE)
+     * is layered on later once coin-based unlocking exists.
+     */
+    private void requireWorkspaceMembership(UUID workspaceId) {
+        if (!workspaceGuard.isMember(workspaceId)) {
+            throw new ForbiddenException("You do not have access to this workspace");
+        }
     }
 }

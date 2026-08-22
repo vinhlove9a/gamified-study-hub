@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { authApi } from '@/features/auth/authApi';
 import { useAuthSession } from '@/features/auth/authSession';
 import { useMfaChallenge } from '@/features/auth/mfaChallenge';
@@ -8,23 +8,28 @@ import { ApiError } from '@/lib/api/apiError';
 import StarfieldCanvas from '@/components/dashboard/StarfieldCanvas.vue';
 
 const router = useRouter();
+const route = useRoute();
 const { setSessionFromAuthResponse } = useAuthSession();
 const { mfaToken, redirectPath, clear } = useMfaChallenge();
+
+// After Google OAuth the challenge is held in an httpOnly cookie (not in memory),
+// and we arrive here via a full-page redirect flagged with ?oauth=1.
+const isOAuthChallenge = route.query.oauth === '1';
 
 const code = ref('');
 const loading = ref(false);
 const message = ref('');
 
 onMounted(() => {
-  // No pending challenge (e.g. page refresh) → back to login.
-  if (!mfaToken.value) {
+  // No pending challenge (e.g. page refresh) and not the OAuth cookie flow → back to login.
+  if (!mfaToken.value && !isOAuthChallenge) {
     void router.replace('/auth/login');
   }
 });
 
 const handleSubmit = async () => {
   message.value = '';
-  if (!mfaToken.value) {
+  if (!mfaToken.value && !isOAuthChallenge) {
     void router.replace('/auth/login');
     return;
   }
@@ -34,7 +39,11 @@ const handleSubmit = async () => {
   }
   loading.value = true;
   try {
-    const result = await authApi.mfaVerify({ mfaToken: mfaToken.value, code: code.value.trim() });
+    const result = await authApi.mfaVerify(
+      mfaToken.value
+        ? { mfaToken: mfaToken.value, code: code.value.trim() }
+        : { code: code.value.trim() }
+    );
     setSessionFromAuthResponse(result);
     const target = redirectPath.value;
     clear();
