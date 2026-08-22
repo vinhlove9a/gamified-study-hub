@@ -100,12 +100,32 @@ public class RefreshTokenService {
         redis.delete(familyKey(familyId));
     }
 
+    /**
+     * Revoke every session for a user across all devices — used by "log out everywhere"
+     * and after a password reset/change. Walks the per-user family index and burns each
+     * family, then drops the index.
+     */
+    public void revokeAllForUser(UUID userId) {
+        if (userId == null) {
+            return;
+        }
+        String userKey = userKey(userId);
+        Set<String> families = redis.opsForSet().members(userKey);
+        if (families != null) {
+            families.forEach(this::revokeFamily);
+        }
+        redis.delete(userKey);
+    }
+
     private String mint(UUID userId, String familyId) {
         String tokenId = UUID.randomUUID().toString();
         String secret = randomSecret();
         redis.opsForValue().set(key(tokenId), join(hash(secret), userId, familyId, STATE_ACTIVE), ttl);
         redis.opsForSet().add(familyKey(familyId), tokenId);
         redis.expire(familyKey(familyId), ttl);
+        // Index the family under the user so all of a user's sessions can be revoked at once.
+        redis.opsForSet().add(userKey(userId), familyId);
+        redis.expire(userKey(userId), ttl);
         return tokenId + "." + secret;
     }
 
@@ -133,6 +153,10 @@ public class RefreshTokenService {
 
     private static String familyKey(String familyId) {
         return "rtfam:" + familyId;
+    }
+
+    private static String userKey(UUID userId) {
+        return "rtuser:" + userId;
     }
 
     private static String randomSecret() {

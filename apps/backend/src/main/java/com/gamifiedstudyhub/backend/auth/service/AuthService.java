@@ -2,16 +2,19 @@ package com.gamifiedstudyhub.backend.auth.service;
 
 import com.gamifiedstudyhub.backend.auth.dto.AuthResponse;
 import com.gamifiedstudyhub.backend.auth.dto.AuthMessageResponse;
+import com.gamifiedstudyhub.backend.auth.dto.ChangePasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ForgotPasswordRequest;
 import com.gamifiedstudyhub.backend.auth.dto.LoginRequest;
 import com.gamifiedstudyhub.backend.auth.dto.RegisterRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResendVerificationRequest;
 import com.gamifiedstudyhub.backend.auth.dto.ResetPasswordRequest;
+import com.gamifiedstudyhub.backend.auth.dto.UpdateProfileRequest;
 import com.gamifiedstudyhub.backend.auth.dto.UserSummaryResponse;
 import com.gamifiedstudyhub.backend.auth.dto.VerifyEmailRequest;
 import com.gamifiedstudyhub.backend.auth.mapper.AuthMapper;
 import com.gamifiedstudyhub.backend.auth.security.CustomUserDetails;
 import com.gamifiedstudyhub.backend.auth.security.JwtService;
+import com.gamifiedstudyhub.backend.auth.token.RefreshTokenService;
 import com.gamifiedstudyhub.backend.audit.AuthEventType;
 import com.gamifiedstudyhub.backend.audit.service.AuthAuditService;
 import com.gamifiedstudyhub.backend.auth.ratelimit.EmailRateLimiter;
@@ -54,6 +57,7 @@ public class AuthService {
     private final AuthAuditService auditService;
     private final EmailService emailService;
     private final MfaService mfaService;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthService(
             UserRepository userRepository,
@@ -67,7 +71,8 @@ public class AuthService {
             EmailRateLimiter emailRateLimiter,
             AuthAuditService auditService,
             EmailService emailService,
-            MfaService mfaService
+            MfaService mfaService,
+            RefreshTokenService refreshTokenService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -81,6 +86,7 @@ public class AuthService {
         this.auditService = auditService;
         this.emailService = emailService;
         this.mfaService = mfaService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -227,9 +233,76 @@ public class AuthService {
         User user = authTokenService.consumePasswordResetToken(request.token()).getUser();
         user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
+        // A reset implies the account may be compromised — invalidate every existing session.
+        refreshTokenService.revokeAllForUser(user.getId());
         auditService.record(AuthEventType.PASSWORD_RESET_COMPLETED, user.getId(), null);
 
         return new AuthMessageResponse("Mật khẩu đã được cập nhật. Bạn có thể đăng nhập bằng mật khẩu mới.");
+    }
+
+    /**
+     * Change the password of the currently authenticated user. Verifies the current password,
+     * enforces the strength policy, forbids reusing the same password, then revokes every
+     * existing session (the caller re-issues a fresh one for this device). Returns a new
+     * access token so the current request stays authenticated.
+     */
+    public AuthResponse changePassword(UUID userId, ChangePasswordRequest request) {
+        User user = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new UnauthorizedException("Unauthorized"));
+
+        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
+            throw new BusinessException(
+                    ErrorCodes.BAD_REQUEST,
+                    "No password is set for this account. Use the password reset flow to set one.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+            auditService.record(AuthEventType.LOGIN_FAILURE, userId, null, "change-password: wrong current password");
+            throw new BusinessException(
+                    ErrorCodes.INVALID_CREDENTIALS,
+                    "Current password is incorrect",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        passwordPolicyValidator.validateOrThrow(request.newPassword());
+        if (passwordEncoder.matches(request.newPassword(), user.getPasswordHash())) {
+            throw new BusinessException(
+                    ErrorCodes.AUTH_PASSWORD_WEAK,
+                    "New password must be different from the current password",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+        // Revoke all sessions (incl. the current one); the controller mints a fresh session next.
+        refreshTokenService.revokeAllForUser(userId);
+        auditService.record(AuthEventType.PASSWORD_CHANGED, userId, null);
+
+        String accessToken = jwtService.generateAccessToken(user);
+        List<String> authorities = authorityService.resolveAuthorityCodes(userId);
+        return authMapper.toAuthResponse(
+                accessToken, jwtService.getAccessTokenExpirationSeconds(), user, authorities);
+    }
+
+    /** Update the current user's profile (partial): null fields are left unchanged. */
+    public UserSummaryResponse updateProfile(UUID userId, UpdateProfileRequest request) {
+        User user = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new UnauthorizedException("Unauthorized"));
+
+        if (request.fullName() != null && !request.fullName().isBlank()) {
+            user.setFullName(request.fullName().trim());
+        }
+        if (request.avatarUrl() != null) {
+            String trimmed = request.avatarUrl().trim();
+            user.setAvatarUrl(trimmed.isEmpty() ? null : trimmed);
+        }
+        userRepository.save(user);
+        auditService.record(AuthEventType.PROFILE_UPDATED, userId, null);
+
+        List<String> authorities = authorityService.resolveAuthorityCodes(userId);
+        return authMapper.toUserSummary(user, authorities);
     }
 
     public AuthMessageResponse verifyEmail(VerifyEmailRequest request) {
